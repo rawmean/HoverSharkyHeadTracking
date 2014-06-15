@@ -18,13 +18,18 @@
 		F53CCA85194D2F3B00A9AB63 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F53CCA83194D2F3B00A9AB63 /* Main_iPad.storyboard */; };
 		F53CCA88194D2F3B00A9AB63 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F53CCA87194D2F3B00A9AB63 /* ViewController.m */; };
 		F53CCA8B194D2F3B00A9AB63 /* MyScene.m in Sources */ = {isa = PBXBuildFile; fileRef = F53CCA8A194D2F3B00A9AB63 /* MyScene.m */; };
-		F53CCA8D194D2F3B00A9AB63 /* Spaceship.png in Resources */ = {isa = PBXBuildFile; fileRef = F53CCA8C194D2F3B00A9AB63 /* Spaceship.png */; };
 		F53CCA8F194D2F3B00A9AB63 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F53CCA8E194D2F3B00A9AB63 /* Images.xcassets */; };
 		F53CCA96194D2F3B00A9AB63 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCA95194D2F3B00A9AB63 /* XCTest.framework */; };
 		F53CCA97194D2F3B00A9AB63 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCA6C194D2F3B00A9AB63 /* Foundation.framework */; };
 		F53CCA98194D2F3B00A9AB63 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCA70194D2F3B00A9AB63 /* UIKit.framework */; };
 		F53CCAA0194D2F3B00A9AB63 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F53CCA9E194D2F3B00A9AB63 /* InfoPlist.strings */; };
 		F53CCAA2194D2F3B00A9AB63 /* HoverBirdTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F53CCAA1194D2F3B00A9AB63 /* HoverBirdTests.m */; };
+		F53CCAAD194D306D00A9AB63 /* Bird1.png in Resources */ = {isa = PBXBuildFile; fileRef = F53CCAAB194D306D00A9AB63 /* Bird1.png */; };
+		F53CCAAE194D306D00A9AB63 /* Bird2.png in Resources */ = {isa = PBXBuildFile; fileRef = F53CCAAC194D306D00A9AB63 /* Bird2.png */; };
+		F53CCAB3194D33AB00A9AB63 /* Ground.png in Resources */ = {isa = PBXBuildFile; fileRef = F53CCAAF194D33AB00A9AB63 /* Ground.png */; };
+		F53CCAB4194D33AB00A9AB63 /* Pipe1.png in Resources */ = {isa = PBXBuildFile; fileRef = F53CCAB0194D33AB00A9AB63 /* Pipe1.png */; };
+		F53CCAB5194D33AB00A9AB63 /* Pipe2.png in Resources */ = {isa = PBXBuildFile; fileRef = F53CCAB1194D33AB00A9AB63 /* Pipe2.png */; };
+		F53CCAB6194D33AB00A9AB63 /* Skyline.png in Resources */ = {isa = PBXBuildFile; fileRef = F53CCAB2194D33AB00A9AB63 /* Skyline.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,13 +60,18 @@
 		F53CCA87194D2F3B00A9AB63 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		F53CCA89194D2F3B00A9AB63 /* MyScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyScene.h; sourceTree = "<group>"; };
 		F53CCA8A194D2F3B00A9AB63 /* MyScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyScene.m; sourceTree = "<group>"; };
-		F53CCA8C194D2F3B00A9AB63 /* Spaceship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spaceship.png; sourceTree = "<group>"; };
 		F53CCA8E194D2F3B00A9AB63 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		F53CCA94194D2F3B00A9AB63 /* HoverBirdTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HoverBirdTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F53CCA95194D2F3B00A9AB63 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		F53CCA9D194D2F3B00A9AB63 /* HoverBirdTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HoverBirdTests-Info.plist"; sourceTree = "<group>"; };
 		F53CCA9F194D2F3B00A9AB63 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F53CCAA1194D2F3B00A9AB63 /* HoverBirdTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HoverBirdTests.m; sourceTree = "<group>"; };
+		F53CCAAB194D306D00A9AB63 /* Bird1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bird1.png; sourceTree = "<group>"; };
+		F53CCAAC194D306D00A9AB63 /* Bird2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bird2.png; sourceTree = "<group>"; };
+		F53CCAAF194D33AB00A9AB63 /* Ground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Ground.png; sourceTree = "<group>"; };
+		F53CCAB0194D33AB00A9AB63 /* Pipe1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pipe1.png; sourceTree = "<group>"; };
+		F53CCAB1194D33AB00A9AB63 /* Pipe2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pipe2.png; sourceTree = "<group>"; };
+		F53CCAB2194D33AB00A9AB63 /* Skyline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Skyline.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,7 +141,6 @@
 				F53CCA87194D2F3B00A9AB63 /* ViewController.m */,
 				F53CCA89194D2F3B00A9AB63 /* MyScene.h */,
 				F53CCA8A194D2F3B00A9AB63 /* MyScene.m */,
-				F53CCA8C194D2F3B00A9AB63 /* Spaceship.png */,
 				F53CCA8E194D2F3B00A9AB63 /* Images.xcassets */,
 				F53CCA75194D2F3B00A9AB63 /* Supporting Files */,
 			);
@@ -141,6 +150,12 @@
 		F53CCA75194D2F3B00A9AB63 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F53CCAAF194D33AB00A9AB63 /* Ground.png */,
+				F53CCAB0194D33AB00A9AB63 /* Pipe1.png */,
+				F53CCAB1194D33AB00A9AB63 /* Pipe2.png */,
+				F53CCAB2194D33AB00A9AB63 /* Skyline.png */,
+				F53CCAAB194D306D00A9AB63 /* Bird1.png */,
+				F53CCAAC194D306D00A9AB63 /* Bird2.png */,
 				F53CCA76194D2F3B00A9AB63 /* HoverBird-Info.plist */,
 				F53CCA77194D2F3B00A9AB63 /* InfoPlist.strings */,
 				F53CCA7A194D2F3B00A9AB63 /* main.m */,
@@ -243,11 +258,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F53CCA8D194D2F3B00A9AB63 /* Spaceship.png in Resources */,
 				F53CCA8F194D2F3B00A9AB63 /* Images.xcassets in Resources */,
 				F53CCA85194D2F3B00A9AB63 /* Main_iPad.storyboard in Resources */,
 				F53CCA82194D2F3B00A9AB63 /* Main_iPhone.storyboard in Resources */,
+				F53CCAB5194D33AB00A9AB63 /* Pipe2.png in Resources */,
+				F53CCAB4194D33AB00A9AB63 /* Pipe1.png in Resources */,
+				F53CCAAD194D306D00A9AB63 /* Bird1.png in Resources */,
 				F53CCA79194D2F3B00A9AB63 /* InfoPlist.strings in Resources */,
+				F53CCAAE194D306D00A9AB63 /* Bird2.png in Resources */,
+				F53CCAB3194D33AB00A9AB63 /* Ground.png in Resources */,
+				F53CCAB6194D33AB00A9AB63 /* Skyline.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
