@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F5354E9A194EC1B20049F406 /* blur1.png in Resources */ = {isa = PBXBuildFile; fileRef = F5354E99194EC1B20049F406 /* blur1.png */; };
 		F53CCA6D194D2F3B00A9AB63 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCA6C194D2F3B00A9AB63 /* Foundation.framework */; };
 		F53CCA6F194D2F3B00A9AB63 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCA6E194D2F3B00A9AB63 /* CoreGraphics.framework */; };
 		F53CCA71194D2F3B00A9AB63 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCA70194D2F3B00A9AB63 /* UIKit.framework */; };
@@ -30,6 +31,21 @@
 		F53CCAB4194D33AB00A9AB63 /* Pipe1.png in Resources */ = {isa = PBXBuildFile; fileRef = F53CCAB0194D33AB00A9AB63 /* Pipe1.png */; };
 		F53CCAB5194D33AB00A9AB63 /* Pipe2.png in Resources */ = {isa = PBXBuildFile; fileRef = F53CCAB1194D33AB00A9AB63 /* Pipe2.png */; };
 		F53CCAB6194D33AB00A9AB63 /* Skyline.png in Resources */ = {isa = PBXBuildFile; fileRef = F53CCAB2194D33AB00A9AB63 /* Skyline.png */; };
+		F53CCAB8194E544D00A9AB63 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCAB7194E544D00A9AB63 /* opencv2.framework */; };
+		F53CCABA194E56C700A9AB63 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCAB9194E56C700A9AB63 /* AVFoundation.framework */; };
+		F53CCABE194E601A00A9AB63 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCABD194E601A00A9AB63 /* CoreVideo.framework */; };
+		F53CCAC0194E602100A9AB63 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCABF194E602100A9AB63 /* CoreMedia.framework */; };
+		F53CCAC3194E604D00A9AB63 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCAC1194E604D00A9AB63 /* AddressBook.framework */; };
+		F53CCAC4194E604D00A9AB63 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCAC2194E604D00A9AB63 /* AddressBookUI.framework */; };
+		F53CCAC6194E606500A9AB63 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCAC5194E606500A9AB63 /* CoreImage.framework */; };
+		F53CCAC8194E607700A9AB63 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCAC7194E607700A9AB63 /* SystemConfiguration.framework */; };
+		F53CCACA194E609000A9AB63 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCAC9194E609000A9AB63 /* Security.framework */; };
+		F53CCACC194E60AD00A9AB63 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCACB194E60AD00A9AB63 /* MessageUI.framework */; };
+		F53CCACE194E60EE00A9AB63 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCACD194E60EE00A9AB63 /* AssetsLibrary.framework */; };
+		F53CCAD0194E611400A9AB63 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCACF194E611400A9AB63 /* QuartzCore.framework */; };
+		F5D56B10194E89D30063D43A /* ScoresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D56B0F194E89D30063D43A /* ScoresViewController.m */; };
+		F5D56B16194E8B3E0063D43A /* ScoresTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D56B15194E8B3E0063D43A /* ScoresTableViewController.m */; };
+		F5D56B18194EBBEB0063D43A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D56B17194EBBEB0063D43A /* iAd.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +59,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F5354E99194EC1B20049F406 /* blur1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blur1.png; sourceTree = "<group>"; };
 		F53CCA69194D2F3B00A9AB63 /* HoverBird.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HoverBird.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F53CCA6C194D2F3B00A9AB63 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F53CCA6E194D2F3B00A9AB63 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -72,6 +89,23 @@
 		F53CCAB0194D33AB00A9AB63 /* Pipe1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pipe1.png; sourceTree = "<group>"; };
 		F53CCAB1194D33AB00A9AB63 /* Pipe2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pipe2.png; sourceTree = "<group>"; };
 		F53CCAB2194D33AB00A9AB63 /* Skyline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Skyline.png; sourceTree = "<group>"; };
+		F53CCAB7194E544D00A9AB63 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
+		F53CCAB9194E56C700A9AB63 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		F53CCABD194E601A00A9AB63 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		F53CCABF194E602100A9AB63 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		F53CCAC1194E604D00A9AB63 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		F53CCAC2194E604D00A9AB63 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		F53CCAC5194E606500A9AB63 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		F53CCAC7194E607700A9AB63 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		F53CCAC9194E609000A9AB63 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		F53CCACB194E60AD00A9AB63 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		F53CCACD194E60EE00A9AB63 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		F53CCACF194E611400A9AB63 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		F5D56B0E194E89D30063D43A /* ScoresViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoresViewController.h; sourceTree = "<group>"; };
+		F5D56B0F194E89D30063D43A /* ScoresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoresViewController.m; sourceTree = "<group>"; };
+		F5D56B14194E8B3E0063D43A /* ScoresTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScoresTableViewController.h; path = HoverBird/ScoresTableViewController.h; sourceTree = "<group>"; };
+		F5D56B15194E8B3E0063D43A /* ScoresTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScoresTableViewController.m; path = HoverBird/ScoresTableViewController.m; sourceTree = "<group>"; };
+		F5D56B17194EBBEB0063D43A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,9 +113,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5D56B18194EBBEB0063D43A /* iAd.framework in Frameworks */,
+				F53CCAD0194E611400A9AB63 /* QuartzCore.framework in Frameworks */,
+				F53CCACE194E60EE00A9AB63 /* AssetsLibrary.framework in Frameworks */,
+				F53CCACC194E60AD00A9AB63 /* MessageUI.framework in Frameworks */,
+				F53CCACA194E609000A9AB63 /* Security.framework in Frameworks */,
+				F53CCAC8194E607700A9AB63 /* SystemConfiguration.framework in Frameworks */,
+				F53CCAC6194E606500A9AB63 /* CoreImage.framework in Frameworks */,
+				F53CCAC3194E604D00A9AB63 /* AddressBook.framework in Frameworks */,
+				F53CCAC4194E604D00A9AB63 /* AddressBookUI.framework in Frameworks */,
+				F53CCAC0194E602100A9AB63 /* CoreMedia.framework in Frameworks */,
+				F53CCABE194E601A00A9AB63 /* CoreVideo.framework in Frameworks */,
+				F53CCABA194E56C700A9AB63 /* AVFoundation.framework in Frameworks */,
 				F53CCA6F194D2F3B00A9AB63 /* CoreGraphics.framework in Frameworks */,
 				F53CCA71194D2F3B00A9AB63 /* UIKit.framework in Frameworks */,
 				F53CCA73194D2F3B00A9AB63 /* SpriteKit.framework in Frameworks */,
+				F53CCAB8194E544D00A9AB63 /* opencv2.framework in Frameworks */,
 				F53CCA6D194D2F3B00A9AB63 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -102,6 +149,8 @@
 		F53CCA60194D2F3B00A9AB63 = {
 			isa = PBXGroup;
 			children = (
+				F5D56B14194E8B3E0063D43A /* ScoresTableViewController.h */,
+				F5D56B15194E8B3E0063D43A /* ScoresTableViewController.m */,
 				F53CCA74194D2F3B00A9AB63 /* HoverBird */,
 				F53CCA9B194D2F3B00A9AB63 /* HoverBirdTests */,
 				F53CCA6B194D2F3B00A9AB63 /* Frameworks */,
@@ -121,6 +170,19 @@
 		F53CCA6B194D2F3B00A9AB63 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F5D56B17194EBBEB0063D43A /* iAd.framework */,
+				F53CCACF194E611400A9AB63 /* QuartzCore.framework */,
+				F53CCACD194E60EE00A9AB63 /* AssetsLibrary.framework */,
+				F53CCACB194E60AD00A9AB63 /* MessageUI.framework */,
+				F53CCAC9194E609000A9AB63 /* Security.framework */,
+				F53CCAC7194E607700A9AB63 /* SystemConfiguration.framework */,
+				F53CCAC5194E606500A9AB63 /* CoreImage.framework */,
+				F53CCAC1194E604D00A9AB63 /* AddressBook.framework */,
+				F53CCAC2194E604D00A9AB63 /* AddressBookUI.framework */,
+				F53CCABF194E602100A9AB63 /* CoreMedia.framework */,
+				F53CCABD194E601A00A9AB63 /* CoreVideo.framework */,
+				F53CCAB9194E56C700A9AB63 /* AVFoundation.framework */,
+				F53CCAB7194E544D00A9AB63 /* opencv2.framework */,
 				F53CCA6C194D2F3B00A9AB63 /* Foundation.framework */,
 				F53CCA6E194D2F3B00A9AB63 /* CoreGraphics.framework */,
 				F53CCA70194D2F3B00A9AB63 /* UIKit.framework */,
@@ -139,6 +201,8 @@
 				F53CCA83194D2F3B00A9AB63 /* Main_iPad.storyboard */,
 				F53CCA86194D2F3B00A9AB63 /* ViewController.h */,
 				F53CCA87194D2F3B00A9AB63 /* ViewController.m */,
+				F5D56B0E194E89D30063D43A /* ScoresViewController.h */,
+				F5D56B0F194E89D30063D43A /* ScoresViewController.m */,
 				F53CCA89194D2F3B00A9AB63 /* MyScene.h */,
 				F53CCA8A194D2F3B00A9AB63 /* MyScene.m */,
 				F53CCA8E194D2F3B00A9AB63 /* Images.xcassets */,
@@ -150,6 +214,7 @@
 		F53CCA75194D2F3B00A9AB63 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F5354E99194EC1B20049F406 /* blur1.png */,
 				F53CCAAF194D33AB00A9AB63 /* Ground.png */,
 				F53CCAB0194D33AB00A9AB63 /* Pipe1.png */,
 				F53CCAB1194D33AB00A9AB63 /* Pipe2.png */,
@@ -261,6 +326,7 @@
 				F53CCA8F194D2F3B00A9AB63 /* Images.xcassets in Resources */,
 				F53CCA85194D2F3B00A9AB63 /* Main_iPad.storyboard in Resources */,
 				F53CCA82194D2F3B00A9AB63 /* Main_iPhone.storyboard in Resources */,
+				F5354E9A194EC1B20049F406 /* blur1.png in Resources */,
 				F53CCAB5194D33AB00A9AB63 /* Pipe2.png in Resources */,
 				F53CCAB4194D33AB00A9AB63 /* Pipe1.png in Resources */,
 				F53CCAAD194D306D00A9AB63 /* Bird1.png in Resources */,
@@ -287,8 +353,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				F53CCA8B194D2F3B00A9AB63 /* MyScene.m in Sources */,
+				F5D56B10194E89D30063D43A /* ScoresViewController.m in Sources */,
 				F53CCA88194D2F3B00A9AB63 /* ViewController.m in Sources */,
 				F53CCA7F194D2F3B00A9AB63 /* AppDelegate.m in Sources */,
+				F5D56B16194E8B3E0063D43A /* ScoresTableViewController.m in Sources */,
 				F53CCA7B194D2F3B00A9AB63 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -424,9 +492,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HoverBird/HoverBird-Prefix.pch";
 				INFOPLIST_FILE = "HoverBird/HoverBird-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
 				WRAPPER_EXTENSION = app;
@@ -438,9 +512,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HoverBird/HoverBird-Prefix.pch";
 				INFOPLIST_FILE = "HoverBird/HoverBird-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
 				WRAPPER_EXTENSION = app;
@@ -506,6 +586,7 @@
 				F53CCAA7194D2F3B00A9AB63 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F53CCAA8194D2F3B00A9AB63 /* Build configuration list for PBXNativeTarget "HoverBirdTests" */ = {
 			isa = XCConfigurationList;
@@ -514,6 +595,7 @@
 				F53CCAAA194D2F3B00A9AB63 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -21,8 +21,9 @@
     skView.showsNodeCount = YES;
     
     // Create and configure the scene.
-    SKScene * scene = [MyScene sceneWithSize:skView.bounds.size];
+    MyScene * scene = [MyScene sceneWithSize:skView.bounds.size];
     scene.scaleMode = SKSceneScaleModeAspectFill;
+    scene.scoreDelegate = self; // for game over
     
     // Present the scene.
     [skView presentScene:scene];
@@ -46,6 +47,19 @@
 {
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+//    if ([segue.identifier isEqualToString:@"showScores"]) {
+//        <#statements#>
+//    }
+    
+}
+
+#pragma Game delegate
+-(void)didFinishGameWithScore:(NSInteger)score {
+    [self performSegueWithIdentifier:@"ShowScores" sender:self];
+
 }
 
 @end

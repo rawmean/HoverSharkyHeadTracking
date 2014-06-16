@@ -8,6 +8,15 @@
 
 #import <SpriteKit/SpriteKit.h>
 
-@interface MyScene : SKScene
+@protocol GameSceneDelegate <NSObject>
+@required
+- (void) didFinishGameWithScore:(NSInteger)score;
+@end
+
+@interface MyScene : SKScene {
+    id <GameSceneDelegate> scoreDelegate;
+}
+
+@property  id scoreDelegate;
 
 @end

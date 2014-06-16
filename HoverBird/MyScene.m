@@ -6,9 +6,12 @@
 //  Copyright (c) 2014 maadotaa.com. All rights reserved.
 //
 
+#import <opencv2/highgui/ios.h>
 #import "MyScene.h"
 
-@interface MyScene ()<SKPhysicsContactDelegate> {
+using namespace cv;
+
+@interface MyScene ()<SKPhysicsContactDelegate, CvVideoCameraDelegate> {
     SKSpriteNode* _bird;
     SKColor* _skyColor;
     SKTexture* _pipeTexture1;
@@ -19,7 +22,12 @@
     BOOL _canRestart;
     SKLabelNode* _scoreLabelNode;
     NSInteger _score;
+    Mat grayImage, prevGrayImage;
+    NSMutableDictionary * scoreArray;
+
 }
+@property (nonatomic, strong) CvVideoCamera* videoCamera;
+
 @end
 
 @implementation MyScene
@@ -30,7 +38,7 @@ static const uint32_t pipeCategory = 1 << 2;
 static const uint32_t scoreCategory = 1 << 3;
 static NSInteger const kVerticalPipeGap = 100;
 
-
+@synthesize scoreDelegate = _scoreDelegate;
 
 -(void)resetScene {
     // Move bird to original position and reset velocity
@@ -50,7 +58,7 @@ static NSInteger const kVerticalPipeGap = 100;
     
     // Reset score
     _score = 0;
-    _scoreLabelNode.text = [NSString stringWithFormat:@"%d", _score];
+    _scoreLabelNode.text = [NSString stringWithFormat:@"%ld", (long)_score];
 }
 
 
@@ -93,8 +101,23 @@ static NSInteger const kVerticalPipeGap = 100;
     [_pipes addChild:pipePair];
 }
 
+
+
 -(id)initWithSize:(CGSize)size {
     if (self = [super initWithSize:size]) {
+        
+        // init camera
+        self.videoCamera = [[CvVideoCamera alloc] init];
+        self.videoCamera.delegate = self;
+        self.videoCamera.defaultAVCaptureDevicePosition = AVCaptureDevicePositionFront;
+        self.videoCamera.defaultAVCaptureSessionPreset = AVCaptureSessionPreset352x288;
+        //                                AVCaptureSessionPreset640x480;
+        self.videoCamera.defaultAVCaptureVideoOrientation =
+        AVCaptureVideoOrientationPortrait;
+        self.videoCamera.defaultFPS = 30;
+        [self.videoCamera start];
+        
+        
         /* Setup your scene here */
         _canRestart = NO;
         // Initialize label and create a label which holds the score
@@ -102,7 +125,7 @@ static NSInteger const kVerticalPipeGap = 100;
         _scoreLabelNode = [SKLabelNode labelNodeWithFontNamed:@"MarkerFelt-Wide"];
         _scoreLabelNode.position = CGPointMake( CGRectGetMidX( self.frame ), 3 * self.frame.size.height / 4 );
         _scoreLabelNode.zPosition = 100;
-        _scoreLabelNode.text = [NSString stringWithFormat:@"%d", _score];
+        _scoreLabelNode.text = [NSString stringWithFormat:@"%ld", (long)_score];
         [self addChild:_scoreLabelNode];
 
         self.physicsWorld.gravity = CGVectorMake( 0.0, -5.0 );
@@ -234,11 +257,36 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             // Bird has contact with score entity
             
             _score++;
-            _scoreLabelNode.text = [NSString stringWithFormat:@"%d", _score];
+            _scoreLabelNode.text = [NSString stringWithFormat:@"%ld", (long)_score];
             // Add a little visual feedback for the score increment
             [_scoreLabelNode runAction:[SKAction sequence:@[[SKAction scaleTo:1.5 duration:0.1], [SKAction scaleTo:1.0 duration:0.1]]]];
        } else {
             // Bird has collided with world
+           
+           scoreArray = [[[NSUserDefaults standardUserDefaults] objectForKey:@"scoreArray"] mutableCopy];
+           if (!scoreArray) {
+               NSLog(@"Disct is empty.  Allocating it first");
+               scoreArray = [[NSMutableDictionary alloc] init];
+           }
+           NSDate* dateNow = [NSDate date];
+           NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+           [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+           [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+           
+           NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+           [dateFormatter setLocale:usLocale];
+           
+           NSLog(@"Date for locale %@: %@",
+                 [[dateFormatter locale] localeIdentifier], [dateFormatter stringFromDate:dateNow]);
+           
+           NSString* now = [dateFormatter stringFromDate:dateNow];
+           
+           //[scoreArray addEntriesFromDictionary:@{now: @(_score)}];
+           [scoreArray setObject:@(_score) forKey:now];
+           [[NSUserDefaults standardUserDefaults] setObject:scoreArray forKey:@"scoreArray"];
+           [[NSUserDefaults standardUserDefaults] synchronize];
+           
+           
             _moving.speed = 0;
             
             _bird.physicsBody.collisionBitMask = worldCategory;
@@ -255,8 +303,13 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             }], [SKAction waitForDuration:0.05]]] count:4], [SKAction runBlock:^{
                 _canRestart = YES;
             }]]] withKey:@"flash"];
+           [self performSelector:@selector(restartGame) withObject:nil afterDelay:2];
         }
     }
+}
+
+-(void) restartGame {
+    [self.scoreDelegate didFinishGameWithScore:_score];
 }
 
 -(void)update:(CFTimeInterval)currentTime {
@@ -264,6 +317,33 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
     if( _moving.speed > 0 ) {
         _bird.zRotation = clamp( -1, 0.5, _bird.physicsBody.velocity.dy * ( _bird.physicsBody.velocity.dy < 0 ? 0.003 : 0.001 ) );
     }
+}
+
+#pragma opencv callback
+
+- (void)processImage:(Mat&)image
+{
+    Mat filteredImage;
+    
+    cvtColor(image, grayImage, COLOR_BGR2GRAY);
+    
+    Mat cflow, flow;
+    pyrDown(grayImage, grayImage);
+    pyrDown(grayImage, grayImage);
+    
+    if (prevGrayImage.data)
+    {
+        calcOpticalFlowFarneback(prevGrayImage, grayImage, flow, 0.5, 3, 15, 3, 5, 1.2, 0);
+        Scalar meanFlow = mean(flow);
+//        NSLog(@"mean flow = %f, %f", meanFlow.val[0], meanFlow.val[1]);
+        
+        if( _moving.speed > 0 ) {
+            _bird.physicsBody.velocity = CGVectorMake(0, 0);
+            [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[0]*2, -meanFlow.val[1]*2)];
+        }
+    }
+    std::swap(prevGrayImage, grayImage);
+
 }
 
 @end

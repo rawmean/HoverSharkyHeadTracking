@@ -4,6 +4,10 @@
 //  The contents of this file are implicitly included at the beginning of every source file.
 //
 
+#ifdef __cplusplus
+#import <opencv2/opencv.hpp>
+#endif
+
 #import <Availability.h>
 
 #ifndef __IPHONE_5_0
