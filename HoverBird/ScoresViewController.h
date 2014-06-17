@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ScoresViewController : UIViewController
+@interface ScoresViewController : UIViewController {
+    
+}
+
+@property (strong, nonatomic) UIImage* bgImage;
 
 @end

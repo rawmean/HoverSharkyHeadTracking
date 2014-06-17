@@ -16,13 +16,18 @@
 }
 @property (weak, nonatomic) IBOutlet UITableView *scoresTableView;
 @property (strong, nonatomic) ADBannerView *rectangleAdView;
+@property (weak, nonatomic) IBOutlet UIImageView *backgroundImage;
 
 - (IBAction)didTapNewGame:(id)sender;
 
 
 @end
 
+
+
 @implementation ScoresViewController
+
+@synthesize bgImage = _bgImage;
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -31,6 +36,16 @@
         // Custom initialization
     }
     return self;
+}
+
+//-(void)setBgImage:(UIImage *)bgImage {
+//    _bgImage = bgImage;
+//}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.backgroundImage.image = _bgImage;
+
 }
 
 - (void)viewDidLoad

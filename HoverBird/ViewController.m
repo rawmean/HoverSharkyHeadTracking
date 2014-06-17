@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 #import "MyScene.h"
+#import "UIImage+ImageEffects.h"
+#import "ScoresViewController.h"
 
 @implementation ViewController
 
@@ -50,10 +52,26 @@
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-//    if ([segue.identifier isEqualToString:@"showScores"]) {
-//        <#statements#>
-//    }
+    if ([segue.identifier isEqualToString:@"ShowScores"]) {
+        ScoresViewController *svc = [segue destinationViewController];
+        svc.bgImage = [self captureBlurredScreenshot];
     
+    }
+    
+}
+
+-(UIImage*) captureBlurredScreenshot {
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
+        UIGraphicsBeginImageContextWithOptions(self.view.bounds.size, NO, [UIScreen mainScreen].scale);
+    else
+        UIGraphicsBeginImageContext(self.view.bounds.size);
+    [self.view drawViewHierarchyInRect:self.view.bounds afterScreenUpdates:YES];
+
+//    [self.view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return [image applyLightEffect];
 }
 
 #pragma Game delegate

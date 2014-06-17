@@ -24,7 +24,9 @@ using namespace cv;
     NSInteger _score;
     Mat grayImage, prevGrayImage;
     NSMutableDictionary * scoreArray;
-
+    NSMutableArray *lifeIconArray;
+    NSInteger numLivesLeft;
+    NSInteger totalNumLives;
 }
 @property (nonatomic, strong) CvVideoCamera* videoCamera;
 
@@ -53,12 +55,18 @@ static NSInteger const kVerticalPipeGap = 100;
     // Reset _canRestart
     _canRestart = NO;
     
+    if (numLivesLeft == 0) {
+        numLivesLeft = totalNumLives;
+        [self drawNumberOfLivesLeft:totalNumLives];
+
+        // Reset score
+        _score = 0;
+        _scoreLabelNode.text = [NSString stringWithFormat:@"%ld", (long)_score];
+    }
+    
     // Restart animation
     _moving.speed = 1;
     
-    // Reset score
-    _score = 0;
-    _scoreLabelNode.text = [NSString stringWithFormat:@"%ld", (long)_score];
 }
 
 
@@ -101,6 +109,26 @@ static NSInteger const kVerticalPipeGap = 100;
     [_pipes addChild:pipePair];
 }
 
+-(void) drawNumberOfLivesLeft:(NSInteger)numLives {
+    for (int k=0; k < numLives; k++) {
+        SKTexture* lifeTexture = [SKTexture textureWithImageNamed:@"heart"];
+        lifeTexture.filteringMode = SKTextureFilteringNearest;
+        
+        SKSpriteNode* lifeIcon = [SKSpriteNode spriteNodeWithTexture:lifeTexture];
+        [lifeIcon setScale:.70];
+        
+        lifeIcon.position = CGPointMake(self.frame.size.width*0.08 + k*lifeTexture.size.width*.80, self.frame.size.height*0.9);
+        lifeIcon.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:lifeIcon.size.height / 2];
+        lifeIcon.physicsBody.dynamic = NO;
+        lifeIcon.physicsBody.allowsRotation = NO;
+        lifeIconArray[k] = lifeIcon;
+        [self addChild:lifeIcon];
+        
+        //    lifeIcon.physicsBody.categoryBitMask = birdCategory;
+        //    _bird.physicsBody.collisionBitMask = worldCategory | pipeCategory;
+        //    _bird.physicsBody.contactTestBitMask = worldCategory | pipeCategory;
+    }
+}
 
 
 -(id)initWithSize:(CGSize)size {
@@ -117,6 +145,10 @@ static NSInteger const kVerticalPipeGap = 100;
         self.videoCamera.defaultFPS = 30;
         [self.videoCamera start];
         
+        totalNumLives = 4;
+        numLivesLeft = totalNumLives;
+        lifeIconArray = [[NSMutableArray alloc] initWithCapacity:totalNumLives];
+        [self drawNumberOfLivesLeft:totalNumLives];
         
         /* Setup your scene here */
         _canRestart = NO;
@@ -249,6 +281,8 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
     }
 }
 
+
+
 - (void)didBeginContact:(SKPhysicsContact *)contact {
     // Flash background if contact is detected
     if( _moving.speed > 0 ) {
@@ -260,33 +294,37 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             _scoreLabelNode.text = [NSString stringWithFormat:@"%ld", (long)_score];
             // Add a little visual feedback for the score increment
             [_scoreLabelNode runAction:[SKAction sequence:@[[SKAction scaleTo:1.5 duration:0.1], [SKAction scaleTo:1.0 duration:0.1]]]];
-       } else {
+        } else {
             // Bird has collided with world
-           
-           scoreArray = [[[NSUserDefaults standardUserDefaults] objectForKey:@"scoreArray"] mutableCopy];
-           if (!scoreArray) {
-               NSLog(@"Disct is empty.  Allocating it first");
-               scoreArray = [[NSMutableDictionary alloc] init];
+            
+            numLivesLeft--;
+            [ lifeIconArray[numLivesLeft] runAction:[SKAction removeFromParent] ];
+            if (numLivesLeft == 0) {
+                // Game over
+                scoreArray = [[[NSUserDefaults standardUserDefaults] objectForKey:@"scoreArray"] mutableCopy];
+                if (!scoreArray) {
+                    scoreArray = [[NSMutableDictionary alloc] init];
+                }
+                NSDate* dateNow = [NSDate date];
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+                [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+                
+                NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+                [dateFormatter setLocale:usLocale];
+                
+                NSLog(@"Date for locale %@: %@",
+                      [[dateFormatter locale] localeIdentifier], [dateFormatter stringFromDate:dateNow]);
+                
+                NSString* now = [dateFormatter stringFromDate:dateNow];
+                
+                //[scoreArray addEntriesFromDictionary:@{now: @(_score)}];
+                [scoreArray setObject:@(_score) forKey:now];
+                [[NSUserDefaults standardUserDefaults] setObject:scoreArray forKey:@"scoreArray"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                [self performSelector:@selector(restartGame) withObject:nil afterDelay:1];
            }
-           NSDate* dateNow = [NSDate date];
-           NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-           [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
-           [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
-           
-           NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-           [dateFormatter setLocale:usLocale];
-           
-           NSLog(@"Date for locale %@: %@",
-                 [[dateFormatter locale] localeIdentifier], [dateFormatter stringFromDate:dateNow]);
-           
-           NSString* now = [dateFormatter stringFromDate:dateNow];
-           
-           //[scoreArray addEntriesFromDictionary:@{now: @(_score)}];
-           [scoreArray setObject:@(_score) forKey:now];
-           [[NSUserDefaults standardUserDefaults] setObject:scoreArray forKey:@"scoreArray"];
-           [[NSUserDefaults standardUserDefaults] synchronize];
-           
-           
+            
             _moving.speed = 0;
             
             _bird.physicsBody.collisionBitMask = worldCategory;
@@ -303,7 +341,6 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             }], [SKAction waitForDuration:0.05]]] count:4], [SKAction runBlock:^{
                 _canRestart = YES;
             }]]] withKey:@"flash"];
-           [self performSelector:@selector(restartGame) withObject:nil afterDelay:2];
         }
     }
 }

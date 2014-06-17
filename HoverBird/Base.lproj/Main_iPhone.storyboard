@@ -70,6 +70,7 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="backgroundImage" destination="Lm5-gW-028" id="hov-Fj-8vx"/>
                         <outlet property="scoresTableView" destination="V0f-a8-ShK" id="Vy7-N3-BaV"/>
                     </connections>
                 </viewController>
