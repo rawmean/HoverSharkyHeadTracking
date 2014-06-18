@@ -212,9 +212,9 @@
         if (hasSaturationChange) {
             CGFloat s = saturationDeltaFactor;
             CGFloat floatingPointSaturationMatrix[] = {
-                0.0722 + 0.9278 * s,  0.0722 - 0.0722 * s,  0.0722 - 0.0722 * s,  0,
-                0.7152 - 0.7152 * s,  0.7152 + 0.2848 * s,  0.7152 - 0.7152 * s,  0,
-                0.2126 - 0.2126 * s,  0.2126 - 0.2126 * s,  0.2126 + 0.7873 * s,  0,
+                static_cast<CGFloat>(0.0722 + 0.9278 * s),  static_cast<CGFloat>(0.0722 - 0.0722 * s),  static_cast<CGFloat>(0.0722 - 0.0722 * s),  0,
+                static_cast<CGFloat>(0.7152 - 0.7152 * s),  static_cast<CGFloat>(0.7152 + 0.2848 * s),  static_cast<CGFloat>(0.7152 - 0.7152 * s),  0,
+                static_cast<CGFloat>(0.2126 - 0.2126 * s),  static_cast<CGFloat>(0.2126 - 0.2126 * s),  static_cast<CGFloat>(0.2126 + 0.7873 * s),  0,
                                   0,                    0,                    0,  1,
             };
             const int32_t divisor = 256;

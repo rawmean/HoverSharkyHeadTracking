@@ -13,10 +13,12 @@
     NSDictionary* scoreDict;
     NSMutableArray* scoreArray;
     NSMutableArray* dateArray;
+    NSInteger maxScore;
 }
 @property (weak, nonatomic) IBOutlet UITableView *scoresTableView;
 @property (strong, nonatomic) ADBannerView *rectangleAdView;
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImage;
+@property (weak, nonatomic) IBOutlet UILabel *highestScoreLabel;
 
 - (IBAction)didTapNewGame:(id)sender;
 
@@ -45,24 +47,34 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.backgroundImage.image = _bgImage;
+    self.highestScoreLabel.text = [NSString stringWithFormat:@"%ld", (long)maxScore];
+    [self.scoresTableView reloadData];
 
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.canDisplayBannerAds = YES;
 
     // Do any additional setup after loading the view.
-    self.scoresTableView.dataSource = self;
     [self.scoresTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"scores"];
-
-    self.rectangleAdView = [[ADBannerView alloc]
-                        initWithAdType:ADAdTypeMediumRectangle];
-    self.rectangleAdView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2);
-    self.rectangleAdView.center = self.view.center;
     
-    self.rectangleAdView.delegate = self;
+    NSString *reqSysVer = @"8.0";
+    NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
+    BOOL isIOS8 = ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending);
+    
+    if (isIOS8) {
+        self.rectangleAdView = [[ADBannerView alloc]
+                                initWithAdType:ADAdTypeMediumRectangle];
+        self.rectangleAdView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2);
+        self.rectangleAdView.center = self.view.center;
+        
+        self.rectangleAdView.delegate = self;
+    }
+    else
+        self.canDisplayBannerAds = YES;
+   
+    
     
     scoreDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"scoreArray"];
     
@@ -71,12 +83,18 @@
     
     scoreArray = [[NSMutableArray alloc] init];
     dateArray  =[[NSMutableArray alloc] init];
+    maxScore = -1;
     while ((key = [enumerator nextObject])) {
         /* code that uses the returned key */
         [scoreArray addObject:scoreDict[key]];
         [dateArray addObject:key];
+        if ([scoreDict[key] integerValue] > maxScore) {
+            maxScore = [scoreDict[key] integerValue];
+        }
     }
     
+    self.scoresTableView.dataSource = self;
+
     
 }
 
