@@ -51,6 +51,8 @@
 		F57750C5195F247E005205FF /* whackTrimmed.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F57750C4195F247E005205FF /* whackTrimmed.m4a */; };
 		F57750C7195F2504005205FF /* whack1.aifc in Resources */ = {isa = PBXBuildFile; fileRef = F57750C6195F2504005205FF /* whack1.aifc */; };
 		F57750C9195F25F6005205FF /* whack4.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F57750C8195F25F6005205FF /* whack4.m4a */; };
+		F57750CC195F2D72005205FF /* DateScore.m in Sources */ = {isa = PBXBuildFile; fileRef = F57750CB195F2D72005205FF /* DateScore.m */; };
+		F57750D0195F6B2A005205FF /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F57750CF195F6B2A005205FF /* GameKit.framework */; };
 		F5D56B10194E89D30063D43A /* ScoresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D56B0F194E89D30063D43A /* ScoresViewController.m */; };
 		F5D56B18194EBBEB0063D43A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D56B17194EBBEB0063D43A /* iAd.framework */; };
 /* End PBXBuildFile section */
@@ -71,15 +73,15 @@
 		F5354EA6194FE3510049F406 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		F5354EA9194FE4CD0049F406 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		F5354EAB195011C60049F406 /* heart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heart.png; sourceTree = "<group>"; };
-		F53CCA69194D2F3B00A9AB63 /* HoverBird.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HoverBird.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F53CCA69194D2F3B00A9AB63 /* HoverFlappy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HoverFlappy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F53CCA6C194D2F3B00A9AB63 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F53CCA6E194D2F3B00A9AB63 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		F53CCA70194D2F3B00A9AB63 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F53CCA72194D2F3B00A9AB63 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
-		F53CCA76194D2F3B00A9AB63 /* HoverBird-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HoverBird-Info.plist"; sourceTree = "<group>"; };
+		F53CCA76194D2F3B00A9AB63 /* HoverFlappy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HoverFlappy-Info.plist"; sourceTree = "<group>"; };
 		F53CCA78194D2F3B00A9AB63 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F53CCA7A194D2F3B00A9AB63 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		F53CCA7C194D2F3B00A9AB63 /* HoverBird-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HoverBird-Prefix.pch"; sourceTree = "<group>"; };
+		F53CCA7C194D2F3B00A9AB63 /* HoverFlappy-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HoverFlappy-Prefix.pch"; sourceTree = "<group>"; };
 		F53CCA7D194D2F3B00A9AB63 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F53CCA7E194D2F3B00A9AB63 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		F53CCA81194D2F3B00A9AB63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
@@ -89,9 +91,9 @@
 		F53CCA89194D2F3B00A9AB63 /* MyScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyScene.h; sourceTree = "<group>"; };
 		F53CCA8A194D2F3B00A9AB63 /* MyScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyScene.m; sourceTree = "<group>"; };
 		F53CCA8E194D2F3B00A9AB63 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		F53CCA94194D2F3B00A9AB63 /* HoverBirdTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HoverBirdTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F53CCA94194D2F3B00A9AB63 /* HoverFlappyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HoverFlappyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F53CCA95194D2F3B00A9AB63 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		F53CCA9D194D2F3B00A9AB63 /* HoverBirdTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HoverBirdTests-Info.plist"; sourceTree = "<group>"; };
+		F53CCA9D194D2F3B00A9AB63 /* HoverFlappyTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HoverFlappyTests-Info.plist"; sourceTree = "<group>"; };
 		F53CCA9F194D2F3B00A9AB63 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F53CCAA1194D2F3B00A9AB63 /* HoverBirdTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HoverBirdTests.m; sourceTree = "<group>"; };
 		F53CCAAB194D306D00A9AB63 /* Bird1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bird1.png; sourceTree = "<group>"; };
@@ -117,6 +119,9 @@
 		F57750C4195F247E005205FF /* whackTrimmed.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = whackTrimmed.m4a; path = ../whackTrimmed.m4a; sourceTree = "<group>"; };
 		F57750C6195F2504005205FF /* whack1.aifc */ = {isa = PBXFileReference; lastKnownFileType = file; path = whack1.aifc; sourceTree = "<group>"; };
 		F57750C8195F25F6005205FF /* whack4.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = whack4.m4a; sourceTree = "<group>"; };
+		F57750CA195F2D72005205FF /* DateScore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateScore.h; sourceTree = "<group>"; };
+		F57750CB195F2D72005205FF /* DateScore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateScore.m; sourceTree = "<group>"; };
+		F57750CF195F6B2A005205FF /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		F5D56B0E194E89D30063D43A /* ScoresViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoresViewController.h; sourceTree = "<group>"; };
 		F5D56B0F194E89D30063D43A /* ScoresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoresViewController.m; sourceTree = "<group>"; };
 		F5D56B17194EBBEB0063D43A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
@@ -140,6 +145,7 @@
 				F53CCAC0194E602100A9AB63 /* CoreMedia.framework in Frameworks */,
 				F53CCABE194E601A00A9AB63 /* CoreVideo.framework in Frameworks */,
 				F53CCABA194E56C700A9AB63 /* AVFoundation.framework in Frameworks */,
+				F57750D0195F6B2A005205FF /* GameKit.framework in Frameworks */,
 				F53CCA6F194D2F3B00A9AB63 /* CoreGraphics.framework in Frameworks */,
 				F53CCA71194D2F3B00A9AB63 /* UIKit.framework in Frameworks */,
 				F53CCA73194D2F3B00A9AB63 /* SpriteKit.framework in Frameworks */,
@@ -183,8 +189,8 @@
 		F53CCA6A194D2F3B00A9AB63 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F53CCA69194D2F3B00A9AB63 /* HoverBird.app */,
-				F53CCA94194D2F3B00A9AB63 /* HoverBirdTests.xctest */,
+				F53CCA69194D2F3B00A9AB63 /* HoverFlappy.app */,
+				F53CCA94194D2F3B00A9AB63 /* HoverFlappyTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -192,6 +198,7 @@
 		F53CCA6B194D2F3B00A9AB63 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F57750CF195F6B2A005205FF /* GameKit.framework */,
 				F5354EA9194FE4CD0049F406 /* Accelerate.framework */,
 				F5D56B17194EBBEB0063D43A /* iAd.framework */,
 				F53CCACF194E611400A9AB63 /* QuartzCore.framework */,
@@ -229,6 +236,8 @@
 				F5D56B0F194E89D30063D43A /* ScoresViewController.m */,
 				F53CCA89194D2F3B00A9AB63 /* MyScene.h */,
 				F53CCA8A194D2F3B00A9AB63 /* MyScene.m */,
+				F57750CA195F2D72005205FF /* DateScore.h */,
+				F57750CB195F2D72005205FF /* DateScore.m */,
 				F53CCA8E194D2F3B00A9AB63 /* Images.xcassets */,
 				F53CCA75194D2F3B00A9AB63 /* Supporting Files */,
 			);
@@ -251,10 +260,10 @@
 				F53CCAB2194D33AB00A9AB63 /* Skyline.png */,
 				F53CCAAB194D306D00A9AB63 /* Bird1.png */,
 				F53CCAAC194D306D00A9AB63 /* Bird2.png */,
-				F53CCA76194D2F3B00A9AB63 /* HoverBird-Info.plist */,
+				F53CCA76194D2F3B00A9AB63 /* HoverFlappy-Info.plist */,
 				F53CCA77194D2F3B00A9AB63 /* InfoPlist.strings */,
 				F53CCA7A194D2F3B00A9AB63 /* main.m */,
-				F53CCA7C194D2F3B00A9AB63 /* HoverBird-Prefix.pch */,
+				F53CCA7C194D2F3B00A9AB63 /* HoverFlappy-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -271,7 +280,7 @@
 		F53CCA9C194D2F3B00A9AB63 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				F53CCA9D194D2F3B00A9AB63 /* HoverBirdTests-Info.plist */,
+				F53CCA9D194D2F3B00A9AB63 /* HoverFlappyTests-Info.plist */,
 				F53CCA9E194D2F3B00A9AB63 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -280,9 +289,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F53CCA68194D2F3B00A9AB63 /* HoverBird */ = {
+		F53CCA68194D2F3B00A9AB63 /* HoverFlappy */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F53CCAA5194D2F3B00A9AB63 /* Build configuration list for PBXNativeTarget "HoverBird" */;
+			buildConfigurationList = F53CCAA5194D2F3B00A9AB63 /* Build configuration list for PBXNativeTarget "HoverFlappy" */;
 			buildPhases = (
 				F53CCA65194D2F3B00A9AB63 /* Sources */,
 				F53CCA66194D2F3B00A9AB63 /* Frameworks */,
@@ -292,14 +301,14 @@
 			);
 			dependencies = (
 			);
-			name = HoverBird;
+			name = HoverFlappy;
 			productName = HoverBird;
-			productReference = F53CCA69194D2F3B00A9AB63 /* HoverBird.app */;
+			productReference = F53CCA69194D2F3B00A9AB63 /* HoverFlappy.app */;
 			productType = "com.apple.product-type.application";
 		};
-		F53CCA93194D2F3B00A9AB63 /* HoverBirdTests */ = {
+		F53CCA93194D2F3B00A9AB63 /* HoverFlappyTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F53CCAA8194D2F3B00A9AB63 /* Build configuration list for PBXNativeTarget "HoverBirdTests" */;
+			buildConfigurationList = F53CCAA8194D2F3B00A9AB63 /* Build configuration list for PBXNativeTarget "HoverFlappyTests" */;
 			buildPhases = (
 				F53CCA90194D2F3B00A9AB63 /* Sources */,
 				F53CCA91194D2F3B00A9AB63 /* Frameworks */,
@@ -310,9 +319,9 @@
 			dependencies = (
 				F53CCA9A194D2F3B00A9AB63 /* PBXTargetDependency */,
 			);
-			name = HoverBirdTests;
+			name = HoverFlappyTests;
 			productName = HoverBirdTests;
-			productReference = F53CCA94194D2F3B00A9AB63 /* HoverBirdTests.xctest */;
+			productReference = F53CCA94194D2F3B00A9AB63 /* HoverFlappyTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -324,12 +333,20 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = maadotaa.com;
 				TargetAttributes = {
+					F53CCA68194D2F3B00A9AB63 = {
+						DevelopmentTeam = 876U4BLX5B;
+						SystemCapabilities = {
+							com.apple.GameCenter = {
+								enabled = 1;
+							};
+						};
+					};
 					F53CCA93194D2F3B00A9AB63 = {
 						TestTargetID = F53CCA68194D2F3B00A9AB63;
 					};
 				};
 			};
-			buildConfigurationList = F53CCA64194D2F3B00A9AB63 /* Build configuration list for PBXProject "HoverBird" */;
+			buildConfigurationList = F53CCA64194D2F3B00A9AB63 /* Build configuration list for PBXProject "HoverFlappy" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -342,8 +359,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F53CCA68194D2F3B00A9AB63 /* HoverBird */,
-				F53CCA93194D2F3B00A9AB63 /* HoverBirdTests */,
+				F53CCA68194D2F3B00A9AB63 /* HoverFlappy */,
+				F53CCA93194D2F3B00A9AB63 /* HoverFlappyTests */,
 			);
 		};
 /* End PBXProject section */
@@ -390,6 +407,7 @@
 			files = (
 				F53CCA8B194D2F3B00A9AB63 /* MyScene.m in Sources */,
 				F5D56B10194E89D30063D43A /* ScoresViewController.m in Sources */,
+				F57750CC195F2D72005205FF /* DateScore.m in Sources */,
 				F5354EA7194FE3510049F406 /* UIImage+ImageEffects.m in Sources */,
 				F53CCA88194D2F3B00A9AB63 /* ViewController.m in Sources */,
 				F53CCA7F194D2F3B00A9AB63 /* AppDelegate.m in Sources */,
@@ -410,7 +428,7 @@
 /* Begin PBXTargetDependency section */
 		F53CCA9A194D2F3B00A9AB63 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F53CCA68194D2F3B00A9AB63 /* HoverBird */;
+			target = F53CCA68194D2F3B00A9AB63 /* HoverFlappy */;
 			targetProxy = F53CCA99194D2F3B00A9AB63 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -529,16 +547,19 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
 				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "HoverBird/HoverBird-Prefix.pch";
-				INFOPLIST_FILE = "HoverBird/HoverBird-Info.plist";
+				GCC_PREFIX_HEADER = "HoverBird/HoverFlappy-Prefix.pch";
+				INFOPLIST_FILE = "HoverBird/HoverFlappy-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = HoverFlappy;
+				PROVISIONING_PROFILE = "";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -550,16 +571,19 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
 				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "HoverBird/HoverBird-Prefix.pch";
-				INFOPLIST_FILE = "HoverBird/HoverBird-Info.plist";
+				GCC_PREFIX_HEADER = "HoverBird/HoverFlappy-Prefix.pch";
+				INFOPLIST_FILE = "HoverBird/HoverFlappy-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = HoverFlappy;
+				PROVISIONING_PROFILE = "";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -580,8 +604,8 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "HoverBirdTests/HoverBirdTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "HoverBirdTests/HoverFlappyTests-Info.plist";
+				PRODUCT_NAME = HoverFlappyTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -598,8 +622,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HoverBird/HoverBird-Prefix.pch";
-				INFOPLIST_FILE = "HoverBirdTests/HoverBirdTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "HoverBirdTests/HoverFlappyTests-Info.plist";
+				PRODUCT_NAME = HoverFlappyTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -608,7 +632,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F53CCA64194D2F3B00A9AB63 /* Build configuration list for PBXProject "HoverBird" */ = {
+		F53CCA64194D2F3B00A9AB63 /* Build configuration list for PBXProject "HoverFlappy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F53CCAA3194D2F3B00A9AB63 /* Debug */,
@@ -617,7 +641,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F53CCAA5194D2F3B00A9AB63 /* Build configuration list for PBXNativeTarget "HoverBird" */ = {
+		F53CCAA5194D2F3B00A9AB63 /* Build configuration list for PBXNativeTarget "HoverFlappy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F53CCAA6194D2F3B00A9AB63 /* Debug */,
@@ -626,7 +650,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F53CCAA8194D2F3B00A9AB63 /* Build configuration list for PBXNativeTarget "HoverBirdTests" */ = {
+		F53CCAA8194D2F3B00A9AB63 /* Build configuration list for PBXNativeTarget "HoverFlappyTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F53CCAA9194D2F3B00A9AB63 /* Debug */,

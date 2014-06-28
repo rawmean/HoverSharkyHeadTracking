@@ -7,11 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <GameKit/GameKit.h>
 
-@interface ScoresViewController : UIViewController {
+@interface ScoresViewController : UIViewController<GKGameCenterControllerDelegate> {
     
 }
 
 @property (strong, nonatomic) UIImage* bgImage;
+@property (assign, nonatomic) NSInteger score;
 
 @end

@@ -19,6 +19,8 @@
 @property (strong, nonatomic) ADBannerView *rectangleAdView;
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImage;
 @property (weak, nonatomic) IBOutlet UILabel *highestScoreLabel;
+@property (weak, nonatomic) IBOutlet UILabel *currentScore;
+- (IBAction)didTapLeaderboard:(id)sender;
 
 - (IBAction)didTapNewGame:(id)sender;
 
@@ -46,9 +48,22 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    [self reportScore:self.score forLeaderboardID:@"hoverflappy_leaderboardID"];
+
+    
     self.backgroundImage.image = _bgImage;
+    
+    NSInteger highestScore = [[NSUserDefaults standardUserDefaults] integerForKey:@"highestScore"];
+    highestScore = MAX(highestScore, self.score);
+
+    [[NSUserDefaults standardUserDefaults] setInteger:highestScore forKey:@"highestScore"];
+    [[NSUserDefaults standardUserDefaults]  synchronize];
+    maxScore = highestScore;
+
+    
     self.highestScoreLabel.text = [NSString stringWithFormat:@"%ld", (long)maxScore];
-    [self.scoresTableView reloadData];
+    self.currentScore.text = [NSString stringWithFormat:@"%ld", (long)self.score];
 
 }
 
@@ -144,6 +159,11 @@
 
 
 
+- (IBAction)didTapLeaderboard:(id)sender {
+    [self presentLeaderboards];
+    
+}
+
 - (IBAction)didTapNewGame:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -164,6 +184,37 @@
     [banner removeFromSuperview];
     [self.view layoutIfNeeded];
 }
+
+
+#pragma mark - Reporting Score to GameCenter
+
+- (void) reportScore: (int64_t) score forLeaderboardID: (NSString*) identifier
+{
+    GKScore *scoreReporter = [[GKScore alloc] initWithLeaderboardIdentifier: identifier];
+    scoreReporter.value = score;
+    scoreReporter.context = 0;
+    
+    NSArray *scores = @[scoreReporter];
+    [GKScore  reportScores:scores withCompletionHandler:^(NSError *error) {
+        NSLog(@"reported score to leaderboard");
+//        [self presentLeaderboards];
+    }];
+}
+
+
+- (void) presentLeaderboards {
+    GKGameCenterViewController* gameCenterController = [[GKGameCenterViewController alloc] init];
+    gameCenterController.viewState = GKGameCenterViewControllerStateLeaderboards;
+    gameCenterController.gameCenterDelegate = self;
+    gameCenterController.modalTransitionStyle = UIModalTransitionStylePartialCurl;
+    [self presentViewController:gameCenterController animated:YES completion:nil];
+}
+
+- (void) gameCenterViewControllerDidFinish:(GKGameCenterViewController*) gameCenterViewController {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+
 
 
 @end

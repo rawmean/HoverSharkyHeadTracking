@@ -8,6 +8,7 @@
 
 #import <opencv2/highgui/ios.h>
 #import "MyScene.h"
+#import "DateScore.h"
 
 using namespace cv;
 
@@ -23,7 +24,7 @@ using namespace cv;
     SKLabelNode* _scoreLabelNode;
     NSInteger _score;
     Mat grayImage, prevGrayImage;
-    NSMutableDictionary * scoreArray;
+    NSMutableArray * scoreArray;
     NSMutableArray *lifeIconArray;
     NSInteger numLivesLeft;
     NSInteger totalNumLives;
@@ -309,7 +310,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                 // Game over
                 scoreArray = [[[NSUserDefaults standardUserDefaults] objectForKey:@"scoreArray"] mutableCopy];
                 if (!scoreArray) {
-                    scoreArray = [[NSMutableDictionary alloc] init];
+                    scoreArray = [[NSMutableArray alloc] init];
                 }
                 NSDate* dateNow = [NSDate date];
                 NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -324,10 +325,16 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                 
                 NSString* now = [dateFormatter stringFromDate:dateNow];
                 
+                DateScore *dateScore = [[DateScore alloc] init];
+                dateScore.date = now;
+                dateScore.score = _score;
+                
+                [scoreArray insertObject:dateScore atIndex:0];
+                
                 //[scoreArray addEntriesFromDictionary:@{now: @(_score)}];
-                [scoreArray setObject:@(_score) forKey:now];
-                [[NSUserDefaults standardUserDefaults] setObject:scoreArray forKey:@"scoreArray"];
-                [[NSUserDefaults standardUserDefaults] synchronize];
+//                [scoreArray setObject:@(_score) forKey:now];
+//                [[NSUserDefaults standardUserDefaults] setObject:scoreArray forKey:@"scoreArray"];
+//                [[NSUserDefaults standardUserDefaults] synchronize];
                 [self performSelector:@selector(restartGame) withObject:nil afterDelay:1];
            }
             
