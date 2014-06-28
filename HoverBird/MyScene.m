@@ -27,6 +27,7 @@ using namespace cv;
     NSMutableArray *lifeIconArray;
     NSInteger numLivesLeft;
     NSInteger totalNumLives;
+    SKAction *crashSound;
 }
 @property (nonatomic, strong) CvVideoCamera* videoCamera;
 
@@ -133,6 +134,9 @@ static NSInteger const kVerticalPipeGap = 100;
 
 -(id)initWithSize:(CGSize)size {
     if (self = [super initWithSize:size]) {
+        
+        crashSound = [SKAction playSoundFileNamed:@"whack4.m4a" waitForCompletion:NO];
+
         
         // init camera
         self.videoCamera = [[CvVideoCamera alloc] init];
@@ -297,6 +301,8 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
         } else {
             // Bird has collided with world
             
+            [self runAction:crashSound];
+
             numLivesLeft--;
             [ lifeIconArray[numLivesLeft] runAction:[SKAction removeFromParent] ];
             if (numLivesLeft == 0) {
@@ -308,7 +314,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                 NSDate* dateNow = [NSDate date];
                 NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                 [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
-                [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+                [dateFormatter setDateStyle:NSDateFormatterShortStyle];
                 
                 NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
                 [dateFormatter setLocale:usLocale];

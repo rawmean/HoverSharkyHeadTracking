@@ -46,6 +46,11 @@
 		F53CCACC194E60AD00A9AB63 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCACB194E60AD00A9AB63 /* MessageUI.framework */; };
 		F53CCACE194E60EE00A9AB63 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCACD194E60EE00A9AB63 /* AssetsLibrary.framework */; };
 		F53CCAD0194E611400A9AB63 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCACF194E611400A9AB63 /* QuartzCore.framework */; };
+		F57750BD195F1F98005205FF /* whack.aif in Resources */ = {isa = PBXBuildFile; fileRef = F57750BC195F1F98005205FF /* whack.aif */; };
+		F57750BF195F2208005205FF /* whack_short.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F57750BE195F2208005205FF /* whack_short.mp3 */; };
+		F57750C5195F247E005205FF /* whackTrimmed.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F57750C4195F247E005205FF /* whackTrimmed.m4a */; };
+		F57750C7195F2504005205FF /* whack1.aifc in Resources */ = {isa = PBXBuildFile; fileRef = F57750C6195F2504005205FF /* whack1.aifc */; };
+		F57750C9195F25F6005205FF /* whack4.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F57750C8195F25F6005205FF /* whack4.m4a */; };
 		F5D56B10194E89D30063D43A /* ScoresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D56B0F194E89D30063D43A /* ScoresViewController.m */; };
 		F5D56B18194EBBEB0063D43A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D56B17194EBBEB0063D43A /* iAd.framework */; };
 /* End PBXBuildFile section */
@@ -107,6 +112,11 @@
 		F53CCACB194E60AD00A9AB63 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		F53CCACD194E60EE00A9AB63 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		F53CCACF194E611400A9AB63 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		F57750BC195F1F98005205FF /* whack.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = whack.aif; sourceTree = "<group>"; };
+		F57750BE195F2208005205FF /* whack_short.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = whack_short.mp3; sourceTree = "<group>"; };
+		F57750C4195F247E005205FF /* whackTrimmed.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = whackTrimmed.m4a; path = ../whackTrimmed.m4a; sourceTree = "<group>"; };
+		F57750C6195F2504005205FF /* whack1.aifc */ = {isa = PBXFileReference; lastKnownFileType = file; path = whack1.aifc; sourceTree = "<group>"; };
+		F57750C8195F25F6005205FF /* whack4.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = whack4.m4a; sourceTree = "<group>"; };
 		F5D56B0E194E89D30063D43A /* ScoresViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoresViewController.h; sourceTree = "<group>"; };
 		F5D56B0F194E89D30063D43A /* ScoresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoresViewController.m; sourceTree = "<group>"; };
 		F5D56B17194EBBEB0063D43A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
@@ -228,6 +238,11 @@
 		F53CCA75194D2F3B00A9AB63 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F57750C4195F247E005205FF /* whackTrimmed.m4a */,
+				F57750C8195F25F6005205FF /* whack4.m4a */,
+				F57750C6195F2504005205FF /* whack1.aifc */,
+				F57750BC195F1F98005205FF /* whack.aif */,
+				F57750BE195F2208005205FF /* whack_short.mp3 */,
 				F5354EAB195011C60049F406 /* heart.png */,
 				F5354E99194EC1B20049F406 /* blur1.png */,
 				F53CCAAF194D33AB00A9AB63 /* Ground.png */,
@@ -338,14 +353,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F57750C5195F247E005205FF /* whackTrimmed.m4a in Resources */,
 				F53CCA8F194D2F3B00A9AB63 /* Images.xcassets in Resources */,
 				F53CCA85194D2F3B00A9AB63 /* Main_iPad.storyboard in Resources */,
+				F57750BF195F2208005205FF /* whack_short.mp3 in Resources */,
+				F57750BD195F1F98005205FF /* whack.aif in Resources */,
 				F53CCA82194D2F3B00A9AB63 /* Main_iPhone.storyboard in Resources */,
 				F5354E9A194EC1B20049F406 /* blur1.png in Resources */,
 				F53CCAB5194D33AB00A9AB63 /* Pipe2.png in Resources */,
 				F5354EAC195011C60049F406 /* heart.png in Resources */,
 				F53CCAB4194D33AB00A9AB63 /* Pipe1.png in Resources */,
 				F53CCAAD194D306D00A9AB63 /* Bird1.png in Resources */,
+				F57750C7195F2504005205FF /* whack1.aifc in Resources */,
+				F57750C9195F25F6005205FF /* whack4.m4a in Resources */,
 				F53CCA79194D2F3B00A9AB63 /* InfoPlist.strings in Resources */,
 				F53CCAAE194D306D00A9AB63 /* Bird2.png in Resources */,
 				F53CCAB3194D33AB00A9AB63 /* Ground.png in Resources */,

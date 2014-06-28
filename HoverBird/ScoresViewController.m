@@ -134,7 +134,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"scores" forIndexPath:indexPath];
     
     // Configure the cell...
-    cell.textLabel.text = [NSString stringWithFormat:@"%@:\t\t%@",
+    cell.textLabel.text = [NSString stringWithFormat:@"%@:\t\t\t%@",
                            dateArray[indexPath.row], scoreArray[indexPath.row]];
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.backgroundColor = [UIColor clearColor];
