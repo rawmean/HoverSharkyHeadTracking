@@ -9,7 +9,7 @@
 #import "ScoresViewController.h"
 #import <iAd/iAd.h>
 
-@interface ScoresViewController ()<UITableViewDataSource, ADBannerViewDelegate> {
+@interface ScoresViewController ()<ADBannerViewDelegate> {
     NSDictionary* scoreDict;
     NSMutableArray* scoreArray;
     NSMutableArray* dateArray;
@@ -49,7 +49,6 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self reportScore:self.score forLeaderboardID:@"hoverflappy_leaderboardID"];
 
     
     self.backgroundImage.image = _bgImage;
@@ -60,6 +59,7 @@
     [[NSUserDefaults standardUserDefaults] setInteger:highestScore forKey:@"highestScore"];
     [[NSUserDefaults standardUserDefaults]  synchronize];
     maxScore = highestScore;
+    [self reportScore:maxScore forLeaderboardID:@"hoverflappy_leaderboardID"];
 
     
     self.highestScoreLabel.text = [NSString stringWithFormat:@"%ld", (long)maxScore];
@@ -88,29 +88,6 @@
     }
     else
         self.canDisplayBannerAds = YES;
-   
-    
-    
-    scoreDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"scoreArray"];
-    
-    NSEnumerator *enumerator = [scoreDict keyEnumerator];
-    id key;
-    
-    scoreArray = [[NSMutableArray alloc] init];
-    dateArray  =[[NSMutableArray alloc] init];
-    maxScore = -1;
-    while ((key = [enumerator nextObject])) {
-        /* code that uses the returned key */
-        [scoreArray addObject:scoreDict[key]];
-        [dateArray addObject:key];
-        if ([scoreDict[key] integerValue] > maxScore) {
-            maxScore = [scoreDict[key] integerValue];
-        }
-    }
-    
-    self.scoresTableView.dataSource = self;
-
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -129,34 +106,6 @@
     // Pass the selected object to the new view controller.
 }
 */
-
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    // Return the number of sections.
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    // Return the number of rows in the section.
-    return scoreArray.count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"scores" forIndexPath:indexPath];
-    
-    // Configure the cell...
-    cell.textLabel.text = [NSString stringWithFormat:@"%@:\t\t\t%@",
-                           dateArray[indexPath.row], scoreArray[indexPath.row]];
-    cell.textLabel.backgroundColor = [UIColor clearColor];
-    cell.backgroundColor = [UIColor clearColor];
-    
-    return cell;
-}
-
 
 
 - (IBAction)didTapLeaderboard:(id)sender {
@@ -206,8 +155,14 @@
     GKGameCenterViewController* gameCenterController = [[GKGameCenterViewController alloc] init];
     gameCenterController.viewState = GKGameCenterViewControllerStateLeaderboards;
     gameCenterController.gameCenterDelegate = self;
-    gameCenterController.modalTransitionStyle = UIModalTransitionStylePartialCurl;
-    [self presentViewController:gameCenterController animated:YES completion:nil];
+    
+    [self presentViewController:gameCenterController animated:YES completion: nil];
+    
+//    [self performSegueWithIdentifier:@"ShowLeaderboard" sender:self];
+
+    
+//    gameCenterController.modalTransitionStyle = UIModalTransitionStylePartialCurl;
+//    [self presentViewController:gameCenterController animated:YES completion:nil];
 }
 
 - (void) gameCenterViewControllerDidFinish:(GKGameCenterViewController*) gameCenterViewController {
