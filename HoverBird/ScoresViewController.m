@@ -9,6 +9,8 @@
 #import "ScoresViewController.h"
 #import <iAd/iAd.h>
 
+#define LEADERBOARD_ID @"hoverflappy_leaderboardID"
+
 @interface ScoresViewController ()<ADBannerViewDelegate> {
     NSDictionary* scoreDict;
     NSMutableArray* scoreArray;
@@ -20,6 +22,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImage;
 @property (weak, nonatomic) IBOutlet UILabel *highestScoreLabel;
 @property (weak, nonatomic) IBOutlet UILabel *currentScore;
+@property (weak, nonatomic) IBOutlet UILabel *rankLabel;
+
 - (IBAction)didTapLeaderboard:(id)sender;
 
 - (IBAction)didTapNewGame:(id)sender;
@@ -59,10 +63,10 @@
     [[NSUserDefaults standardUserDefaults] setInteger:highestScore forKey:@"highestScore"];
     [[NSUserDefaults standardUserDefaults]  synchronize];
     maxScore = highestScore;
-    [self reportScore:maxScore forLeaderboardID:@"hoverflappy_leaderboardID"];
+    [self reportScore:self.score forLeaderboardID:LEADERBOARD_ID];
 
-    
-    self.highestScoreLabel.text = [NSString stringWithFormat:@"%ld", (long)maxScore];
+    [self updateHighestScore];
+//    self.highestScoreLabel.text = [NSString stringWithFormat:@"%ld", (long)maxScore];
     self.currentScore.text = [NSString stringWithFormat:@"%ld", (long)self.score];
 
 }
@@ -72,7 +76,7 @@
     [super viewDidLoad];
 
     // Do any additional setup after loading the view.
-    [self.scoresTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"scores"];
+//    [self.scoresTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"scores"];
     
     NSString *reqSysVer = @"8.0";
     NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
@@ -145,9 +149,29 @@
     
     NSArray *scores = @[scoreReporter];
     [GKScore  reportScores:scores withCompletionHandler:^(NSError *error) {
-        NSLog(@"reported score to leaderboard");
 //        [self presentLeaderboards];
     }];
+}
+
+
+-(void) updateHighestScore {
+    GKLeaderboard *leaderboardRequest = [[GKLeaderboard alloc] init];
+    if (leaderboardRequest != nil) {
+        leaderboardRequest.identifier = LEADERBOARD_ID;
+        leaderboardRequest.range = NSMakeRange(1,1);
+
+        [leaderboardRequest loadScoresWithCompletionHandler:^(NSArray *scores, NSError *error){
+            if (error != nil) {
+                //Handle error
+                NSLog(@"Trouble getting highest score: %@", error.description);
+            }
+            else{
+                self.highestScoreLabel.text = [NSString stringWithFormat:@"%ld", (long)leaderboardRequest.localPlayerScore.value];
+                self.rankLabel.text = [NSString stringWithFormat:@"%ld", (long)leaderboardRequest.localPlayerScore.rank];
+                NSLog(@"highscore: %@", self.highestScoreLabel.text);
+            }
+        }];
+    }
 }
 
 

@@ -29,6 +29,8 @@ using namespace cv;
     NSInteger numLivesLeft;
     NSInteger totalNumLives;
     SKAction *crashSound;
+    SKAction *scoreSound;
+    SKAction *gameOverSound;
 }
 @property (nonatomic, strong) CvVideoCamera* videoCamera;
 
@@ -137,6 +139,8 @@ static NSInteger const kVerticalPipeGap = 100;
     if (self = [super initWithSize:size]) {
         
         crashSound = [SKAction playSoundFileNamed:@"whack4.m4a" waitForCompletion:NO];
+        scoreSound = [SKAction playSoundFileNamed:@"score.wav" waitForCompletion:NO];
+        gameOverSound = [SKAction playSoundFileNamed:@"game_over.wav" waitForCompletion:NO];
 
         
         // init camera
@@ -298,7 +302,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             _score++;
             _scoreLabelNode.text = [NSString stringWithFormat:@"%ld", (long)_score];
             // Add a little visual feedback for the score increment
-            [_scoreLabelNode runAction:[SKAction sequence:@[[SKAction scaleTo:1.5 duration:0.1], [SKAction scaleTo:1.0 duration:0.1]]]];
+            [_scoreLabelNode runAction:[SKAction sequence:@[scoreSound, [SKAction scaleTo:1.5 duration:0.1], [SKAction scaleTo:1.0 duration:0.1]]]];
         } else {
             // Bird has collided with world
             
@@ -308,33 +312,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             [ lifeIconArray[numLivesLeft] runAction:[SKAction removeFromParent] ];
             if (numLivesLeft == 0) {
                 // Game over
-                scoreArray = [[[NSUserDefaults standardUserDefaults] objectForKey:@"scoreArray"] mutableCopy];
-                if (!scoreArray) {
-                    scoreArray = [[NSMutableArray alloc] init];
-                }
-                NSDate* dateNow = [NSDate date];
-                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-                [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
-                [dateFormatter setDateStyle:NSDateFormatterShortStyle];
-                
-                NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-                [dateFormatter setLocale:usLocale];
-                
-                NSLog(@"Date for locale %@: %@",
-                      [[dateFormatter locale] localeIdentifier], [dateFormatter stringFromDate:dateNow]);
-                
-                NSString* now = [dateFormatter stringFromDate:dateNow];
-                
-                DateScore *dateScore = [[DateScore alloc] init];
-                dateScore.date = now;
-                dateScore.score = _score;
-                
-                [scoreArray insertObject:dateScore atIndex:0];
-                
-                //[scoreArray addEntriesFromDictionary:@{now: @(_score)}];
-//                [scoreArray setObject:@(_score) forKey:now];
-//                [[NSUserDefaults standardUserDefaults] setObject:scoreArray forKey:@"scoreArray"];
-//                [[NSUserDefaults standardUserDefaults] synchronize];
+                [self runAction:gameOverSound];
                 [self performSelector:@selector(restartGame) withObject:nil afterDelay:1];
            }
             
