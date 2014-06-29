@@ -47,6 +47,7 @@
 		F53CCACE194E60EE00A9AB63 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCACD194E60EE00A9AB63 /* AssetsLibrary.framework */; };
 		F53CCAD0194E611400A9AB63 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCACF194E611400A9AB63 /* QuartzCore.framework */; };
 		F555DDD4195F9E2A00E0841A /* game_over.wav in Resources */ = {isa = PBXBuildFile; fileRef = F555DDD3195F9E2A00E0841A /* game_over.wav */; };
+		F555DDD619609D8F00E0841A /* Loopy_trimmed.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F555DDD519609D8F00E0841A /* Loopy_trimmed.m4a */; };
 		F57750BD195F1F98005205FF /* whack.aif in Resources */ = {isa = PBXBuildFile; fileRef = F57750BC195F1F98005205FF /* whack.aif */; };
 		F57750BF195F2208005205FF /* whack_short.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F57750BE195F2208005205FF /* whack_short.mp3 */; };
 		F57750C5195F247E005205FF /* whackTrimmed.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F57750C4195F247E005205FF /* whackTrimmed.m4a */; };
@@ -118,6 +119,7 @@
 		F53CCACD194E60EE00A9AB63 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		F53CCACF194E611400A9AB63 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F555DDD3195F9E2A00E0841A /* game_over.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = game_over.wav; sourceTree = "<group>"; };
+		F555DDD519609D8F00E0841A /* Loopy_trimmed.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = Loopy_trimmed.m4a; sourceTree = "<group>"; };
 		F57750BC195F1F98005205FF /* whack.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = whack.aif; sourceTree = "<group>"; };
 		F57750BE195F2208005205FF /* whack_short.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = whack_short.mp3; sourceTree = "<group>"; };
 		F57750C4195F247E005205FF /* whackTrimmed.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = whackTrimmed.m4a; path = ../whackTrimmed.m4a; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 		F53CCA75194D2F3B00A9AB63 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F555DDD519609D8F00E0841A /* Loopy_trimmed.m4a */,
 				F555DDD3195F9E2A00E0841A /* game_over.wav */,
 				F57750DB195F9C84005205FF /*  GameOver.wav */,
 				F57750D1195F9883005205FF /* score.wav */,
@@ -391,6 +394,7 @@
 				F5354EAC195011C60049F406 /* heart.png in Resources */,
 				F53CCAB4194D33AB00A9AB63 /* Pipe1.png in Resources */,
 				F53CCAAD194D306D00A9AB63 /* Bird1.png in Resources */,
+				F555DDD619609D8F00E0841A /* Loopy_trimmed.m4a in Resources */,
 				F57750C7195F2504005205FF /* whack1.aifc in Resources */,
 				F57750DC195F9C84005205FF /*  GameOver.wav in Resources */,
 				F57750C9195F25F6005205FF /* whack4.m4a in Resources */,

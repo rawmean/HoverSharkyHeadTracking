@@ -10,6 +10,7 @@
 #import "MyScene.h"
 #import "DateScore.h"
 
+
 using namespace cv;
 
 @interface MyScene ()<SKPhysicsContactDelegate, CvVideoCameraDelegate> {
@@ -20,6 +21,7 @@ using namespace cv;
     SKAction* _movePipesAndRemove;
     SKNode* _moving;
     SKNode* _pipes;
+    SKNode* _ground;
     BOOL _canRestart;
     SKLabelNode* _scoreLabelNode;
     NSInteger _score;
@@ -31,6 +33,9 @@ using namespace cv;
     SKAction *crashSound;
     SKAction *scoreSound;
     SKAction *gameOverSound;
+    SKAction *bgMusic;
+    BOOL isGameInProgress;
+    AVAudioPlayer *gameSceneLoop;
 }
 @property (nonatomic, strong) CvVideoCamera* videoCamera;
 
@@ -46,7 +51,18 @@ static NSInteger const kVerticalPipeGap = 100;
 
 @synthesize scoreDelegate = _scoreDelegate;
 
+
+#define BG_MUSIC @"bgMusic"
+
 -(void)resetScene {
+    
+//    SKAction* repeatBGMisicForever = [SKAction repeatActionForever:bgMusic];
+//    [self runAction:repeatBGMisicForever withKey:BG_MUSIC];
+    
+    [gameSceneLoop play];
+
+//    [self runAction:bgMusic];
+    
     // Move bird to original position and reset velocity
     _bird.position = CGPointMake(self.frame.size.width / 4, CGRectGetMidY(self.frame));
     _bird.physicsBody.velocity = CGVectorMake( 0, 0 );
@@ -88,6 +104,7 @@ static NSInteger const kVerticalPipeGap = 100;
     pipe1.physicsBody.dynamic = NO;
     pipe1.physicsBody.categoryBitMask = pipeCategory;
     pipe1.physicsBody.contactTestBitMask = birdCategory;
+//    pipe1.physicsBody.restitution = 0.1;
     
     [pipePair addChild:pipe1];
     
@@ -98,6 +115,8 @@ static NSInteger const kVerticalPipeGap = 100;
     pipe2.physicsBody.dynamic = NO;
     pipe2.physicsBody.categoryBitMask = pipeCategory;
     pipe2.physicsBody.contactTestBitMask = birdCategory;
+//    pipe2.physicsBody.restitution = 0.1;
+    
     [pipePair addChild:pipe2];
     
     SKNode* contactNode = [SKNode node];
@@ -138,9 +157,23 @@ static NSInteger const kVerticalPipeGap = 100;
 -(id)initWithSize:(CGSize)size {
     if (self = [super initWithSize:size]) {
         
+        isGameInProgress = NO;
+        
         crashSound = [SKAction playSoundFileNamed:@"whack4.m4a" waitForCompletion:NO];
         scoreSound = [SKAction playSoundFileNamed:@"score.wav" waitForCompletion:NO];
         gameOverSound = [SKAction playSoundFileNamed:@"game_over.wav" waitForCompletion:NO];
+//        bgMusic = [SKAction playSoundFileNamed:@"Loopy_trimmed.m4a" waitForCompletion:YES];
+
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"Loopy_trimmed" ofType:@"m4a"];
+        NSError *error;
+        gameSceneLoop = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:filePath] error:&error];
+        if (error) {
+            NSLog(@"Error in audioPlayer: %@", [error localizedDescription]);
+        } else {
+            gameSceneLoop.numberOfLoops = -1;
+            [gameSceneLoop prepareToPlay];
+//            [gameSceneLoop play];
+        }
 
         
         // init camera
@@ -164,12 +197,13 @@ static NSInteger const kVerticalPipeGap = 100;
         // Initialize label and create a label which holds the score
         _score = 0;
         _scoreLabelNode = [SKLabelNode labelNodeWithFontNamed:@"MarkerFelt-Wide"];
-        _scoreLabelNode.position = CGPointMake( CGRectGetMidX( self.frame ), 3 * self.frame.size.height / 4 );
+        _scoreLabelNode.position = CGPointMake( CGRectGetMidX( self.frame ), 7 * self.frame.size.height / 8 );
         _scoreLabelNode.zPosition = 100;
         _scoreLabelNode.text = [NSString stringWithFormat:@"%ld", (long)_score];
         [self addChild:_scoreLabelNode];
 
-        self.physicsWorld.gravity = CGVectorMake( 0.0, -5.0 );
+//        self.physicsWorld.gravity = CGVectorMake( 0.0, -5.0 );
+        self.physicsWorld.gravity = CGVectorMake( 0.0, -0.0 );
         self.physicsWorld.contactDelegate = self;
         
         _skyColor = [SKColor colorWithRed:113.0/255.0 green:197.0/255.0 blue:207.0/255.0 alpha:1.0];
@@ -182,6 +216,7 @@ static NSInteger const kVerticalPipeGap = 100;
         [_moving addChild:_pipes];
         
         // Create ground
+        //////////////////
         
         SKTexture* groundTexture = [SKTexture textureWithImageNamed:@"Ground"];
         groundTexture.filteringMode = SKTextureFilteringNearest;
@@ -200,15 +235,18 @@ static NSInteger const kVerticalPipeGap = 100;
         
         // Create ground physics container
         
-        SKNode* dummy = [SKNode node];
-        dummy.position = CGPointMake(0, groundTexture.size.height);
-        dummy.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.frame.size.width, groundTexture.size.height * 2)];
-        dummy.physicsBody.dynamic = NO;
-        dummy.physicsBody.categoryBitMask = worldCategory;
+        _ground = [SKNode node];
+        _ground.position = CGPointMake(0, groundTexture.size.height);
+        _ground.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.frame.size.width, groundTexture.size.height * 2)];
+        _ground.physicsBody.dynamic = NO;
+        _ground.physicsBody.categoryBitMask = worldCategory;
+    //    _ground.physicsBody.contactTestBitMask = birdCategory;
+        _ground.physicsBody.restitution = 0.5;
 
-        [self addChild:dummy];
+        [self addChild:_ground];
         
         // Create skyline
+        /////////////////
         
         SKTexture* skylineTexture = [SKTexture textureWithImageNamed:@"Skyline"];
         skylineTexture.filteringMode = SKTextureFilteringNearest;
@@ -227,6 +265,7 @@ static NSInteger const kVerticalPipeGap = 100;
         }
         
         // Create pipes
+        ////////////////
         
         _pipeTexture1 = [SKTexture textureWithImageNamed:@"Pipe1"];
         _pipeTexture1.filteringMode = SKTextureFilteringNearest;
@@ -242,9 +281,17 @@ static NSInteger const kVerticalPipeGap = 100;
         SKAction* delay = [SKAction waitForDuration:2.0];
         SKAction* spawnThenDelay = [SKAction sequence:@[spawn, delay]];
         SKAction* spawnThenDelayForever = [SKAction repeatActionForever:spawnThenDelay];
+        
+//        // Delay the pipes at the begining a little
+//        SKAction* delay5 = [SKAction waitForDuration:5.0];
+//        SKAction* delayThenspawnThenDelayForever = [SKAction sequence:@[delay5, spawnThenDelayForever]];
+//        [self runAction:delayThenspawnThenDelayForever];
+        
         [self runAction:spawnThenDelayForever];
         
+        ///////////////
         // create bird
+        ///////////////
         SKTexture* birdTexture1 = [SKTexture textureWithImageNamed:@"Bird1"];
         birdTexture1.filteringMode = SKTextureFilteringNearest;
         SKTexture* birdTexture2 = [SKTexture textureWithImageNamed:@"Bird2"];
@@ -258,6 +305,8 @@ static NSInteger const kVerticalPipeGap = 100;
         _bird.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:_bird.size.height / 2];
         _bird.physicsBody.dynamic = YES;
         _bird.physicsBody.allowsRotation = NO;
+        _bird.physicsBody.restitution = 0.3;
+        _bird.physicsBody.friction = 0.9;
         
         _bird.physicsBody.categoryBitMask = birdCategory;
         _bird.physicsBody.collisionBitMask = worldCategory | pipeCategory;
@@ -271,13 +320,25 @@ static NSInteger const kVerticalPipeGap = 100;
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    /* Called when a touch begins */
-    if( _moving.speed > 0 ) {
+    
+    if (isGameInProgress) {
         _bird.physicsBody.velocity = CGVectorMake(0, 0);
         [_bird.physicsBody applyImpulse:CGVectorMake(0, 4)];
-    } else if( _canRestart ) {
+    }
+    else {
+        isGameInProgress = YES;
+        self.physicsWorld.gravity = CGVectorMake( 0.0, -5.0 );
         [self resetScene];
     }
+    
+    
+    /* Called when a touch begins */
+//    if( _moving.speed > 0 ) {
+//        _bird.physicsBody.velocity = CGVectorMake(0, 0);
+//        [_bird.physicsBody applyImpulse:CGVectorMake(0, 4)];
+//    } else if( _canRestart ) {
+//        [self resetScene];
+//    }
 }
 
 CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
@@ -305,7 +366,9 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             [_scoreLabelNode runAction:[SKAction sequence:@[scoreSound, [SKAction scaleTo:1.5 duration:0.1], [SKAction scaleTo:1.0 duration:0.1]]]];
         } else {
             // Bird has collided with world
-            
+            [gameSceneLoop stop];
+//            [self removeActionForKey:BG_MUSIC];
+            isGameInProgress = NO;
             [self runAction:crashSound];
 
             numLivesLeft--;
@@ -323,6 +386,11 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             [_bird runAction:[SKAction rotateByAngle:M_PI * _bird.position.y * 0.01 duration:_bird.position.y * 0.003] completion:^{
                 _bird.speed = 0;
             }];
+            
+//            SKAction *moveGroundUp = [SKAction  ];
+//            
+//            SKAction *shakeGround = [SKAction sequence:@[SKAction repeatAction:[SKAction sequence:@[<#objects, ...#>]] count:4], [SKAction runBlock:^{
+//                _canRestart = YES];
             
             [self removeActionForKey:@"flash"];
             [self runAction:[SKAction sequence:@[[SKAction repeatAction:[SKAction sequence:@[[SKAction runBlock:^{
