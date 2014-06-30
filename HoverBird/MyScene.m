@@ -141,9 +141,9 @@ static NSInteger const kVerticalPipeGap = 100;
         [lifeIcon setScale:.70];
         
         lifeIcon.position = CGPointMake(self.frame.size.width*0.08 + k*lifeTexture.size.width*.80, self.frame.size.height*0.9);
-        lifeIcon.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:lifeIcon.size.height / 2];
-        lifeIcon.physicsBody.dynamic = NO;
-        lifeIcon.physicsBody.allowsRotation = NO;
+//        lifeIcon.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:lifeIcon.size.height / 2];
+//        lifeIcon.physicsBody.dynamic = NO;
+//        lifeIcon.physicsBody.allowsRotation = NO;
         lifeIconArray[k] = lifeIcon;
         [self addChild:lifeIcon];
         
@@ -326,8 +326,54 @@ static NSInteger const kVerticalPipeGap = 100;
     return self;
 }
 
+-(void) reverseGravity {
+    self.physicsWorld.gravity = CGVectorMake( 0.0, 1.0 );
+}
 
--(void) flapAfterCrash {
+#pragma mark - Bird Creation
+
+
+-(void) createDeadBird {
+    CGPoint lastPosition = _bird.position;
+    [_bird removeFromParent];
+    NSArray *birdTextures = @[[SKTexture textureWithImageNamed:@"g1"],
+                              [SKTexture textureWithImageNamed:@"g2"],
+                              [SKTexture textureWithImageNamed:@"g3"],
+                              [SKTexture textureWithImageNamed:@"g4"],
+                              [SKTexture textureWithImageNamed:@"g5"],
+                              [SKTexture textureWithImageNamed:@"g6"],
+                              [SKTexture textureWithImageNamed:@"g7"],
+                              [SKTexture textureWithImageNamed:@"g8"]];
+    
+    SKAction* flap = [SKAction repeatActionForever:[SKAction animateWithTextures:birdTextures timePerFrame:0.15]];
+    _bird = [SKSpriteNode spriteNodeWithTexture:birdTextures[0]];
+    [_bird setScale:.05];
+    
+    _bird.position = lastPosition;
+    _bird.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:_bird.size.height / 2];
+    _bird.physicsBody.dynamic = YES;
+    _bird.physicsBody.allowsRotation = NO;
+    _bird.physicsBody.restitution = 0.3;
+    _bird.physicsBody.friction = 0.9;
+    
+    _bird.physicsBody.categoryBitMask = birdCategory;
+    _bird.physicsBody.collisionBitMask = worldCategory;
+    _bird.physicsBody.contactTestBitMask = worldCategory | pipeCategory;
+    
+    
+    [self addChild:_bird];
+//    SKAction* delay = [SKAction waitForDuration:5.0];
+//    SKAction* delayThenGotoHeaven = [SKAction sequence:@[delay, flap]];
+
+//    [self removeActionForKey:@"flapAfterCrash"];
+    [_bird runAction:flap withKey:@"flapAfterDeath"];
+    [self performSelector:@selector(reverseGravity) withObject:nil afterDelay:1];
+
+
+}
+
+
+-(void) createCrashedBird {
     CGPoint lastPosition = _bird.position;
     [_bird removeFromParent];
     NSArray *birdTextures = @[[SKTexture textureWithImageNamed:@"d1"],
@@ -360,7 +406,7 @@ static NSInteger const kVerticalPipeGap = 100;
     [_bird runAction:flap withKey:@"flapAfterCrash"];
 }
 
--(void) flapRegular {
+-(void) createBirdRegular {
     [_bird removeFromParent];
     NSArray *birdTextures = @[[SKTexture textureWithImageNamed:@"a1"],
                               [SKTexture textureWithImageNamed:@"a2"],
@@ -403,7 +449,7 @@ static NSInteger const kVerticalPipeGap = 100;
         isGameInProgress = YES;
         self.physicsWorld.gravity = CGVectorMake( 0.0, -5.0 );
         [self resetScene];
-        [self flapRegular];
+        [self createBirdRegular];
     }
     
     
@@ -428,6 +474,8 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
 
 
 
+#pragma mark - Contact
+
 - (void)didBeginContact:(SKPhysicsContact *)contact {
     // Flash background if contact is detected
     if( _moving.speed > 0 ) {
@@ -441,7 +489,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             [_scoreLabelNode runAction:[SKAction sequence:@[scoreSound, [SKAction scaleTo:1.5 duration:0.1], [SKAction scaleTo:1.0 duration:0.1]]]];
         } else {
             // Bird has collided with world
-            [self flapAfterCrash];
+            [self createCrashedBird];
             [gameSceneLoop stop];
 //            [self removeActionForKey:BG_MUSIC];
             isGameInProgress = NO;
@@ -461,6 +509,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             
             [_bird runAction:[SKAction rotateByAngle:M_PI * _bird.position.y * 0.01 duration:_bird.position.y * 0.003] completion:^{
                 _bird.speed = 0;
+                [self performSelector:@selector(createDeadBird) withObject:nil afterDelay:1];
             }];
             
 //            SKAction *moveGroundUp = [SKAction  ];
