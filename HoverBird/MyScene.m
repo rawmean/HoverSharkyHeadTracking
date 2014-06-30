@@ -35,6 +35,7 @@ using namespace cv;
     SKAction *gameOverSound;
     BOOL isGameInProgress;
     AVAudioPlayer *gameSceneLoop;
+    BOOL isTouchEnabled;
 }
 @property (nonatomic, strong) CvVideoCamera* videoCamera;
 
@@ -156,6 +157,8 @@ static NSInteger const kVerticalPipeGap = 100;
 
 -(id)initWithSize:(CGSize)size {
     if (self = [super initWithSize:size]) {
+        
+        isTouchEnabled = YES;
         
         isGameInProgress = NO;
         
@@ -328,6 +331,8 @@ static NSInteger const kVerticalPipeGap = 100;
 
 -(void) reverseGravity {
     self.physicsWorld.gravity = CGVectorMake( 0.0, 1.0 );
+    isTouchEnabled = YES;
+
 }
 
 #pragma mark - Bird Creation
@@ -385,7 +390,7 @@ static NSInteger const kVerticalPipeGap = 100;
                               [SKTexture textureWithImageNamed:@"d7"],
                               [SKTexture textureWithImageNamed:@"d8"]];
     
-    SKAction* flap = [SKAction repeatActionForever:[SKAction animateWithTextures:birdTextures timePerFrame:0.05]];
+    SKAction* flap = [SKAction repeatActionForever:[SKAction animateWithTextures:birdTextures timePerFrame:0.15]];
     _bird = [SKSpriteNode spriteNodeWithTexture:birdTextures[0]];
     [_bird setScale:.05];
 
@@ -402,8 +407,9 @@ static NSInteger const kVerticalPipeGap = 100;
 
     
     [self addChild:_bird];
-    [self removeActionForKey:@"flapRegular"];
+//    [self removeActionForKey:@"flapRegular"];
     [_bird runAction:flap withKey:@"flapAfterCrash"];
+    [self createSmoke];
 }
 
 -(void) createBirdRegular {
@@ -417,7 +423,7 @@ static NSInteger const kVerticalPipeGap = 100;
                               [SKTexture textureWithImageNamed:@"a7"],
                               [SKTexture textureWithImageNamed:@"a8"]];
     
-    SKAction* flap = [SKAction repeatActionForever:[SKAction animateWithTextures:birdTextures timePerFrame:0.05]];
+    SKAction* flap = [SKAction repeatActionForever:[SKAction animateWithTextures:birdTextures timePerFrame:0.15]];
     _bird = [SKSpriteNode spriteNodeWithTexture:birdTextures[0]];
     [_bird setScale:.05];
     
@@ -438,8 +444,42 @@ static NSInteger const kVerticalPipeGap = 100;
     [_bird runAction:flap withKey:@"flapRegular"];
 }
 
+-(void) createSmoke {
+    NSArray *smokeTextures = @[[SKTexture textureWithImageNamed:@"s1"],
+                              [SKTexture textureWithImageNamed:@"s2"],
+                              [SKTexture textureWithImageNamed:@"s3"],
+                              [SKTexture textureWithImageNamed:@"s4"],
+                               [SKTexture textureWithImageNamed:@"s5"]];
+                               
+    SKAction* explode = [SKAction animateWithTextures:smokeTextures timePerFrame:0.2];
+    SKSpriteNode* smokeNode = [SKSpriteNode spriteNodeWithTexture:smokeTextures[0]];
+    [smokeNode setScale:.05];
+    
+    smokeNode.position = _bird.position;
+//    _bird.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:_bird.size.height / 2];
+//    _bird.physicsBody.dynamic = YES;
+//    _bird.physicsBody.allowsRotation = NO;
+//    _bird.physicsBody.restitution = 0.3;
+//    _bird.physicsBody.friction = 0.9;
+//    
+//    _bird.physicsBody.categoryBitMask = birdCategory;
+//    _bird.physicsBody.collisionBitMask = worldCategory | pipeCategory;
+//    _bird.physicsBody.contactTestBitMask = worldCategory | pipeCategory;
+    
+    
+    [self addChild:smokeNode];
+    SKAction* explodeThenRemove = [SKAction sequence:@[explode, [SKAction removeFromParent]]];
+    [smokeNode runAction:explodeThenRemove];
+}
+
+
+#pragma mark - Touch handling
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+    if (!isTouchEnabled) {
+        return;
+    }
     
     if (isGameInProgress) {
         _bird.physicsBody.velocity = CGVectorMake(0, 0);
@@ -489,19 +529,11 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             [_scoreLabelNode runAction:[SKAction sequence:@[scoreSound, [SKAction scaleTo:1.5 duration:0.1], [SKAction scaleTo:1.0 duration:0.1]]]];
         } else {
             // Bird has collided with world
+            isTouchEnabled = NO;
             [self createCrashedBird];
             [gameSceneLoop stop];
-//            [self removeActionForKey:BG_MUSIC];
             isGameInProgress = NO;
             [self runAction:crashSound];
-
-            numLivesLeft--;
-            [ lifeIconArray[numLivesLeft] runAction:[SKAction removeFromParent] ];
-            if (numLivesLeft == 0) {
-                // Game over
-                [self runAction:gameOverSound];
-                [self performSelector:@selector(restartGame) withObject:nil afterDelay:1];
-           }
             
             _moving.speed = 0;
             
@@ -512,10 +544,6 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                 [self performSelector:@selector(createDeadBird) withObject:nil afterDelay:1];
             }];
             
-//            SKAction *moveGroundUp = [SKAction  ];
-//            
-//            SKAction *shakeGround = [SKAction sequence:@[SKAction repeatAction:[SKAction sequence:@[<#objects, ...#>]] count:4], [SKAction runBlock:^{
-//                _canRestart = YES];
             
             [self removeActionForKey:@"flash"];
             [self runAction:[SKAction sequence:@[[SKAction repeatAction:[SKAction sequence:@[[SKAction runBlock:^{
@@ -525,6 +553,14 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             }], [SKAction waitForDuration:0.05]]] count:4], [SKAction runBlock:^{
                 _canRestart = YES;
             }]]] withKey:@"flash"];
+            
+            numLivesLeft--;
+            [ lifeIconArray[numLivesLeft] runAction:[SKAction removeFromParent] ];
+            if (numLivesLeft == 0) {
+                // Game over
+                [self runAction:gameOverSound];
+                [self performSelector:@selector(restartGame) withObject:nil afterDelay:2];
+            }
         }
     }
 }
