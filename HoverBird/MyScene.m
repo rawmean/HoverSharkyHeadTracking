@@ -33,7 +33,6 @@ using namespace cv;
     SKAction *crashSound;
     SKAction *scoreSound;
     SKAction *gameOverSound;
-    SKAction *bgMusic;
     BOOL isGameInProgress;
     AVAudioPlayer *gameSceneLoop;
 }
@@ -52,16 +51,10 @@ static NSInteger const kVerticalPipeGap = 100;
 @synthesize scoreDelegate = _scoreDelegate;
 
 
-#define BG_MUSIC @"bgMusic"
 
 -(void)resetScene {
     
-//    SKAction* repeatBGMisicForever = [SKAction repeatActionForever:bgMusic];
-//    [self runAction:repeatBGMisicForever withKey:BG_MUSIC];
-    
     [gameSceneLoop play];
-
-//    [self runAction:bgMusic];
     
     // Move bird to original position and reset velocity
     _bird.position = CGPointMake(self.frame.size.width / 4, CGRectGetMidY(self.frame));
@@ -86,6 +79,13 @@ static NSInteger const kVerticalPipeGap = 100;
     
     // Restart animation
     _moving.speed = 1;
+    
+    [self removeActionForKey:@"pipes"];
+    SKAction* spawn = [SKAction performSelector:@selector(spawnPipes) onTarget:self];
+    SKAction* delay = [SKAction waitForDuration:2.0];
+    SKAction* spawnThenDelay = [SKAction sequence:@[spawn, delay]];
+    SKAction* spawnThenDelayForever = [SKAction repeatActionForever:spawnThenDelay];
+    [self runAction:spawnThenDelayForever withKey:@"pipes"];
     
 }
 
@@ -277,29 +277,36 @@ static NSInteger const kVerticalPipeGap = 100;
         SKAction* removePipes = [SKAction removeFromParent];
         _movePipesAndRemove = [SKAction sequence:@[movePipes, removePipes]];
         
-        SKAction* spawn = [SKAction performSelector:@selector(spawnPipes) onTarget:self];
-        SKAction* delay = [SKAction waitForDuration:2.0];
-        SKAction* spawnThenDelay = [SKAction sequence:@[spawn, delay]];
-        SKAction* spawnThenDelayForever = [SKAction repeatActionForever:spawnThenDelay];
-        
-//        // Delay the pipes at the begining a little
-//        SKAction* delay5 = [SKAction waitForDuration:5.0];
-//        SKAction* delayThenspawnThenDelayForever = [SKAction sequence:@[delay5, spawnThenDelayForever]];
-//        [self runAction:delayThenspawnThenDelayForever];
-        
-        [self runAction:spawnThenDelayForever];
+//        SKAction* spawn = [SKAction performSelector:@selector(spawnPipes) onTarget:self];
+//        SKAction* delay = [SKAction waitForDuration:2.0];
+//        SKAction* spawnThenDelay = [SKAction sequence:@[spawn, delay]];
+//        SKAction* spawnThenDelayForever = [SKAction repeatActionForever:spawnThenDelay];
+//        [self runAction:spawnThenDelayForever];
         
         ///////////////
         // create bird
         ///////////////
-        SKTexture* birdTexture1 = [SKTexture textureWithImageNamed:@"Bird1"];
-        birdTexture1.filteringMode = SKTextureFilteringNearest;
-        SKTexture* birdTexture2 = [SKTexture textureWithImageNamed:@"Bird2"];
-        birdTexture2.filteringMode = SKTextureFilteringNearest;
+//        SKTexture* birdTexture1 = [SKTexture textureWithImageNamed:@"bird01"];
+//        birdTexture1.filteringMode = SKTextureFilteringNearest;
+//        SKTexture* birdTexture2 = [SKTexture textureWithImageNamed:@"bird02"];
+//        birdTexture2.filteringMode = SKTextureFilteringNearest;
+//        SKTexture* birdTexture3 = [SKTexture textureWithImageNamed:@"bird03"];
+//        birdTexture2.filteringMode = SKTextureFilteringNearest;
+//        SKTexture* birdTexture4 = [SKTexture textureWithImageNamed:@"bird04"];
+//        birdTexture2.filteringMode = SKTextureFilteringNearest;
         
-        SKAction* flap = [SKAction repeatActionForever:[SKAction animateWithTextures:@[birdTexture1, birdTexture2] timePerFrame:0.2]];
-        _bird = [SKSpriteNode spriteNodeWithTexture:birdTexture1];
-        [_bird setScale:2.0];
+        NSArray *birdTextures = @[[SKTexture textureWithImageNamed:@"a1"],
+                                  [SKTexture textureWithImageNamed:@"a2"],
+                                  [SKTexture textureWithImageNamed:@"a3"],
+                                  [SKTexture textureWithImageNamed:@"a4"],
+                                  [SKTexture textureWithImageNamed:@"a5"],
+                                  [SKTexture textureWithImageNamed:@"a6"],
+                                  [SKTexture textureWithImageNamed:@"a7"],
+                                  [SKTexture textureWithImageNamed:@"a8"]];
+        
+        SKAction* flap = [SKAction repeatActionForever:[SKAction animateWithTextures:birdTextures timePerFrame:0.05]];
+        _bird = [SKSpriteNode spriteNodeWithTexture:birdTextures[0]];
+        [_bird setScale:.05];
         
         _bird.position = CGPointMake(self.frame.size.width / 4, CGRectGetMidY(self.frame));
         _bird.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:_bird.size.height / 2];
@@ -314,28 +321,96 @@ static NSInteger const kVerticalPipeGap = 100;
         
         
         [self addChild:_bird];
-        [_bird runAction:flap];
+        [_bird runAction:flap withKey:@"flapRegular"];
     }
     return self;
 }
+
+
+-(void) flapAfterCrash {
+    CGPoint lastPosition = _bird.position;
+    [_bird removeFromParent];
+    NSArray *birdTextures = @[[SKTexture textureWithImageNamed:@"d1"],
+                              [SKTexture textureWithImageNamed:@"d2"],
+                              [SKTexture textureWithImageNamed:@"d3"],
+                              [SKTexture textureWithImageNamed:@"d4"],
+                              [SKTexture textureWithImageNamed:@"d5"],
+                              [SKTexture textureWithImageNamed:@"d6"],
+                              [SKTexture textureWithImageNamed:@"d7"],
+                              [SKTexture textureWithImageNamed:@"d8"]];
+    
+    SKAction* flap = [SKAction repeatActionForever:[SKAction animateWithTextures:birdTextures timePerFrame:0.05]];
+    _bird = [SKSpriteNode spriteNodeWithTexture:birdTextures[0]];
+    [_bird setScale:.05];
+
+    _bird.position = lastPosition;
+    _bird.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:_bird.size.height / 2];
+    _bird.physicsBody.dynamic = YES;
+    _bird.physicsBody.allowsRotation = NO;
+    _bird.physicsBody.restitution = 0.3;
+    _bird.physicsBody.friction = 0.9;
+    
+    _bird.physicsBody.categoryBitMask = birdCategory;
+    _bird.physicsBody.collisionBitMask = worldCategory | pipeCategory;
+    _bird.physicsBody.contactTestBitMask = worldCategory | pipeCategory;
+
+    
+    [self addChild:_bird];
+    [self removeActionForKey:@"flapRegular"];
+    [_bird runAction:flap withKey:@"flapAfterCrash"];
+}
+
+-(void) flapRegular {
+    [_bird removeFromParent];
+    NSArray *birdTextures = @[[SKTexture textureWithImageNamed:@"a1"],
+                              [SKTexture textureWithImageNamed:@"a2"],
+                              [SKTexture textureWithImageNamed:@"a3"],
+                              [SKTexture textureWithImageNamed:@"a4"],
+                              [SKTexture textureWithImageNamed:@"a5"],
+                              [SKTexture textureWithImageNamed:@"a6"],
+                              [SKTexture textureWithImageNamed:@"a7"],
+                              [SKTexture textureWithImageNamed:@"a8"]];
+    
+    SKAction* flap = [SKAction repeatActionForever:[SKAction animateWithTextures:birdTextures timePerFrame:0.05]];
+    _bird = [SKSpriteNode spriteNodeWithTexture:birdTextures[0]];
+    [_bird setScale:.05];
+    
+    _bird.position = CGPointMake(self.frame.size.width / 4, CGRectGetMidY(self.frame));
+    _bird.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:_bird.size.height / 2];
+    _bird.physicsBody.dynamic = YES;
+    _bird.physicsBody.allowsRotation = NO;
+    _bird.physicsBody.restitution = 0.3;
+    _bird.physicsBody.friction = 0.9;
+    
+    _bird.physicsBody.categoryBitMask = birdCategory;
+    _bird.physicsBody.collisionBitMask = worldCategory | pipeCategory;
+    _bird.physicsBody.contactTestBitMask = worldCategory | pipeCategory;
+
+    
+    [self addChild:_bird];
+    [self removeActionForKey:@"flapAfterCrash"];
+    [_bird runAction:flap withKey:@"flapRegular"];
+}
+
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
     if (isGameInProgress) {
         _bird.physicsBody.velocity = CGVectorMake(0, 0);
-        [_bird.physicsBody applyImpulse:CGVectorMake(0, 4)];
+        [_bird.physicsBody applyImpulse:CGVectorMake(0, 7)];
     }
     else {
         isGameInProgress = YES;
         self.physicsWorld.gravity = CGVectorMake( 0.0, -5.0 );
         [self resetScene];
+        [self flapRegular];
     }
     
     
     /* Called when a touch begins */
 //    if( _moving.speed > 0 ) {
 //        _bird.physicsBody.velocity = CGVectorMake(0, 0);
-//        [_bird.physicsBody applyImpulse:CGVectorMake(0, 4)];
+//        [_bird.physicsBody applyImpulse:CGVectorMake(0, 6)];
 //    } else if( _canRestart ) {
 //        [self resetScene];
 //    }
@@ -366,6 +441,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             [_scoreLabelNode runAction:[SKAction sequence:@[scoreSound, [SKAction scaleTo:1.5 duration:0.1], [SKAction scaleTo:1.0 duration:0.1]]]];
         } else {
             // Bird has collided with world
+            [self flapAfterCrash];
             [gameSceneLoop stop];
 //            [self removeActionForKey:BG_MUSIC];
             isGameInProgress = NO;
