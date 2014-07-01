@@ -33,6 +33,7 @@ using namespace cv;
     SKAction *crashSound;
     SKAction *scoreSound;
     SKAction *gameOverSound;
+    SKAction *organSound;
     BOOL isGameInProgress;
     AVAudioPlayer *gameSceneLoop;
     BOOL isTouchEnabled;
@@ -52,11 +53,50 @@ static NSInteger const kVerticalPipeGap = 100;
 @synthesize scoreDelegate = _scoreDelegate;
 
 
+#pragma mark - Buttons
+
+//TapToStart button
+- (SKSpriteNode *)startButtonNode
+{
+    SKSpriteNode *startNode = [SKSpriteNode spriteNodeWithImageNamed:@"startButton.png"];
+    startNode.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame)*1.5);
+    startNode.name = @"startButtonNode";//how the node is identified later
+    startNode.zPosition = 1.0;
+    [startNode setScale:.50];
+
+    return startNode;
+}
+
+//TapToRest button
+- (SKSpriteNode *)restartButtonNode
+{
+    SKSpriteNode *startNode = [SKSpriteNode spriteNodeWithImageNamed:@"restartButton.png"];
+    startNode.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame)*0.7);
+    startNode.name = @"restartButtonNode";//how the node is identified later
+    startNode.zPosition = 1.0;
+    [startNode setScale:.50];
+
+    return startNode;
+}
+
+-(void) startGeneratingPipes {
+    isGameInProgress = YES;
+    [gameSceneLoop play];
+    self.physicsWorld.gravity = CGVectorMake( 0.0, -5.0 );
+    [self removeActionForKey:@"pipes"];
+    SKAction* spawn = [SKAction performSelector:@selector(spawnPipes) onTarget:self];
+    SKAction* delay = [SKAction waitForDuration:2.0];
+    SKAction* spawnThenDelay = [SKAction sequence:@[spawn, delay]];
+    SKAction* spawnThenDelayForever = [SKAction repeatActionForever:spawnThenDelay];
+    [self runAction:spawnThenDelayForever withKey:@"pipes"];
+}
 
 -(void)resetScene {
     
-    [gameSceneLoop play];
-    
+    [self addChild: [self startButtonNode]];
+    self.physicsWorld.gravity = CGVectorMake( 0.0, 0.0 );
+    [self removeActionForKey:@"pipes"];
+
     // Move bird to original position and reset velocity
     _bird.position = CGPointMake(self.frame.size.width / 4, CGRectGetMidY(self.frame));
     _bird.physicsBody.velocity = CGVectorMake( 0, 0 );
@@ -81,12 +121,6 @@ static NSInteger const kVerticalPipeGap = 100;
     // Restart animation
     _moving.speed = 1;
     
-    [self removeActionForKey:@"pipes"];
-    SKAction* spawn = [SKAction performSelector:@selector(spawnPipes) onTarget:self];
-    SKAction* delay = [SKAction waitForDuration:2.0];
-    SKAction* spawnThenDelay = [SKAction sequence:@[spawn, delay]];
-    SKAction* spawnThenDelayForever = [SKAction repeatActionForever:spawnThenDelay];
-    [self runAction:spawnThenDelayForever withKey:@"pipes"];
     
 }
 
@@ -109,9 +143,11 @@ static NSInteger const kVerticalPipeGap = 100;
     
     [pipePair addChild:pipe1];
     
+    float distanceScale = (_score > 20) ? 1.3:1.0;
+    
     SKSpriteNode* pipe2 = [SKSpriteNode spriteNodeWithTexture:_pipeTexture2];
     [pipe2 setScale:2];
-    pipe2.position = CGPointMake( 0, y + pipe1.size.height + kVerticalPipeGap );
+    pipe2.position = CGPointMake( 0, y + pipe1.size.height + kVerticalPipeGap/distanceScale );
     pipe2.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:pipe2.size];
     pipe2.physicsBody.dynamic = NO;
     pipe2.physicsBody.categoryBitMask = pipeCategory;
@@ -154,6 +190,7 @@ static NSInteger const kVerticalPipeGap = 100;
     }
 }
 
+#pragma mark - initialization
 
 -(id)initWithSize:(CGSize)size {
     if (self = [super initWithSize:size]) {
@@ -165,6 +202,7 @@ static NSInteger const kVerticalPipeGap = 100;
         crashSound = [SKAction playSoundFileNamed:@"whack4.m4a" waitForCompletion:NO];
         scoreSound = [SKAction playSoundFileNamed:@"score.wav" waitForCompletion:NO];
         gameOverSound = [SKAction playSoundFileNamed:@"game_over.wav" waitForCompletion:NO];
+        organSound = [SKAction playSoundFileNamed:@"organ.wav" waitForCompletion:NO];
 //        bgMusic = [SKAction playSoundFileNamed:@"Loopy_trimmed.m4a" waitForCompletion:YES];
 
         NSString *filePath = [[NSBundle mainBundle] pathForResource:@"Loopy_trimmed" ofType:@"m4a"];
@@ -221,16 +259,17 @@ static NSInteger const kVerticalPipeGap = 100;
         // Create ground
         //////////////////
         
-        SKTexture* groundTexture = [SKTexture textureWithImageNamed:@"Ground"];
-        groundTexture.filteringMode = SKTextureFilteringNearest;
-        
-        SKAction* moveGroundSprite = [SKAction moveByX:-groundTexture.size.width*2 y:0 duration:0.02 * groundTexture.size.width*2];
-        SKAction* resetGroundSprite = [SKAction moveByX:groundTexture.size.width*2 y:0 duration:0];
+        SKTexture* groundTexture = [SKTexture textureWithImageNamed:@"ground_flower"];
+//        groundTexture.filteringMode = SKTextureFilteringNearest;
+        float groundScale = .25;
+
+        SKAction* moveGroundSprite = [SKAction moveByX:-groundTexture.size.width*groundScale y:0 duration:0.02 * groundTexture.size.width*groundScale];
+        SKAction* resetGroundSprite = [SKAction moveByX:groundTexture.size.width*groundScale y:0 duration:0];
         SKAction* moveGroundSpritesForever = [SKAction repeatActionForever:[SKAction sequence:@[moveGroundSprite, resetGroundSprite]]];
         
-        for( int i = 0; i < 2 + self.frame.size.width / ( groundTexture.size.width * 2 ); ++i ) {
+        for( int i = 0; i < 2 + self.frame.size.width / ( groundTexture.size.width * groundScale ); ++i ) {
             SKSpriteNode* sprite = [SKSpriteNode spriteNodeWithTexture:groundTexture];
-            [sprite setScale:2.0];
+            [sprite setScale:groundScale];
             sprite.position = CGPointMake(i * sprite.size.width, sprite.size.height / 2);
             [sprite runAction:moveGroundSpritesForever];
             [_moving addChild:sprite];
@@ -239,8 +278,8 @@ static NSInteger const kVerticalPipeGap = 100;
         // Create ground physics container
         
         _ground = [SKNode node];
-        _ground.position = CGPointMake(0, groundTexture.size.height);
-        _ground.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.frame.size.width, groundTexture.size.height * 2)];
+        _ground.position = CGPointMake(0, groundTexture.size.height* groundScale/2);
+        _ground.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.frame.size.width, groundTexture.size.height * groundScale)];
         _ground.physicsBody.dynamic = NO;
         _ground.physicsBody.categoryBitMask = worldCategory;
     //    _ground.physicsBody.contactTestBitMask = birdCategory;
@@ -251,18 +290,19 @@ static NSInteger const kVerticalPipeGap = 100;
         // Create skyline
         /////////////////
         
-        SKTexture* skylineTexture = [SKTexture textureWithImageNamed:@"Skyline"];
-        skylineTexture.filteringMode = SKTextureFilteringNearest;
+        SKTexture* skylineTexture = [SKTexture textureWithImageNamed:@"Skyline_red"];
+//        skylineTexture.filteringMode = SKTextureFilteringNearest;
+        float skylineScale = 0.12;
         
-        SKAction* moveSkylineSprite = [SKAction moveByX:-skylineTexture.size.width*2 y:0 duration:0.1 * skylineTexture.size.width*2];
-        SKAction* resetSkylineSprite = [SKAction moveByX:skylineTexture.size.width*2 y:0 duration:0];
+        SKAction* moveSkylineSprite = [SKAction moveByX:-skylineTexture.size.width*skylineScale y:0 duration:0.1 * skylineTexture.size.width*skylineScale];
+        SKAction* resetSkylineSprite = [SKAction moveByX:skylineTexture.size.width*skylineScale y:0 duration:0];
         SKAction* moveSkylineSpritesForever = [SKAction repeatActionForever:[SKAction sequence:@[moveSkylineSprite, resetSkylineSprite]]];
         
-        for( int i = 0; i < 2 + self.frame.size.width / ( skylineTexture.size.width * 2 ); ++i ) {
+        for( int i = 0; i < 2 + self.frame.size.width / ( skylineTexture.size.width * skylineScale ); ++i ) {
             SKSpriteNode* sprite = [SKSpriteNode spriteNodeWithTexture:skylineTexture];
-            [sprite setScale:2.0];
+            [sprite setScale:skylineScale];
             sprite.zPosition = -20;
-            sprite.position = CGPointMake(i * sprite.size.width, sprite.size.height / 2 + groundTexture.size.height * 2);
+            sprite.position = CGPointMake(i * sprite.size.width, sprite.size.height / 2 + groundTexture.size.height * groundScale);
             [sprite runAction:moveSkylineSpritesForever];
             [_moving addChild:sprite];
         }
@@ -280,23 +320,6 @@ static NSInteger const kVerticalPipeGap = 100;
         SKAction* removePipes = [SKAction removeFromParent];
         _movePipesAndRemove = [SKAction sequence:@[movePipes, removePipes]];
         
-//        SKAction* spawn = [SKAction performSelector:@selector(spawnPipes) onTarget:self];
-//        SKAction* delay = [SKAction waitForDuration:2.0];
-//        SKAction* spawnThenDelay = [SKAction sequence:@[spawn, delay]];
-//        SKAction* spawnThenDelayForever = [SKAction repeatActionForever:spawnThenDelay];
-//        [self runAction:spawnThenDelayForever];
-        
-        ///////////////
-        // create bird
-        ///////////////
-//        SKTexture* birdTexture1 = [SKTexture textureWithImageNamed:@"bird01"];
-//        birdTexture1.filteringMode = SKTextureFilteringNearest;
-//        SKTexture* birdTexture2 = [SKTexture textureWithImageNamed:@"bird02"];
-//        birdTexture2.filteringMode = SKTextureFilteringNearest;
-//        SKTexture* birdTexture3 = [SKTexture textureWithImageNamed:@"bird03"];
-//        birdTexture2.filteringMode = SKTextureFilteringNearest;
-//        SKTexture* birdTexture4 = [SKTexture textureWithImageNamed:@"bird04"];
-//        birdTexture2.filteringMode = SKTextureFilteringNearest;
         
         NSArray *birdTextures = @[[SKTexture textureWithImageNamed:@"a1"],
                                   [SKTexture textureWithImageNamed:@"a2"],
@@ -325,12 +348,14 @@ static NSInteger const kVerticalPipeGap = 100;
         
         [self addChild:_bird];
         [_bird runAction:flap withKey:@"flapRegular"];
+        [self addChild:[self startButtonNode]];
     }
     return self;
 }
 
 -(void) reverseGravity {
     self.physicsWorld.gravity = CGVectorMake( 0.0, 1.0 );
+    [self runAction:organSound];
     isTouchEnabled = YES;
 
 }
@@ -481,16 +506,31 @@ static NSInteger const kVerticalPipeGap = 100;
         return;
     }
     
-    if (isGameInProgress) {
-        _bird.physicsBody.velocity = CGVectorMake(0, 0);
-        [_bird.physicsBody applyImpulse:CGVectorMake(0, 7)];
-    }
-    else {
+    
+    UITouch *touch = [touches anyObject];
+    CGPoint location = [touch locationInNode:self];
+    SKNode *node = [self nodeAtPoint:location];
+    
+    //if start button touched, bring the pipes and gravity
+    if ([node.name isEqualToString:@"startButtonNode"]) {
+        [node removeFromParent];
+        [self startGeneratingPipes];
         isGameInProgress = YES;
-        self.physicsWorld.gravity = CGVectorMake( 0.0, -5.0 );
+
+//        _bird.physicsBody.velocity = CGVectorMake(0, 0);
+        [_bird.physicsBody applyImpulse:CGVectorMake(0, 9)];
+
+    } else if ([node.name isEqualToString:@"restartButtonNode"])
+    {
+        [node removeFromParent];
         [self resetScene];
         [self createBirdRegular];
+    } else if (isGameInProgress)
+    {
+        _bird.physicsBody.velocity = CGVectorMake(0, 0);
+        [_bird.physicsBody applyImpulse:CGVectorMake(0, 10)];
     }
+    
     
     
     /* Called when a touch begins */
@@ -544,15 +584,17 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                 [self performSelector:@selector(createDeadBird) withObject:nil afterDelay:1];
             }];
             
+            [self addChild: [self restartButtonNode]];
+
             
-            [self removeActionForKey:@"flash"];
-            [self runAction:[SKAction sequence:@[[SKAction repeatAction:[SKAction sequence:@[[SKAction runBlock:^{
-                self.backgroundColor = [SKColor redColor];
-            }], [SKAction waitForDuration:0.05], [SKAction runBlock:^{
-                self.backgroundColor = _skyColor;
-            }], [SKAction waitForDuration:0.05]]] count:4], [SKAction runBlock:^{
-                _canRestart = YES;
-            }]]] withKey:@"flash"];
+//            [self removeActionForKey:@"flash"];
+//            [self runAction:[SKAction sequence:@[[SKAction repeatAction:[SKAction sequence:@[[SKAction runBlock:^{
+//                self.backgroundColor = [SKColor redColor];
+//            }], [SKAction waitForDuration:0.05], [SKAction runBlock:^{
+//                self.backgroundColor = _skyColor;
+//            }], [SKAction waitForDuration:0.05]]] count:4], [SKAction runBlock:^{
+//                _canRestart = YES;
+//            }]]] withKey:@"flash"];
             
             numLivesLeft--;
             [ lifeIconArray[numLivesLeft] runAction:[SKAction removeFromParent] ];
