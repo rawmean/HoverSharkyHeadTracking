@@ -50,6 +50,16 @@
 //    _bgImage = bgImage;
 //}
 
+-(BOOL)shouldAutorotate {
+    NSLog(@"ViewController shouldAutorotate super=%d", [super shouldAutorotate]);
+    return NO;
+}
+
+-(NSUInteger)supportedInterfaceOrientations {
+    NSLog(@"ViewController supportedInterfaceOrientations");
+   return UIInterfaceOrientationMaskPortrait;
+}
+
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     

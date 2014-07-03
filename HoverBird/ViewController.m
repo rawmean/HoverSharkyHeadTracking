@@ -28,8 +28,8 @@
         /* Perform additional tasks for the authenticated player here */
         // Configure the view.
         SKView * skView = (SKView *)self.view;
-        skView.showsFPS = YES;
-        skView.showsNodeCount = YES;
+//        skView.showsFPS = YES;
+//        skView.showsNodeCount = YES;
         
         // Create and configure the scene.
         MyScene * scene = [MyScene sceneWithSize:skView.bounds.size];
@@ -71,15 +71,15 @@
 
 - (BOOL)shouldAutorotate
 {
-    return YES;
+    return NO;
 }
 
 - (NSUInteger)supportedInterfaceOrientations
 {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        return UIInterfaceOrientationMaskAllButUpsideDown;
+        return UIInterfaceOrientationMaskPortrait;
     } else {
-        return UIInterfaceOrientationMaskAll;
+        return UIInterfaceOrientationLandscapeLeft;
     }
 }
 

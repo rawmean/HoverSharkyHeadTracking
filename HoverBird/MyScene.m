@@ -37,6 +37,11 @@ using namespace cv;
     BOOL isGameInProgress;
     AVAudioPlayer *gameSceneLoop;
     BOOL isTouchEnabled;
+    float pipeScale;
+    BOOL isMusicEnabled;
+    BOOL isHoverEnabled;
+    SKSpriteNode* musicButton;
+    SKSpriteNode* hoverButton;
 }
 @property (nonatomic, strong) CvVideoCamera* videoCamera;
 
@@ -55,6 +60,27 @@ static NSInteger const kVerticalPipeGap = 100;
 
 #pragma mark - Buttons
 
+- (SKSpriteNode *)hoverButtonNode
+{
+    SKSpriteNode *node = [SKSpriteNode spriteNodeWithImageNamed:@"hover.png"];
+    node.position = CGPointMake(self.frame.size.width*0.75, self.frame.size.height*0.9);
+    node.name = @"hoverButtonNode";//how the node is identified later
+    node.zPosition = 1.0;
+    [node setScale:.25];
+    
+    return node;
+}
+- (SKSpriteNode *)MusicButtonNode
+{
+    SKSpriteNode *musicNode = [SKSpriteNode spriteNodeWithImageNamed:@"music.png"];
+    musicNode.position = CGPointMake(self.frame.size.width*0.9, self.frame.size.height*0.9);
+    musicNode.name = @"musicButtonNode";//how the node is identified later
+    musicNode.zPosition = 1.0;
+    [musicNode setScale:.30];
+    
+    return musicNode;
+}
+
 //TapToStart button
 - (SKSpriteNode *)startButtonNode
 {
@@ -67,7 +93,7 @@ static NSInteger const kVerticalPipeGap = 100;
     return startNode;
 }
 
-//TapToRest button
+//TapToReset button
 - (SKSpriteNode *)restartButtonNode
 {
     SKSpriteNode *startNode = [SKSpriteNode spriteNodeWithImageNamed:@"restartButton.png"];
@@ -81,7 +107,8 @@ static NSInteger const kVerticalPipeGap = 100;
 
 -(void) startGeneratingPipes {
     isGameInProgress = YES;
-    [gameSceneLoop play];
+    if (isMusicEnabled)
+        [gameSceneLoop play];
     self.physicsWorld.gravity = CGVectorMake( 0.0, -5.0 );
     [self removeActionForKey:@"pipes"];
     SKAction* spawn = [SKAction performSelector:@selector(spawnPipes) onTarget:self];
@@ -94,6 +121,9 @@ static NSInteger const kVerticalPipeGap = 100;
 -(void)resetScene {
     
     [self addChild: [self startButtonNode]];
+    [self addChild: musicButton];
+    [self addChild: hoverButton];
+    
     self.physicsWorld.gravity = CGVectorMake( 0.0, 0.0 );
     [self removeActionForKey:@"pipes"];
 
@@ -127,13 +157,13 @@ static NSInteger const kVerticalPipeGap = 100;
 
 -(void)spawnPipes {
     SKNode* pipePair = [SKNode node];
-    pipePair.position = CGPointMake( self.frame.size.width + _pipeTexture1.size.width, 0 );
+    pipePair.position = CGPointMake( self.frame.size.width + _pipeTexture1.size.width*pipeScale, 0 );
     pipePair.zPosition = -10;
     
     CGFloat y = arc4random() % (NSInteger)( self.frame.size.height / 3 );
     
     SKSpriteNode* pipe1 = [SKSpriteNode spriteNodeWithTexture:_pipeTexture1];
-    [pipe1 setScale:2];
+    [pipe1 setScale:pipeScale];
     pipe1.position = CGPointMake( 0, y );
     pipe1.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:pipe1.size];
     pipe1.physicsBody.dynamic = NO;
@@ -146,7 +176,7 @@ static NSInteger const kVerticalPipeGap = 100;
     float distanceScale = (_score > 20) ? 1.3:1.0;
     
     SKSpriteNode* pipe2 = [SKSpriteNode spriteNodeWithTexture:_pipeTexture2];
-    [pipe2 setScale:2];
+    [pipe2 setScale:pipeScale];
     pipe2.position = CGPointMake( 0, y + pipe1.size.height + kVerticalPipeGap/distanceScale );
     pipe2.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:pipe2.size];
     pipe2.physicsBody.dynamic = NO;
@@ -195,7 +225,14 @@ static NSInteger const kVerticalPipeGap = 100;
 -(id)initWithSize:(CGSize)size {
     if (self = [super initWithSize:size]) {
         
+        musicButton = [self MusicButtonNode];
+        hoverButton = [self hoverButtonNode];
+        [self addChild: musicButton];
+        [self addChild: hoverButton];
+
         isTouchEnabled = YES;
+        isMusicEnabled = YES;
+        isHoverEnabled = YES;
         
         isGameInProgress = NO;
         
@@ -213,7 +250,6 @@ static NSInteger const kVerticalPipeGap = 100;
         } else {
             gameSceneLoop.numberOfLoops = -1;
             [gameSceneLoop prepareToPlay];
-//            [gameSceneLoop play];
         }
 
         
@@ -225,8 +261,7 @@ static NSInteger const kVerticalPipeGap = 100;
         //                                AVCaptureSessionPreset640x480;
         self.videoCamera.defaultAVCaptureVideoOrientation =
         AVCaptureVideoOrientationPortrait;
-        self.videoCamera.defaultFPS = 30;
-        [self.videoCamera start];
+        self.videoCamera.defaultFPS = 15;
         
         totalNumLives = 4;
         numLivesLeft = totalNumLives;
@@ -310,12 +345,13 @@ static NSInteger const kVerticalPipeGap = 100;
         // Create pipes
         ////////////////
         
-        _pipeTexture1 = [SKTexture textureWithImageNamed:@"Pipe1"];
+        _pipeTexture1 = [SKTexture textureWithImageNamed:@"bricks1"];
         _pipeTexture1.filteringMode = SKTextureFilteringNearest;
-        _pipeTexture2 = [SKTexture textureWithImageNamed:@"Pipe2"];
+        _pipeTexture2 = [SKTexture textureWithImageNamed:@"bricks2"];
         _pipeTexture2.filteringMode = SKTextureFilteringNearest;
+        pipeScale = 0.25;
         
-        CGFloat distanceToMove = self.frame.size.width + 2 * _pipeTexture1.size.width;
+        CGFloat distanceToMove = self.frame.size.width + 1 * _pipeTexture1.size.width;
         SKAction* movePipes = [SKAction moveByX:-distanceToMove y:0 duration:0.01 * distanceToMove];
         SKAction* removePipes = [SKAction removeFromParent];
         _movePipesAndRemove = [SKAction sequence:@[movePipes, removePipes]];
@@ -506,19 +542,50 @@ static NSInteger const kVerticalPipeGap = 100;
         return;
     }
     
-    
     UITouch *touch = [touches anyObject];
     CGPoint location = [touch locationInNode:self];
     SKNode *node = [self nodeAtPoint:location];
     
+    if ([node.name isEqualToString:@"musicButtonNode"]) {
+        isMusicEnabled = !isMusicEnabled;
+        if (isMusicEnabled) {
+            SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"music.png"]];
+            [musicButton runAction:changeImage];
+        }
+        else {
+            SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"no-music.png"]];
+            [musicButton runAction:changeImage];
+        }
+        return;
+    }
+    
+    if ([node.name isEqualToString:@"hoverButtonNode"]) {
+        isHoverEnabled = !isHoverEnabled;
+        if (isHoverEnabled) {
+            SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"hover.png"]];
+            [hoverButton runAction:changeImage];
+        }
+        else {
+            SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"tap.png"]];
+            [hoverButton runAction:changeImage];
+        }
+        return;
+    }
+    
     //if start button touched, bring the pipes and gravity
     if ([node.name isEqualToString:@"startButtonNode"]) {
         [node removeFromParent];
+        [musicButton removeFromParent];
+        [hoverButton removeFromParent];
+        
         [self startGeneratingPipes];
+        if (isHoverEnabled)
+            [self.videoCamera start];
+
         isGameInProgress = YES;
 
 //        _bird.physicsBody.velocity = CGVectorMake(0, 0);
-        [_bird.physicsBody applyImpulse:CGVectorMake(0, 9)];
+        [_bird.physicsBody applyImpulse:CGVectorMake(0, 12)];
 
     } else if ([node.name isEqualToString:@"restartButtonNode"])
     {
@@ -570,8 +637,11 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
         } else {
             // Bird has collided with world
             isTouchEnabled = NO;
+            [self.videoCamera stop];
             [self createCrashedBird];
-            [gameSceneLoop stop];
+            if (isMusicEnabled)
+                [gameSceneLoop stop];
+        
             isGameInProgress = NO;
             [self runAction:crashSound];
             
@@ -581,7 +651,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             
             [_bird runAction:[SKAction rotateByAngle:M_PI * _bird.position.y * 0.01 duration:_bird.position.y * 0.003] completion:^{
                 _bird.speed = 0;
-                [self performSelector:@selector(createDeadBird) withObject:nil afterDelay:1];
+                [self performSelector:@selector(createDeadBird) withObject:nil afterDelay:.1];
             }];
             
             [self addChild: [self restartButtonNode]];
@@ -618,7 +688,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
     }
 }
 
-#pragma opencv callback
+#pragma mark - opencv callback
 
 - (void)processImage:(Mat&)image
 {
@@ -634,15 +704,31 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
     {
         calcOpticalFlowFarneback(prevGrayImage, grayImage, flow, 0.5, 3, 15, 3, 5, 1.2, 0);
         Scalar meanFlow = mean(flow);
-//        NSLog(@"mean flow = %f, %f", meanFlow.val[0], meanFlow.val[1]);
+//        NSLog(@"mean flowmeanFlow.val[1] = %f, %f", meanFlow.val[0], meanFlow.val[1]);
+        
+//        if( _moving.speed >0  ) {
+//            if (meanFlow.val[1] < -1.) {
+//                _bird.physicsBody.velocity = CGVectorMake(0, 0);
+//                [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[0]*0, 9)];
+//            }
+//        }
+
         
         if( _moving.speed > 0 ) {
             _bird.physicsBody.velocity = CGVectorMake(0, 0);
-            [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[0]*2, -meanFlow.val[1]*2)];
+                [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[0]*0, -meanFlow.val[1]*7)];
         }
     }
     std::swap(prevGrayImage, grayImage);
 
+}
+
+-(BOOL)shouldAutorotate {
+    return YES;
+}
+
+- (NSInteger)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 @end
