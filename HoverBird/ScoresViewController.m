@@ -64,6 +64,8 @@
     }
 }
 
+
+
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -92,19 +94,19 @@
     // Do any additional setup after loading the view.
 //    [self.scoresTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"scores"];
     
-    NSString *reqSysVer = @"8.0";
-    NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
-    BOOL isIOS8 = ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending);
-    
-    if (isIOS8) {
-        self.rectangleAdView = [[ADBannerView alloc]
-                                initWithAdType:ADAdTypeMediumRectangle];
-        self.rectangleAdView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2);
-        self.rectangleAdView.center = self.view.center;
-        
-        self.rectangleAdView.delegate = self;
-    }
-    else
+//    NSString *reqSysVer = @"8.0";
+//    NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
+//    BOOL isIOS8 = ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending);
+//    
+//    if (isIOS8) {
+//        self.rectangleAdView = [[ADBannerView alloc]
+//                                initWithAdType:ADAdTypeMediumRectangle];
+//        self.rectangleAdView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2);
+//        self.rectangleAdView.center = self.view.center;
+//        
+//        self.rectangleAdView.delegate = self;
+//    }
+//    else
         self.canDisplayBannerAds = YES;
 }
 
@@ -194,20 +196,13 @@
     gameCenterController.viewState = GKGameCenterViewControllerStateLeaderboards;
     gameCenterController.gameCenterDelegate = self;
     gameCenterController.topViewController.canDisplayBannerAds = YES;
-
-    
     [self presentViewController:gameCenterController animated:YES completion: nil];
-    
-//    [self performSegueWithIdentifier:@"ShowLeaderboard" sender:self];
 
-    
-//    gameCenterController.modalTransitionStyle = UIModalTransitionStylePartialCurl;
-//    [self presentViewController:gameCenterController animated:YES completion:nil];
 }
 
 - (void) gameCenterViewControllerDidFinish:(GKGameCenterViewController*) gameCenterViewController {
     [self dismissViewControllerAnimated:YES completion:nil];
-    self.canDisplayBannerAds = YES;
+//    self.canDisplayBannerAds = YES;
 }
 
 

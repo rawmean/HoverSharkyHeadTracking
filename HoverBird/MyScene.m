@@ -245,7 +245,7 @@ static NSInteger const kVerticalPipeGap = 100;
         crashSound = [SKAction playSoundFileNamed:@"whack4.m4a" waitForCompletion:NO];
         scoreSound = [SKAction playSoundFileNamed:@"score.wav" waitForCompletion:NO];
         gameOverSound = [SKAction playSoundFileNamed:@"game_over.wav" waitForCompletion:NO];
-        organSound = [SKAction playSoundFileNamed:@"organ.wav" waitForCompletion:NO];
+        organSound = [SKAction playSoundFileNamed:@"organ.wav" waitForCompletion:YES];
 //        bgMusic = [SKAction playSoundFileNamed:@"Loopy_trimmed.m4a" waitForCompletion:YES];
 
         NSString *filePath = [[NSBundle mainBundle] pathForResource:@"Loopy_trimmed" ofType:@"m4a"];
@@ -404,7 +404,7 @@ static NSInteger const kVerticalPipeGap = 100;
 
 -(void) reverseGravity {
     self.physicsWorld.gravity = CGVectorMake( 0.0, 1.0 );
-    [self runAction:organSound];
+    [self runAction:organSound withKey:@"organPlaying"];
     isTouchEnabled = YES;
 
 }
@@ -530,21 +530,11 @@ static NSInteger const kVerticalPipeGap = 100;
     [smokeNode setScale:.05];
     
     smokeNode.position = _bird.position;
-//    _bird.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:_bird.size.height / 2];
-//    _bird.physicsBody.dynamic = YES;
-//    _bird.physicsBody.allowsRotation = NO;
-//    _bird.physicsBody.restitution = 0.3;
-//    _bird.physicsBody.friction = 0.9;
-//    
-//    _bird.physicsBody.categoryBitMask = birdCategory;
-//    _bird.physicsBody.collisionBitMask = worldCategory | pipeCategory;
-//    _bird.physicsBody.contactTestBitMask = worldCategory | pipeCategory;
-    
-    
     [self addChild:smokeNode];
     SKAction* explodeThenRemove = [SKAction sequence:@[explode, [SKAction removeFromParent]]];
     [smokeNode runAction:explodeThenRemove];
 }
+
 
 
 #pragma mark - Touch handling
@@ -603,6 +593,8 @@ static NSInteger const kVerticalPipeGap = 100;
     } else if ([node.name isEqualToString:@"restartButtonNode"])
     {
         [node removeFromParent];
+        [self removeActionForKey:@"organPlaying"];
+        
         [self resetScene];
         [self createBirdRegular];
     } else if (isGameInProgress)
@@ -667,7 +659,6 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                 _bird.speed = 0;
             }];
             
-            [self addChild: [self restartButtonNode]];
 
             
 //            [self removeActionForKey:@"flash"];
@@ -687,8 +678,10 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                 [self performSelector:@selector(restartGame) withObject:nil afterDelay:2];
                 isTouchEnabled = YES;
             }
-            else
-                [self performSelector:@selector(createDeadBird) withObject:nil afterDelay:.1];
+            else {
+                [self performSelector:@selector(createDeadBird) withObject:nil afterDelay:.5];
+                [self addChild: [self restartButtonNode]];
+            }
 
         }
     }
@@ -696,6 +689,10 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
 
 -(void) restartGame {
     [self.scoreDelegate didFinishGameWithScore:_score];
+//    [[self childNodeWithName:@"restartButtonNode"] removeFromParent];
+    [self resetScene];
+    [self createBirdRegular];
+
 }
 
 -(void)update:(CFTimeInterval)currentTime {
