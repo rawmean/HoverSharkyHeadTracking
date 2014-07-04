@@ -260,7 +260,7 @@ static NSInteger const kVerticalPipeGap = 100;
         
         
         // init camera
-        isCameraAvailable = [UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera];
+        isCameraAvailable = [UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceFront];
         if (isCameraAvailable) {
             [self addChild: hoverButton];
 

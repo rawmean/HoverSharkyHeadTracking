@@ -50,14 +50,18 @@
 //    _bgImage = bgImage;
 //}
 
--(BOOL)shouldAutorotate {
-    NSLog(@"ViewController shouldAutorotate super=%d", [super shouldAutorotate]);
-    return NO;
+- (BOOL)shouldAutorotate
+{
+    return YES;
 }
 
--(NSUInteger)supportedInterfaceOrientations {
-    NSLog(@"ViewController supportedInterfaceOrientations");
-   return UIInterfaceOrientationMaskPortrait;
+- (NSUInteger)supportedInterfaceOrientations
+{
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return UIInterfaceOrientationMaskPortrait;
+    } else {
+        return UIInterfaceOrientationMaskLandscape ;
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -189,6 +193,8 @@
     GKGameCenterViewController* gameCenterController = [[GKGameCenterViewController alloc] init];
     gameCenterController.viewState = GKGameCenterViewControllerStateLeaderboards;
     gameCenterController.gameCenterDelegate = self;
+    gameCenterController.canDisplayBannerAds = YES;
+
     
     [self presentViewController:gameCenterController animated:YES completion: nil];
     
