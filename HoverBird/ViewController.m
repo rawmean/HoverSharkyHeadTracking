@@ -71,7 +71,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return NO;
+        return YES;
 }
 
 - (NSUInteger)supportedInterfaceOrientations
@@ -79,7 +79,7 @@
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         return UIInterfaceOrientationMaskPortrait;
     } else {
-        return UIInterfaceOrientationLandscapeLeft;
+        return UIInterfaceOrientationMaskLandscape ;
     }
 }
 

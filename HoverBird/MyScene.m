@@ -42,6 +42,7 @@ using namespace cv;
     BOOL isHoverEnabled;
     SKSpriteNode* musicButton;
     SKSpriteNode* hoverButton;
+    BOOL isCameraAvailable;
 }
 @property (nonatomic, strong) CvVideoCamera* videoCamera;
 
@@ -109,7 +110,11 @@ static NSInteger const kVerticalPipeGap = 100;
     isGameInProgress = YES;
     if (isMusicEnabled)
         [gameSceneLoop play];
-    self.physicsWorld.gravity = CGVectorMake( 0.0, -5.0 );
+    if (isHoverEnabled)
+        self.physicsWorld.gravity = CGVectorMake( 0.0, 0.0 );
+    else
+        self.physicsWorld.gravity = CGVectorMake( 0.0, -5.0 );
+    
     [self removeActionForKey:@"pipes"];
     SKAction* spawn = [SKAction performSelector:@selector(spawnPipes) onTarget:self];
     SKAction* delay = [SKAction waitForDuration:2.0];
@@ -122,7 +127,8 @@ static NSInteger const kVerticalPipeGap = 100;
     
     [self addChild: [self startButtonNode]];
     [self addChild: musicButton];
-    [self addChild: hoverButton];
+    if (isCameraAvailable)
+        [self addChild: hoverButton];
     
     self.physicsWorld.gravity = CGVectorMake( 0.0, 0.0 );
     [self removeActionForKey:@"pipes"];
@@ -228,7 +234,7 @@ static NSInteger const kVerticalPipeGap = 100;
         musicButton = [self MusicButtonNode];
         hoverButton = [self hoverButtonNode];
         [self addChild: musicButton];
-        [self addChild: hoverButton];
+        
 
         isTouchEnabled = YES;
         isMusicEnabled = YES;
@@ -251,19 +257,26 @@ static NSInteger const kVerticalPipeGap = 100;
             gameSceneLoop.numberOfLoops = -1;
             [gameSceneLoop prepareToPlay];
         }
-
+        
         
         // init camera
-        self.videoCamera = [[CvVideoCamera alloc] init];
-        self.videoCamera.delegate = self;
-        self.videoCamera.defaultAVCaptureDevicePosition = AVCaptureDevicePositionFront;
-        self.videoCamera.defaultAVCaptureSessionPreset = AVCaptureSessionPreset352x288;
-        //                                AVCaptureSessionPreset640x480;
-        self.videoCamera.defaultAVCaptureVideoOrientation =
-        AVCaptureVideoOrientationPortrait;
-        self.videoCamera.defaultFPS = 15;
+        isCameraAvailable = [UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera];
+        if (isCameraAvailable) {
+            [self addChild: hoverButton];
+
+            self.videoCamera = [[CvVideoCamera alloc] init];
+            self.videoCamera.delegate = self;
+            self.videoCamera.defaultAVCaptureDevicePosition = AVCaptureDevicePositionFront;
+            self.videoCamera.defaultAVCaptureSessionPreset = AVCaptureSessionPreset352x288;
+            //                                AVCaptureSessionPreset640x480;
+            self.videoCamera.defaultAVCaptureVideoOrientation =
+            AVCaptureVideoOrientationPortrait;
+            self.videoCamera.defaultFPS = 15;
+        }
+        else
+            isHoverEnabled = NO;
         
-        totalNumLives = 4;
+        totalNumLives = 3;
         numLivesLeft = totalNumLives;
         lifeIconArray = [[NSMutableArray alloc] initWithCapacity:totalNumLives];
         [self drawNumberOfLivesLeft:totalNumLives];
@@ -637,7 +650,8 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
         } else {
             // Bird has collided with world
             isTouchEnabled = NO;
-            [self.videoCamera stop];
+            if (isHoverEnabled)
+                [self.videoCamera stop];
             [self createCrashedBird];
             if (isMusicEnabled)
                 [gameSceneLoop stop];
@@ -716,19 +730,13 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
         
         if( _moving.speed > 0 ) {
             _bird.physicsBody.velocity = CGVectorMake(0, 0);
-                [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[0]*0, -meanFlow.val[1]*7)];
+                [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[0]*0, -meanFlow.val[1]*5)];
         }
     }
     std::swap(prevGrayImage, grayImage);
 
 }
 
--(BOOL)shouldAutorotate {
-    return YES;
-}
 
-- (NSInteger)supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskPortrait;
-}
 
 @end
