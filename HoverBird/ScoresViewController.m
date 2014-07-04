@@ -193,7 +193,7 @@
     GKGameCenterViewController* gameCenterController = [[GKGameCenterViewController alloc] init];
     gameCenterController.viewState = GKGameCenterViewControllerStateLeaderboards;
     gameCenterController.gameCenterDelegate = self;
-    gameCenterController.canDisplayBannerAds = YES;
+    gameCenterController.topViewController.canDisplayBannerAds = YES;
 
     
     [self presentViewController:gameCenterController animated:YES completion: nil];
@@ -207,6 +207,7 @@
 
 - (void) gameCenterViewControllerDidFinish:(GKGameCenterViewController*) gameCenterViewController {
     [self dismissViewControllerAnimated:YES completion:nil];
+    self.canDisplayBannerAds = YES;
 }
 
 

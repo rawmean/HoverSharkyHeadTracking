@@ -665,7 +665,6 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             
             [_bird runAction:[SKAction rotateByAngle:M_PI * _bird.position.y * 0.01 duration:_bird.position.y * 0.003] completion:^{
                 _bird.speed = 0;
-                [self performSelector:@selector(createDeadBird) withObject:nil afterDelay:.1];
             }];
             
             [self addChild: [self restartButtonNode]];
@@ -686,7 +685,11 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                 // Game over
                 [self runAction:gameOverSound];
                 [self performSelector:@selector(restartGame) withObject:nil afterDelay:2];
+                isTouchEnabled = YES;
             }
+            else
+                [self performSelector:@selector(createDeadBird) withObject:nil afterDelay:.1];
+
         }
     }
 }
