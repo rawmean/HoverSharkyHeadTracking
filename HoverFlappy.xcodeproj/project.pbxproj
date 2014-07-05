@@ -102,6 +102,8 @@
 		F57750DC195F9C84005205FF /*  GameOver.wav in Resources */ = {isa = PBXBuildFile; fileRef = F57750DB195F9C84005205FF /*  GameOver.wav */; };
 		F5D56B10194E89D30063D43A /* ScoresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D56B0F194E89D30063D43A /* ScoresViewController.m */; };
 		F5D56B18194EBBEB0063D43A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D56B17194EBBEB0063D43A /* iAd.framework */; };
+		F5E844FA19687EE7007738C6 /* Easy.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E844F819687EE7007738C6 /* Easy.png */; };
+		F5E844FB19687EE7007738C6 /* Hard.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E844F919687EE7007738C6 /* Hard.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -219,6 +221,8 @@
 		F5D56B0E194E89D30063D43A /* ScoresViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoresViewController.h; sourceTree = "<group>"; };
 		F5D56B0F194E89D30063D43A /* ScoresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoresViewController.m; sourceTree = "<group>"; };
 		F5D56B17194EBBEB0063D43A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
+		F5E844F819687EE7007738C6 /* Easy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Easy.png; sourceTree = "<group>"; };
+		F5E844F919687EE7007738C6 /* Hard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Hard.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -350,6 +354,8 @@
 		F53CCA75194D2F3B00A9AB63 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F5E844F819687EE7007738C6 /* Easy.png */,
+				F5E844F919687EE7007738C6 /* Hard.png */,
 				F50A3529196516F700D9407B /* hover.png */,
 				F50A352A196516F700D9407B /* tap.png */,
 				F51927DD19650860004D1D5F /* Bricks */,
@@ -565,6 +571,7 @@
 				F555DDFD196103C400E0841A /* d5.png in Resources */,
 				F51927DB1965084B004D1D5F /* bricks1.png in Resources */,
 				F555DE1C196134DE00E0841A /* s5.png in Resources */,
+				F5E844FA19687EE7007738C6 /* Easy.png in Resources */,
 				F51927D41964CE35004D1D5F /* bricks.png in Resources */,
 				F53CCA8F194D2F3B00A9AB63 /* Images.xcassets in Resources */,
 				F555DE2D1962802B00E0841A /* grass5.png in Resources */,
@@ -572,6 +579,7 @@
 				F53CCA85194D2F3B00A9AB63 /* Main_iPad.storyboard in Resources */,
 				F555DDFA196103C400E0841A /* d2.png in Resources */,
 				F555DE0E19610BF300E0841A /* g5.png in Resources */,
+				F5E844FB19687EE7007738C6 /* Hard.png in Resources */,
 				F555DDE91960FCD100E0841A /* a2.png in Resources */,
 				F53CCA82194D2F3B00A9AB63 /* Main_iPhone.storyboard in Resources */,
 				F555DE2B19627EBE00E0841A /* grass.png in Resources */,

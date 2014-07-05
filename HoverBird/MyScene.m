@@ -41,8 +41,11 @@ using namespace cv;
     BOOL isMusicEnabled;
     BOOL isHoverEnabled;
     SKSpriteNode* musicButton;
+    SKSpriteNode* difficultyButton;
     SKSpriteNode* hoverButton;
     BOOL isCameraAvailable;
+    BOOL isGameEasy;
+    float speedScale;
 }
 @property (nonatomic, strong) CvVideoCamera* videoCamera;
 
@@ -64,20 +67,32 @@ static NSInteger const kVerticalPipeGap = 100;
 - (SKSpriteNode *)hoverButtonNode
 {
     SKSpriteNode *node = [SKSpriteNode spriteNodeWithImageNamed:@"hover.png"];
-    node.position = CGPointMake(self.frame.size.width*0.75, self.frame.size.height*0.9);
+    node.position = CGPointMake(self.frame.size.width*0.5, self.frame.size.height*0.78);
     node.name = @"hoverButtonNode";//how the node is identified later
     node.zPosition = 1.0;
     [node setScale:.25];
     
     return node;
 }
+
+- (SKSpriteNode *)DifficultyButtonNode
+{
+    SKSpriteNode *node = [SKSpriteNode spriteNodeWithImageNamed:@"Easy.png"];
+    node.position = CGPointMake(self.frame.size.width*0.9, self.frame.size.height*0.78);
+    node.name = @"DifficultyButtonNode";//how the node is identified later
+    node.zPosition = 1.0;
+    [node setScale:.20];
+    
+    return node;
+}
+
 - (SKSpriteNode *)MusicButtonNode
 {
     SKSpriteNode *musicNode = [SKSpriteNode spriteNodeWithImageNamed:@"music.png"];
-    musicNode.position = CGPointMake(self.frame.size.width*0.9, self.frame.size.height*0.9);
+    musicNode.position = CGPointMake(self.frame.size.width*0.7, self.frame.size.height*0.78);
     musicNode.name = @"musicButtonNode";//how the node is identified later
     musicNode.zPosition = 1.0;
-    [musicNode setScale:.30];
+    [musicNode setScale:.37];
     
     return musicNode;
 }
@@ -86,7 +101,7 @@ static NSInteger const kVerticalPipeGap = 100;
 - (SKSpriteNode *)startButtonNode
 {
     SKSpriteNode *startNode = [SKSpriteNode spriteNodeWithImageNamed:@"startButton.png"];
-    startNode.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame)*1.5);
+    startNode.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame)*1.3);
     startNode.name = @"startButtonNode";//how the node is identified later
     startNode.zPosition = 1.0;
     [startNode setScale:.50];
@@ -117,7 +132,7 @@ static NSInteger const kVerticalPipeGap = 100;
     
     [self removeActionForKey:@"pipes"];
     SKAction* spawn = [SKAction performSelector:@selector(spawnPipes) onTarget:self];
-    SKAction* delay = [SKAction waitForDuration:2.0];
+    SKAction* delay = [SKAction waitForDuration:2.0*speedScale];
     SKAction* spawnThenDelay = [SKAction sequence:@[spawn, delay]];
     SKAction* spawnThenDelayForever = [SKAction repeatActionForever:spawnThenDelay];
     [self runAction:spawnThenDelayForever withKey:@"pipes"];
@@ -127,6 +142,7 @@ static NSInteger const kVerticalPipeGap = 100;
     
     [self addChild: [self startButtonNode]];
     [self addChild: musicButton];
+    [self addChild: difficultyButton];
     if (isCameraAvailable)
         [self addChild: hoverButton];
     
@@ -226,19 +242,29 @@ static NSInteger const kVerticalPipeGap = 100;
     }
 }
 
+#pragma mark - Update Speed
+
+-(void) updateSpeed {
+    
+}
+
 #pragma mark - initialization
 
 -(id)initWithSize:(CGSize)size {
     if (self = [super initWithSize:size]) {
         
         musicButton = [self MusicButtonNode];
+        difficultyButton = [self DifficultyButtonNode];
         hoverButton = [self hoverButtonNode];
         [self addChild: musicButton];
+        [self addChild: difficultyButton];
         
 
         isTouchEnabled = YES;
         isMusicEnabled = YES;
         isHoverEnabled = YES;
+        isGameEasy = YES;
+        speedScale = 1.0;
         
         isGameInProgress = NO;
         
@@ -311,7 +337,7 @@ static NSInteger const kVerticalPipeGap = 100;
 //        groundTexture.filteringMode = SKTextureFilteringNearest;
         float groundScale = .25;
 
-        SKAction* moveGroundSprite = [SKAction moveByX:-groundTexture.size.width*groundScale y:0 duration:0.02 * groundTexture.size.width*groundScale];
+        SKAction* moveGroundSprite = [SKAction moveByX:-groundTexture.size.width*groundScale y:0 duration:speedScale*0.02 * groundTexture.size.width*groundScale];
         SKAction* resetGroundSprite = [SKAction moveByX:groundTexture.size.width*groundScale y:0 duration:0];
         SKAction* moveGroundSpritesForever = [SKAction repeatActionForever:[SKAction sequence:@[moveGroundSprite, resetGroundSprite]]];
         
@@ -342,7 +368,7 @@ static NSInteger const kVerticalPipeGap = 100;
 //        skylineTexture.filteringMode = SKTextureFilteringNearest;
         float skylineScale = 0.12;
         
-        SKAction* moveSkylineSprite = [SKAction moveByX:-skylineTexture.size.width*skylineScale y:0 duration:0.1 * skylineTexture.size.width*skylineScale];
+        SKAction* moveSkylineSprite = [SKAction moveByX:-skylineTexture.size.width*skylineScale y:0 duration:speedScale*0.1 * skylineTexture.size.width*skylineScale];
         SKAction* resetSkylineSprite = [SKAction moveByX:skylineTexture.size.width*skylineScale y:0 duration:0];
         SKAction* moveSkylineSpritesForever = [SKAction repeatActionForever:[SKAction sequence:@[moveSkylineSprite, resetSkylineSprite]]];
         
@@ -365,7 +391,7 @@ static NSInteger const kVerticalPipeGap = 100;
         pipeScale = 0.25;
         
         CGFloat distanceToMove = self.frame.size.width + 1 * _pipeTexture1.size.width;
-        SKAction* movePipes = [SKAction moveByX:-distanceToMove y:0 duration:0.01 * distanceToMove];
+        SKAction* movePipes = [SKAction moveByX:-distanceToMove y:0 duration:speedScale*0.01 * distanceToMove];
         SKAction* removePipes = [SKAction removeFromParent];
         _movePipesAndRemove = [SKAction sequence:@[movePipes, removePipes]];
         
@@ -561,6 +587,22 @@ static NSInteger const kVerticalPipeGap = 100;
         }
         return;
     }
+
+    if ([node.name isEqualToString:@"DifficultyButtonNode"]) {
+        isGameEasy = !isGameEasy;
+        if (isGameEasy) {
+            speedScale = 1.0;
+            SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"Easy.png"]];
+            [difficultyButton runAction:changeImage];
+        }
+        else {
+            speedScale = .50;
+            SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"Hard.png"]];
+            [difficultyButton runAction:changeImage];
+        }
+        return;
+    }
+
     
     if ([node.name isEqualToString:@"hoverButtonNode"]) {
         isHoverEnabled = !isHoverEnabled;
@@ -580,6 +622,7 @@ static NSInteger const kVerticalPipeGap = 100;
         [node removeFromParent];
         [musicButton removeFromParent];
         [hoverButton removeFromParent];
+        [difficultyButton removeFromParent];
         
         [self startGeneratingPipes];
         if (isHoverEnabled)
