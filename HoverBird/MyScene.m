@@ -13,6 +13,8 @@
 
 using namespace cv;
 
+#define HARD_LEVEL_SPEED_FACTOR 2.
+
 @interface MyScene ()<SKPhysicsContactDelegate, CvVideoCameraDelegate> {
     SKSpriteNode* _bird;
     SKColor* _skyColor;
@@ -70,7 +72,7 @@ static NSInteger const kVerticalPipeGap = 100;
     node.position = CGPointMake(self.frame.size.width*0.5, self.frame.size.height*0.78);
     node.name = @"hoverButtonNode";//how the node is identified later
     node.zPosition = 1.0;
-    [node setScale:.25];
+    [node setScale:.20];
     
     return node;
 }
@@ -92,7 +94,7 @@ static NSInteger const kVerticalPipeGap = 100;
     musicNode.position = CGPointMake(self.frame.size.width*0.7, self.frame.size.height*0.78);
     musicNode.name = @"musicButtonNode";//how the node is identified later
     musicNode.zPosition = 1.0;
-    [musicNode setScale:.37];
+    [musicNode setScale:.39];
     
     return musicNode;
 }
@@ -121,6 +123,8 @@ static NSInteger const kVerticalPipeGap = 100;
     return startNode;
 }
 
+#pragma mark - Pipes
+
 -(void) startGeneratingPipes {
     isGameInProgress = YES;
     if (isMusicEnabled)
@@ -132,7 +136,10 @@ static NSInteger const kVerticalPipeGap = 100;
     
     [self removeActionForKey:@"pipes"];
     SKAction* spawn = [SKAction performSelector:@selector(spawnPipes) onTarget:self];
-    SKAction* delay = [SKAction waitForDuration:2.0*speedScale];
+    float speed = 1;
+    if (!isGameEasy)
+        speed = HARD_LEVEL_SPEED_FACTOR;
+    SKAction* delay = [SKAction waitForDuration:2.0/speed];
     SKAction* spawnThenDelay = [SKAction sequence:@[spawn, delay]];
     SKAction* spawnThenDelayForever = [SKAction repeatActionForever:spawnThenDelay];
     [self runAction:spawnThenDelayForever withKey:@"pipes"];
@@ -171,7 +178,10 @@ static NSInteger const kVerticalPipeGap = 100;
     }
     
     // Restart animation
-    _moving.speed = 1;
+    if (isGameEasy)
+        _moving.speed = 1;
+    else
+        _moving.speed = HARD_LEVEL_SPEED_FACTOR;
     
     
 }
@@ -196,6 +206,8 @@ static NSInteger const kVerticalPipeGap = 100;
     [pipePair addChild:pipe1];
     
     float distanceScale = (_score > 20) ? 1.3:1.0;
+    if (!isGameEasy)
+        distanceScale *= 1.2;
     
     SKSpriteNode* pipe2 = [SKSpriteNode spriteNodeWithTexture:_pipeTexture2];
     [pipe2 setScale:pipeScale];
@@ -219,6 +231,8 @@ static NSInteger const kVerticalPipeGap = 100;
     [pipePair runAction:_movePipesAndRemove];
     
     [_pipes addChild:pipePair];
+//    [_pipes removeFromParent];
+//    [_moving addChild:_pipes];
 }
 
 -(void) drawNumberOfLivesLeft:(NSInteger)numLives {
@@ -287,6 +301,7 @@ static NSInteger const kVerticalPipeGap = 100;
         
         // init camera
         isCameraAvailable = [UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceFront];
+//        isCameraAvailable = YES; // DEBUG
         if (isCameraAvailable) {
             [self addChild: hoverButton];
 
@@ -591,12 +606,12 @@ static NSInteger const kVerticalPipeGap = 100;
     if ([node.name isEqualToString:@"DifficultyButtonNode"]) {
         isGameEasy = !isGameEasy;
         if (isGameEasy) {
-            speedScale = 1.0;
+            _moving.speed = 1.0;
             SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"Easy.png"]];
             [difficultyButton runAction:changeImage];
         }
         else {
-            speedScale = .50;
+            _moving.speed = HARD_LEVEL_SPEED_FACTOR;
             SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"Hard.png"]];
             [difficultyButton runAction:changeImage];
         }
