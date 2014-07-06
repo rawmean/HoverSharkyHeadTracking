@@ -148,7 +148,7 @@
 
 - (void) bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
 {
-    //NSLog(@"No iAd!, error:%@", error.description);
+    NSLog(@"No iAd!, error:%@", error.description);
     
     [banner removeFromSuperview];
     [self.view layoutIfNeeded];
