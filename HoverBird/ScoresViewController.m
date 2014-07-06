@@ -51,7 +51,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return YES;
+    return NO;
 }
 
 - (NSUInteger)supportedInterfaceOrientations
@@ -72,12 +72,12 @@
     
     self.backgroundImage.image = _bgImage;
     
-    NSInteger highestScore = [[NSUserDefaults standardUserDefaults] integerForKey:@"highestScore"];
-    highestScore = MAX(highestScore, self.score);
-
-    [[NSUserDefaults standardUserDefaults] setInteger:highestScore forKey:@"highestScore"];
-    [[NSUserDefaults standardUserDefaults]  synchronize];
-    maxScore = highestScore;
+//    NSInteger highestScore = [[NSUserDefaults standardUserDefaults] integerForKey:@"highestScore"];
+//    highestScore = MAX(highestScore, self.score);
+//
+//    [[NSUserDefaults standardUserDefaults] setInteger:highestScore forKey:@"highestScore"];
+//    [[NSUserDefaults standardUserDefaults]  synchronize];
+//    maxScore = highestScore;
     [self reportScore:self.score forLeaderboardID:LEADERBOARD_ID];
 
     [self updateHighestScore];
@@ -86,10 +86,27 @@
 
 }
 
+
+-(void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        self.rectangleAdView = [[ADBannerView alloc]
+                                initWithAdType:ADAdTypeMediumRectangle];
+        self.rectangleAdView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2);
+        self.rectangleAdView.center = CGPointMake(CGRectGetMidY(self.view.frame), CGRectGetMidX(self.view.frame)*1.5);
+        
+        self.rectangleAdView.delegate = self;
+    }
+    else
+        self.canDisplayBannerAds = YES;
+    
     // Do any additional setup after loading the view.
 //    [self.scoresTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"scores"];
     
@@ -106,7 +123,7 @@
 //        self.rectangleAdView.delegate = self;
 //    }
 //    else
-        self.canDisplayBannerAds = YES;
+//        self.canDisplayBannerAds = YES;
 }
 
 - (void)didReceiveMemoryWarning
@@ -161,6 +178,7 @@
 {
     GKScore *scoreReporter = [[GKScore alloc] initWithLeaderboardIdentifier: identifier];
     scoreReporter.value = score;
+//    scoreReporter.value = 22; // TODO: remove this
     scoreReporter.context = 0;
     
     NSArray *scores = @[scoreReporter];
@@ -194,6 +212,7 @@
 - (void) presentLeaderboards {
     GKGameCenterViewController* gameCenterController = [[GKGameCenterViewController alloc] init];
     gameCenterController.viewState = GKGameCenterViewControllerStateLeaderboards;
+//    gameCenterController.viewState = GKGameCenterViewControllerStateAchievements;
     gameCenterController.gameCenterDelegate = self;
     gameCenterController.topViewController.canDisplayBannerAds = YES;
     [self presentViewController:gameCenterController animated:YES completion: nil];
@@ -202,7 +221,8 @@
 
 - (void) gameCenterViewControllerDidFinish:(GKGameCenterViewController*) gameCenterViewController {
     [self dismissViewControllerAnimated:YES completion:nil];
-    self.canDisplayBannerAds = YES;
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+        self.canDisplayBannerAds = YES;
 }
 
 

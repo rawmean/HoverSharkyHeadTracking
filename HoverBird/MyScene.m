@@ -9,6 +9,7 @@
 #import <opencv2/highgui/ios.h>
 #import "MyScene.h"
 #import "DateScore.h"
+#import <GameKit/GameKit.h>
 
 
 using namespace cv;
@@ -699,6 +700,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             [_scoreLabelNode runAction:[SKAction sequence:@[scoreSound, [SKAction scaleTo:1.5 duration:0.1], [SKAction scaleTo:1.0 duration:0.1]]]];
         } else {
             // Bird has collided with world
+            [self updateAchievements];
             isTouchEnabled = NO;
             if (isHoverEnabled)
                 [self.videoCamera stop];
@@ -795,6 +797,42 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
 
 }
 
+
+-(void)updateAchievements{
+    NSString *achievementIdentifier;
+    float progressPercentage = 0.0;
+    
+    GKAchievement *scoreAchievement = nil;
+    
+    if (_score >= 20 ) {
+        achievementIdentifier = @"Achieved20Score_ID";
+        progressPercentage = 100.0;
+    }
+    else {
+        achievementIdentifier = @"Achieved20Score_ID";
+        progressPercentage = _score/20.*100.0;
+    }
+
+    if (_score >= 50 ) {
+        achievementIdentifier = @"Achieved50Score_ID";
+        progressPercentage = 100.0;
+    }
+    else if (_score > 20 ){
+        achievementIdentifier = @"Achieved50Score_ID";
+        progressPercentage = _score/50.*100.0;
+    }
+    
+    
+    scoreAchievement = [[GKAchievement alloc] initWithIdentifier:achievementIdentifier];
+    scoreAchievement.percentComplete = progressPercentage;
+
+    [GKAchievement reportAchievements:@[scoreAchievement] withCompletionHandler:^(NSError *error) {
+        if (error != nil) {
+            NSLog(@"%@", [error localizedDescription]);
+        }
+    }];
+
+}
 
 
 @end
