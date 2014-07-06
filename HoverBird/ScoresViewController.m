@@ -17,7 +17,6 @@
     NSMutableArray* dateArray;
     NSInteger maxScore;
 }
-@property (weak, nonatomic) IBOutlet UITableView *scoresTableView;
 @property (strong, nonatomic) ADBannerView *rectangleAdView;
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImage;
 @property (weak, nonatomic) IBOutlet UILabel *highestScoreLabel;
@@ -129,6 +128,7 @@
 
 
 - (IBAction)didTapLeaderboard:(id)sender {
+    self.canDisplayBannerAds = NO;
     [self presentLeaderboards];
     
 }
@@ -202,7 +202,7 @@
 
 - (void) gameCenterViewControllerDidFinish:(GKGameCenterViewController*) gameCenterViewController {
     [self dismissViewControllerAnimated:YES completion:nil];
-//    self.canDisplayBannerAds = YES;
+    self.canDisplayBannerAds = YES;
 }
 
 
