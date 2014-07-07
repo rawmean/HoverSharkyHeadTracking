@@ -20,11 +20,58 @@
                     </view>
                     <connections>
                         <segue destination="cHP-Vj-iou" kind="modal" identifier="ShowScores" id="6uJ-xX-LHg"/>
+                        <segue destination="Fmw-ek-zvk" kind="modal" identifier="ShowHelp" id="m9d-Mp-bY2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="btX-cZ-eVz" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="159" y="-60"/>
+        </scene>
+        <!--Help VideoVC View Controller - Help Viewcontroller-->
+        <scene sceneID="wdy-68-mEc">
+            <objects>
+                <viewController title="Help Viewcontroller" id="Fmw-ek-zvk" customClass="HelpVideoVCViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="4hi-k4-1uL"/>
+                        <viewControllerLayoutGuide type="bottom" id="OOb-uf-XJ8"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="mRq-B7-WT5">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="blur1.png" translatesAutoresizingMaskIntoConstraints="NO" id="gtD-SE-5bo">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Please watch this short video to learn how to play:" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="259" translatesAutoresizingMaskIntoConstraints="NO" id="bKK-bh-qvV">
+                                <rect key="frame" x="20" y="92" width="259" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="22"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1N1-1L-Zq5">
+                                <rect key="frame" x="135" y="431" width="51" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                <state key="normal" title="Done">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="didTapDone:" destination="Fmw-ek-zvk" eventType="touchUpInside" id="6vg-Vy-oVX"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="doneButton" destination="1N1-1L-Zq5" id="sLl-3z-x77"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="982-IL-8W8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="522" y="-709"/>
         </scene>
         <!--Scores View Controller-->
         <scene sceneID="EXX-9X-5VP">
@@ -34,7 +81,7 @@
                         <viewControllerLayoutGuide type="top" id="Hhb-1p-onx"/>
                         <viewControllerLayoutGuide type="bottom" id="zYv-GK-Lhz"/>
                     </layoutGuides>
-                    <view key="view" opaque="NO" contentMode="scaleToFill" id="Ycb-bi-a4q">
+                    <view key="view" opaque="NO" contentMode="scaleToFill" id="Ycb-bi-a4q" customClass="SKView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -99,6 +146,17 @@
                                     <action selector="didTapLeaderboard:" destination="cHP-Vj-iou" eventType="touchUpInside" id="6HA-yx-cd0"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ygu-08-Heb">
+                                <rect key="frame" x="127" y="436" width="66" height="66"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="help8-3.png">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="didTapHelp:" destination="cHP-Vj-iou" eventType="touchUpInside" id="kvM-GR-kqb"/>
+                                    <segue destination="Fmw-ek-zvk" kind="modal" identifier="ShowHelp" id="HSe-Uo-x97"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </view>
@@ -116,10 +174,14 @@
     </scenes>
     <resources>
         <image name="blur1.png" width="640" height="1136"/>
+        <image name="help8-3.png" width="128" height="128"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <nil key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="HSe-Uo-x97"/>
+    </inferredMetricsTieBreakers>
 </document>

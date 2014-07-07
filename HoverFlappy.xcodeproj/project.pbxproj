@@ -104,6 +104,8 @@
 		F5E844FB19687EE7007738C6 /* Hard.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E844F919687EE7007738C6 /* Hard.png */; };
 		F5E84500196892DB007738C6 /* hover.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E844FE196892DB007738C6 /* hover.png */; };
 		F5E84501196892DB007738C6 /* tap.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E844FF196892DB007738C6 /* tap.png */; };
+		F5E84530196A129D007738C6 /* HelpVideoVCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E8452F196A129D007738C6 /* HelpVideoVCViewController.m */; };
+		F5E84536196A17B5007738C6 /* help8-3.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E84535196A17B5007738C6 /* help8-3.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -223,6 +225,9 @@
 		F5E844F919687EE7007738C6 /* Hard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Hard.png; sourceTree = "<group>"; };
 		F5E844FE196892DB007738C6 /* hover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hover.png; sourceTree = "<group>"; };
 		F5E844FF196892DB007738C6 /* tap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tap.png; sourceTree = "<group>"; };
+		F5E8452E196A129D007738C6 /* HelpVideoVCViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpVideoVCViewController.h; sourceTree = "<group>"; };
+		F5E8452F196A129D007738C6 /* HelpVideoVCViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpVideoVCViewController.m; sourceTree = "<group>"; };
+		F5E84535196A17B5007738C6 /* help8-3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help8-3.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -337,6 +342,8 @@
 				F53CCA7E194D2F3B00A9AB63 /* AppDelegate.m */,
 				F53CCA80194D2F3B00A9AB63 /* Main_iPhone.storyboard */,
 				F53CCA83194D2F3B00A9AB63 /* Main_iPad.storyboard */,
+				F5E8452E196A129D007738C6 /* HelpVideoVCViewController.h */,
+				F5E8452F196A129D007738C6 /* HelpVideoVCViewController.m */,
 				F53CCA86194D2F3B00A9AB63 /* ViewController.h */,
 				F53CCA87194D2F3B00A9AB63 /* ViewController.m */,
 				F5D56B0E194E89D30063D43A /* ScoresViewController.h */,
@@ -354,6 +361,7 @@
 		F53CCA75194D2F3B00A9AB63 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F5E84535196A17B5007738C6 /* help8-3.png */,
 				F5E844FD19689186007738C6 /* East_hard */,
 				F5E844FC19689178007738C6 /* Hover_tap */,
 				F51927DD19650860004D1D5F /* Bricks */,
@@ -630,6 +638,7 @@
 				F555DE351962852900E0841A /* grass4.png in Resources */,
 				F51927D81964D8F1004D1D5F /* no-music.png in Resources */,
 				F51927D61964D388004D1D5F /* music.png in Resources */,
+				F5E84536196A17B5007738C6 /* help8-3.png in Resources */,
 				F53CCA79194D2F3B00A9AB63 /* InfoPlist.strings in Resources */,
 				F555DE251962756800E0841A /* restartButton.png in Resources */,
 				F53CCAAE194D306D00A9AB63 /* Bird2.png in Resources */,
@@ -671,6 +680,7 @@
 				F5354EA7194FE3510049F406 /* UIImage+ImageEffects.m in Sources */,
 				F53CCA88194D2F3B00A9AB63 /* ViewController.m in Sources */,
 				F53CCA7F194D2F3B00A9AB63 /* AppDelegate.m in Sources */,
+				F5E84530196A129D007738C6 /* HelpVideoVCViewController.m in Sources */,
 				F53CCA7B194D2F3B00A9AB63 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -12,11 +12,20 @@
 #import "UIImage+ImageEffects.h"
 #import "ScoresViewController.h"
 
+#define HAS_WATCHED_VIDEO @"hasWatchedVideo"
+
+@interface ViewController () {
+    
+}
+
+@property (strong, nonatomic) UIWebView *webView;
+
+@end
 
 
 
 @implementation ViewController
-
+@synthesize webView = _webView;
 
 - (void)checkLocalPlayer
 {
@@ -25,7 +34,6 @@
     if (localPlayer.isAuthenticated)
     {
         NSLog(@"user authenticated!");
-        /* Perform additional tasks for the authenticated player here */
         // Configure the view.
         SKView * skView = (SKView *)self.view;
 //        skView.showsFPS = YES;
@@ -47,23 +55,47 @@
 }
 
 
+
+
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    BOOL hasWatchedVideo = [[NSUserDefaults standardUserDefaults] boolForKey:HAS_WATCHED_VIDEO];
+    if (hasWatchedVideo) {
+        GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
+        [localPlayer setAuthenticateHandler:(^(UIViewController* viewcontroller, NSError *error) {
+            if (!error && viewcontroller)
+            {
+                [self presentViewController:viewcontroller animated:YES completion:nil];
+            }
+            else
+            {
+                [self checkLocalPlayer];
+            }
+        })];
+    }
+    else {
+        [self performSegueWithIdentifier:@"ShowHelp" sender:self];
+    }
+//    else {
+//        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:HAS_WATCHED_VIDEO];
+//        CGRect frame = self.view.frame;
+//        float w, h;
+//        w = self.view.frame.size.width/1.5;
+//        h = self.view.frame.size.height/4.;
+//        
+//        frame = CGRectMake(self.view.frame.size.width/2.-w/2., self.view.frame.size.height/2.-h/2.,
+//                           w, h);
+//        
+//        [self embedYouTube:@"http://www.youtube.com/embed/bw21wo2FzyI" frame:frame];
+//    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
 
-    // ios 6.0 and above
-    [localPlayer setAuthenticateHandler:(^(UIViewController* viewcontroller, NSError *error) {
-        if (!error && viewcontroller)
-        {
-            [self presentViewController:viewcontroller animated:YES completion:nil];
-        }
-        else
-        {
-            [self checkLocalPlayer];
-        }
-    })];
 
 
 

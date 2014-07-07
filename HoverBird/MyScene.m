@@ -14,7 +14,8 @@
 
 using namespace cv;
 
-#define HARD_LEVEL_SPEED_FACTOR 2.
+#define HARD_LEVEL_SPEED_FACTOR 1.3
+#define AFTER_10_SPEED_FACTOR 1.2
 
 @interface MyScene ()<SKPhysicsContactDelegate, CvVideoCameraDelegate> {
     SKSpriteNode* _bird;
@@ -49,6 +50,7 @@ using namespace cv;
     BOOL isCameraAvailable;
     BOOL isGameEasy;
     float speedScale;
+    BOOL isIPAD;
 }
 @property (nonatomic, strong) CvVideoCamera* videoCamera;
 
@@ -137,10 +139,10 @@ static NSInteger const kVerticalPipeGap = 100;
     
     [self removeActionForKey:@"pipes"];
     SKAction* spawn = [SKAction performSelector:@selector(spawnPipes) onTarget:self];
-    float speed = 1;
-    if (!isGameEasy)
-        speed = HARD_LEVEL_SPEED_FACTOR;
-    SKAction* delay = [SKAction waitForDuration:2.0/speed];
+//    float speed = 1;
+//    if (!isGameEasy)
+//        speed = HARD_LEVEL_SPEED_FACTOR;
+    SKAction* delay = [SKAction waitForDuration:2.0/_moving.speed];
     SKAction* spawnThenDelay = [SKAction sequence:@[spawn, delay]];
     SKAction* spawnThenDelayForever = [SKAction repeatActionForever:spawnThenDelay];
     [self runAction:spawnThenDelayForever withKey:@"pipes"];
@@ -184,6 +186,9 @@ static NSInteger const kVerticalPipeGap = 100;
     else
         _moving.speed = HARD_LEVEL_SPEED_FACTOR;
     
+    if (_score > 10)
+        _moving.speed = AFTER_10_SPEED_FACTOR*_moving.speed;
+
     
 }
 
@@ -206,7 +211,11 @@ static NSInteger const kVerticalPipeGap = 100;
     
     [pipePair addChild:pipe1];
     
-    float distanceScale = (_score > 20) ? 1.3:1.0;
+    float distanceScale = (_score > 20) ? 1.2:1.0;
+    distanceScale = (_score > 50) ? 1.3:1.2;
+    
+//    distanceScale = MIN(15.0*_score/100. + 1., 1.6);
+    
     if (!isGameEasy)
         distanceScale *= 1.2;
     
@@ -280,6 +289,9 @@ static NSInteger const kVerticalPipeGap = 100;
         isHoverEnabled = YES;
         isGameEasy = YES;
         speedScale = 1.0;
+        
+        isIPAD = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
+
         
         isGameInProgress = NO;
         
@@ -446,7 +458,8 @@ static NSInteger const kVerticalPipeGap = 100;
 
 -(void) reverseGravity {
     self.physicsWorld.gravity = CGVectorMake( 0.0, 1.0 );
-    [self runAction:organSound withKey:@"organPlaying"];
+    if (isMusicEnabled)
+        [self runAction:organSound withKey:@"organPlaying"];
     isTouchEnabled = YES;
 
 }
@@ -695,12 +708,17 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             // Bird has contact with score entity
             
             _score++;
+            if ((_score > 20) || (_score > 50))
+                [self updateAchievements];
+            if (_score == 10)
+                _moving.speed = AFTER_10_SPEED_FACTOR*_moving.speed;
+            
             _scoreLabelNode.text = [NSString stringWithFormat:@"%ld", (long)_score];
             // Add a little visual feedback for the score increment
             [_scoreLabelNode runAction:[SKAction sequence:@[scoreSound, [SKAction scaleTo:1.5 duration:0.1], [SKAction scaleTo:1.0 duration:0.1]]]];
         } else {
             // Bird has collided with world
-            [self updateAchievements];
+//            [self updateAchievements];
             isTouchEnabled = NO;
             if (isHoverEnabled)
                 [self.videoCamera stop];
@@ -790,6 +808,9 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
         
         if( _moving.speed > 0 ) {
             _bird.physicsBody.velocity = CGVectorMake(0, 0);
+            if (isIPAD)
+                [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[1]*0, -meanFlow.val[0]*5)];
+            else
                 [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[0]*0, -meanFlow.val[1]*5)];
         }
     }

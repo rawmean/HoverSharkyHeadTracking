@@ -26,6 +26,7 @@
 - (IBAction)didTapLeaderboard:(id)sender;
 
 - (IBAction)didTapNewGame:(id)sender;
+- (IBAction)didTapHelp:(id)sender;
 
 
 @end
@@ -152,6 +153,10 @@
 
 - (IBAction)didTapNewGame:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)didTapHelp:(id)sender {
+    [self performSegueWithIdentifier:@"ShowHelp" sender:self];
 }
 
 #pragma iAd Delegate

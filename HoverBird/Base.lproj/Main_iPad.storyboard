@@ -21,11 +21,60 @@
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <connections>
                         <segue destination="dp3-hX-bhg" kind="modal" identifier="ShowScores" id="rPl-xD-4pU"/>
+                        <segue destination="ArX-pj-kX4" kind="modal" identifier="ShowHelp" id="1Nh-A4-jRH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="17" y="-235"/>
+            <point key="canvasLocation" x="89" y="-414"/>
+        </scene>
+        <!--Help VideoVC View Controller-->
+        <scene sceneID="xfb-Lq-tMa">
+            <objects>
+                <viewController id="ArX-pj-kX4" customClass="HelpVideoVCViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="8si-BJ-UCf"/>
+                        <viewControllerLayoutGuide type="bottom" id="bXf-1g-VUj"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="CkW-Ec-cFa">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="blur1.png" translatesAutoresizingMaskIntoConstraints="NO" id="D2X-UM-jWb">
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Please watch this short video to learn how to play:" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="554" translatesAutoresizingMaskIntoConstraints="NO" id="Vb4-1v-y8S">
+                                <rect key="frame" x="107" y="122" width="554" height="126"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="24"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8kw-oX-rRe">
+                                <rect key="frame" x="490" y="588" width="45" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                <state key="normal" title="Done">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="didTapDone:" destination="ArX-pj-kX4" eventType="touchUpInside" id="gIn-G4-aje"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
+                    </view>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
+                    <connections>
+                        <outlet property="doneButton" destination="8kw-oX-rRe" id="W4A-6J-3x5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Oik-yf-R8m" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="482" y="526"/>
         </scene>
         <!--Scores View Controller-->
         <scene sceneID="luq-QU-1X7">
@@ -79,7 +128,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MK1-DA-yOq">
-                                <rect key="frame" x="416" y="354" width="193" height="83"/>
+                                <rect key="frame" x="416" y="244" width="193" height="83"/>
                                 <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="38"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <state key="normal" title="New Game">
@@ -90,7 +139,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mvR-LJ-IgX">
-                                <rect key="frame" x="433" y="277" width="139" height="69"/>
+                                <rect key="frame" x="433" y="199" width="139" height="69"/>
                                 <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="26"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <state key="normal" title="Scoreboard">
@@ -98,6 +147,16 @@
                                 </state>
                                 <connections>
                                     <action selector="didTapLeaderboard:" destination="dp3-hX-bhg" eventType="touchUpInside" id="CD3-sZ-97f"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pEM-dp-RBj">
+                                <rect key="frame" x="463" y="311" width="78" height="77"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="help8-3.png">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="ArX-pj-kX4" kind="modal" identifier="ShowHelp" id="5qK-Bk-84c"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -113,15 +172,19 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zyN-s8-K8u" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1142" y="-224"/>
+            <point key="canvasLocation" x="1526" y="-312"/>
         </scene>
     </scenes>
     <resources>
         <image name="blur1.png" width="640" height="1136"/>
+        <image name="help8-3.png" width="128" height="128"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <nil key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="5qK-Bk-84c"/>
+    </inferredMetricsTieBreakers>
 </document>
