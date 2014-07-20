@@ -43,6 +43,7 @@ using namespace cv;
     SKAction *organSound;
     BOOL isGameInProgress;
     AVAudioPlayer *gameSceneLoop;
+    AVAudioPlayer *gameSceneLoop2;
     BOOL isTouchEnabled;
     float pipeScale;
     BOOL isMusicEnabled;
@@ -134,8 +135,13 @@ static NSInteger const kVerticalPipeGap = 100;
 
 -(void) startGeneratingPipes {
     isGameInProgress = YES;
-    if (isMusicEnabled)
-        [gameSceneLoop play];
+    if (isMusicEnabled) {
+        if (_score <10)
+            [gameSceneLoop play];
+        else
+            [gameSceneLoop2 play];
+    }
+    
     if (isHoverEnabled)
         self.physicsWorld.gravity = CGVectorMake( 0.0, 0.0 );
     else
@@ -339,7 +345,17 @@ static NSInteger const kVerticalPipeGap = 100;
 //        bgMusic = [SKAction playSoundFileNamed:@"Loopy_trimmed.m4a" waitForCompletion:YES];
 
         NSString *filePath = [[NSBundle mainBundle] pathForResource:@"Loopy_trimmed" ofType:@"m4a"];
+        NSString *filePath2 = [[NSBundle mainBundle] pathForResource:@"HoverFlappy_level2" ofType:@"m4a"];
         NSError *error;
+        
+        gameSceneLoop2 = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:filePath2] error:&error];
+        if (error) {
+            NSLog(@"Error in audioPlayer: %@", [error localizedDescription]);
+        } else {
+            gameSceneLoop2.numberOfLoops = -1;
+            [gameSceneLoop2 prepareToPlay];
+        }
+
         gameSceneLoop = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:filePath] error:&error];
         if (error) {
             NSLog(@"Error in audioPlayer: %@", [error localizedDescription]);
@@ -775,6 +791,10 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                 [self startGeneratingBulletsWithDelay:2.0];
             }
             if (_score == 20) {
+                if (isMusicEnabled) {
+                    [gameSceneLoop stop];
+                    [gameSceneLoop2 play];
+                }
                 _bulletTexture = [SKTexture textureWithImageNamed:@"Bullet-A"];
                 [self startGeneratingBulletsWithDelay:1.0];
             }
@@ -784,13 +804,16 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             // Add a little visual feedback for the score increment
             [_scoreLabelNode runAction:[SKAction sequence:@[scoreSound, [SKAction scaleTo:1.5 duration:0.1], [SKAction scaleTo:1.0 duration:0.1]]]];
         } else {
+//            return;
             // Bird has collided with world or a bullet
             isTouchEnabled = NO;
             if (isHoverEnabled)
                 [self.videoCamera stop];
             [self createCrashedBird];
-            if (isMusicEnabled)
+            if (isMusicEnabled) {
                 [gameSceneLoop stop];
+                [gameSceneLoop2 stop];
+            }
         
             isGameInProgress = NO;
             [self runAction:crashSound];

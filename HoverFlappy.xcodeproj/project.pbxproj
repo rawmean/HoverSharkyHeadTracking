@@ -100,6 +100,7 @@
 		F57750DC195F9C84005205FF /*  GameOver.wav in Resources */ = {isa = PBXBuildFile; fileRef = F57750DB195F9C84005205FF /*  GameOver.wav */; };
 		F5892363197B00DD0064C68B /* Bullet-B.png in Resources */ = {isa = PBXBuildFile; fileRef = F5892362197B00DD0064C68B /* Bullet-B.png */; };
 		F5892365197B46920064C68B /* Bullet-A.png in Resources */ = {isa = PBXBuildFile; fileRef = F5892364197B46920064C68B /* Bullet-A.png */; };
+		F5892368197B70340064C68B /* HoverFlappy_level2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F5892367197B70340064C68B /* HoverFlappy_level2.m4a */; };
 		F5D56B10194E89D30063D43A /* ScoresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D56B0F194E89D30063D43A /* ScoresViewController.m */; };
 		F5D56B18194EBBEB0063D43A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D56B17194EBBEB0063D43A /* iAd.framework */; };
 		F5E844FA19687EE7007738C6 /* Easy.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E844F819687EE7007738C6 /* Easy.png */; };
@@ -222,6 +223,7 @@
 		F57750DB195F9C84005205FF /*  GameOver.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = " GameOver.wav"; sourceTree = "<group>"; };
 		F5892362197B00DD0064C68B /* Bullet-B.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bullet-B.png"; sourceTree = "<group>"; };
 		F5892364197B46920064C68B /* Bullet-A.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bullet-A.png"; sourceTree = "<group>"; };
+		F5892367197B70340064C68B /* HoverFlappy_level2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = HoverFlappy_level2.m4a; sourceTree = "<group>"; };
 		F5D56B0E194E89D30063D43A /* ScoresViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoresViewController.h; sourceTree = "<group>"; };
 		F5D56B0F194E89D30063D43A /* ScoresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoresViewController.m; sourceTree = "<group>"; };
 		F5D56B17194EBBEB0063D43A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
@@ -365,6 +367,7 @@
 		F53CCA75194D2F3B00A9AB63 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F5892367197B70340064C68B /* HoverFlappy_level2.m4a */,
 				F5892366197B469C0064C68B /* Bullets */,
 				F5E84535196A17B5007738C6 /* help8-3.png */,
 				F5E844FD19689186007738C6 /* East_hard */,
@@ -632,6 +635,7 @@
 				F5354EAC195011C60049F406 /* heart.png in Resources */,
 				F53CCAB4194D33AB00A9AB63 /* Pipe1.png in Resources */,
 				F53CCAAD194D306D00A9AB63 /* Bird1.png in Resources */,
+				F5892368197B70340064C68B /* HoverFlappy_level2.m4a in Resources */,
 				F555DDEB1960FCD100E0841A /* a4.png in Resources */,
 				F555DE1F1962591300E0841A /* startButton.png in Resources */,
 				F51927DC1965084B004D1D5F /* bricks2.png in Resources */,
