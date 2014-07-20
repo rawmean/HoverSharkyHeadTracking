@@ -213,9 +213,6 @@ static NSInteger const kVerticalPipeGap = 100;
 #pragma mark Spawn Bullets and Pipes
 
 -(void)spawnBullets {
-//    SKNode* bullet = [SKNode node];
-//    bullet.position = CGPointMake( self.frame.size.width + _bulletTexture.size.width*pipeScale, 0 );
-//    bullet.zPosition = -10;
     CGFloat range = 0.5;
     CGFloat y = arc4random() % (NSInteger)( self.frame.size.height*range )+ self.frame.size.height*(0.65-range/2.);
     
@@ -712,6 +709,7 @@ static NSInteger const kVerticalPipeGap = 100;
         }
         if (_score >= 20) {
             [self startGeneratingBulletsWithDelay:1.0];
+            _bulletTexture = [SKTexture textureWithImageNamed:@"Bullet-A"];
         }
 
         
@@ -777,6 +775,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                 [self startGeneratingBulletsWithDelay:2.0];
             }
             if (_score == 20) {
+                _bulletTexture = [SKTexture textureWithImageNamed:@"Bullet-A"];
                 [self startGeneratingBulletsWithDelay:1.0];
             }
 
