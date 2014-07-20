@@ -219,13 +219,14 @@ static NSInteger const kVerticalPipeGap = 100;
 #pragma mark Spawn Bullets and Pipes
 
 -(void)spawnBullets {
-    CGFloat range = 0.5;
-    CGFloat y = arc4random() % (NSInteger)( self.frame.size.height*range )+ self.frame.size.height*(0.65-range/2.);
+//    CGFloat range = 0.5;
+//    CGFloat y = arc4random() % (NSInteger)( self.frame.size.height*range )+ self.frame.size.height*(0.65-range/2.);
+    CGFloat y = arc4random() % (NSInteger)( self.frame.size.height );
     
     SKSpriteNode* bulletSprite = [SKSpriteNode spriteNodeWithTexture:_bulletTexture];
     [bulletSprite setScale:bulletScale];
     bulletSprite.position = CGPointMake( self.frame.size.width + _bulletTexture.size.width*bulletScale, y );
-    bulletSprite.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:bulletSprite.size.height ];
+    bulletSprite.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:bulletSprite.size.height*0.5 ];
     bulletSprite.physicsBody.dynamic = NO;
     bulletSprite.physicsBody.categoryBitMask = bulletCategory;
     bulletSprite.physicsBody.contactTestBitMask = birdCategory;
@@ -238,7 +239,8 @@ static NSInteger const kVerticalPipeGap = 100;
 
 -(void)spawnPipes {
     
-    NSInteger pipeType = arc4random() % 3;
+    NSInteger pipeType = arc4random() % _pipeTexturesUp.count;
+//    pipeType = 0; // justuse the first one for now
     SKTexture* pipeTextureUp = _pipeTexturesUp[pipeType];
     SKTexture* pipeTexturedown = _pipeTexturesDown[pipeType];
     
@@ -473,12 +475,12 @@ static NSInteger const kVerticalPipeGap = 100;
         _pipeTexturesDown = [NSMutableArray arrayWithCapacity:3];
         [_pipeTexturesUp addObject:[SKTexture textureWithImageNamed:@"bricks1"]];
         [_pipeTexturesDown addObject:[SKTexture textureWithImageNamed:@"bricks2"]];
+        
+        [_pipeTexturesUp addObject:[SKTexture textureWithImageNamed:@"bricks_gray_up"]];
+        [_pipeTexturesDown addObject:[SKTexture textureWithImageNamed:@"bricks_gray_down"]];
 
-        [_pipeTexturesUp addObject:[SKTexture textureWithImageNamed:@"column2a"]];
-        [_pipeTexturesDown addObject:[SKTexture textureWithImageNamed:@"column2b"]];
-
-        [_pipeTexturesUp addObject:[SKTexture textureWithImageNamed:@"column_3a"]];
-        [_pipeTexturesDown addObject:[SKTexture textureWithImageNamed:@"column_3b"]];
+        [_pipeTexturesUp addObject:[SKTexture textureWithImageNamed:@"bricks_white_up"]];
+        [_pipeTexturesDown addObject:[SKTexture textureWithImageNamed:@"bricks_white_down"]];
 
         pipeScale = 0.25;
         SKTexture *pipetexture = _pipeTexturesUp[0];
@@ -801,11 +803,12 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                 _moving.speed = AFTER_10_SPEED_FACTOR*_moving.speed;
                 [self startGeneratingBulletsWithDelay:2.0];
             }
-            if (_score == 20) {
+            if (_score == 10)
                 if (isMusicEnabled) {
                     [gameSceneLoop stop];
                     [gameSceneLoop2 play];
                 }
+            if (_score == 20) {
                 _bulletTexture = [SKTexture textureWithImageNamed:@"Bullet-A"];
                 [self startGeneratingBulletsWithDelay:1.0];
             }
@@ -909,9 +912,9 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
         if( _moving.speed > 0 ) {
             _bird.physicsBody.velocity = CGVectorMake(0, 0);
             if (isIPAD)
-                [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[1]*0, -meanFlow.val[0]*5)];
+                [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[1]*(-5), -meanFlow.val[0]*5)];
             else
-                [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[0]*0, -meanFlow.val[1]*5)];
+                [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[0]*5, -meanFlow.val[1]*5)];
         }
     }
     std::swap(prevGrayImage, grayImage);
