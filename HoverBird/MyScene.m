@@ -20,8 +20,8 @@ using namespace cv;
 @interface MyScene ()<SKPhysicsContactDelegate, CvVideoCameraDelegate> {
     SKSpriteNode* _bird;
     SKColor* _skyColor;
-    SKTexture* _pipeTexture1;
-    SKTexture* _pipeTexture2;
+    NSMutableArray* _pipeTexturesUp;
+    NSMutableArray* _pipeTexturesDown;
     SKTexture* _bulletTexture;
     float bulletScale;
     SKAction* _movePipesAndRemove;
@@ -237,13 +237,18 @@ static NSInteger const kVerticalPipeGap = 100;
 }
 
 -(void)spawnPipes {
+    
+    NSInteger pipeType = arc4random() % 3;
+    SKTexture* pipeTextureUp = _pipeTexturesUp[pipeType];
+    SKTexture* pipeTexturedown = _pipeTexturesDown[pipeType];
+    
     SKNode* pipePair = [SKNode node];
-    pipePair.position = CGPointMake( self.frame.size.width + _pipeTexture1.size.width*pipeScale, 0 );
+    pipePair.position = CGPointMake( self.frame.size.width + pipeTextureUp.size.width*pipeScale, 0 );
     pipePair.zPosition = -10;
     
     CGFloat y = arc4random() % (NSInteger)( self.frame.size.height / 3 ) ;
     
-    SKSpriteNode* pipe1 = [SKSpriteNode spriteNodeWithTexture:_pipeTexture1];
+    SKSpriteNode* pipe1 = [SKSpriteNode spriteNodeWithTexture:pipeTextureUp];
     [pipe1 setScale:pipeScale];
     pipe1.position = CGPointMake( 0, y );
     pipe1.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:pipe1.size];
@@ -262,7 +267,7 @@ static NSInteger const kVerticalPipeGap = 100;
     if (!isGameEasy)
         distanceScale *= 1.2;
     
-    SKSpriteNode* pipe2 = [SKSpriteNode spriteNodeWithTexture:_pipeTexture2];
+    SKSpriteNode* pipe2 = [SKSpriteNode spriteNodeWithTexture:pipeTexturedown];
     [pipe2 setScale:pipeScale];
     pipe2.position = CGPointMake( 0, y + pipe1.size.height + kVerticalPipeGap/distanceScale );
     pipe2.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:pipe2.size];
@@ -464,14 +469,20 @@ static NSInteger const kVerticalPipeGap = 100;
         
         // Create pipes
         ////////////////
-        
-        _pipeTexture1 = [SKTexture textureWithImageNamed:@"bricks1"];
-//        _pipeTexture1.filteringMode = SKTextureFilteringNearest;
-        _pipeTexture2 = [SKTexture textureWithImageNamed:@"bricks2"];
-//        _pipeTexture2.filteringMode = SKTextureFilteringNearest;
+        _pipeTexturesUp = [NSMutableArray arrayWithCapacity:3];
+        _pipeTexturesDown = [NSMutableArray arrayWithCapacity:3];
+        [_pipeTexturesUp addObject:[SKTexture textureWithImageNamed:@"bricks1"]];
+        [_pipeTexturesDown addObject:[SKTexture textureWithImageNamed:@"bricks2"]];
+
+        [_pipeTexturesUp addObject:[SKTexture textureWithImageNamed:@"column2a"]];
+        [_pipeTexturesDown addObject:[SKTexture textureWithImageNamed:@"column2b"]];
+
+        [_pipeTexturesUp addObject:[SKTexture textureWithImageNamed:@"column_3a"]];
+        [_pipeTexturesDown addObject:[SKTexture textureWithImageNamed:@"column_3b"]];
+
         pipeScale = 0.25;
-        
-        CGFloat distanceToMove = self.frame.size.width + 1 * _pipeTexture1.size.width;
+        SKTexture *pipetexture = _pipeTexturesUp[0];
+        CGFloat distanceToMove = self.frame.size.width + 1 * pipetexture.size.width;
         SKAction* movePipes = [SKAction moveByX:-distanceToMove y:0 duration:speedScale*0.01 * distanceToMove];
         SKAction* removePipes = [SKAction removeFromParent];
         _movePipesAndRemove = [SKAction sequence:@[movePipes, removePipes]];
