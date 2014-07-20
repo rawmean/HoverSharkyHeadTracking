@@ -22,7 +22,10 @@ using namespace cv;
     SKColor* _skyColor;
     SKTexture* _pipeTexture1;
     SKTexture* _pipeTexture2;
+    SKTexture* _bulletTexture;
+    float bulletScale;
     SKAction* _movePipesAndRemove;
+    SKAction* _moveBulletAndRemove;
     SKNode* _moving;
     SKNode* _pipes;
     SKNode* _ground;
@@ -62,6 +65,7 @@ static const uint32_t birdCategory = 1 << 0;
 static const uint32_t worldCategory = 1 << 1;
 static const uint32_t pipeCategory = 1 << 2;
 static const uint32_t scoreCategory = 1 << 3;
+static const uint32_t bulletCategory = 1 << 4;
 static NSInteger const kVerticalPipeGap = 100;
 
 @synthesize scoreDelegate = _scoreDelegate;
@@ -126,7 +130,7 @@ static NSInteger const kVerticalPipeGap = 100;
     return startNode;
 }
 
-#pragma mark - Pipes
+#pragma mark - Pipes generation
 
 -(void) startGeneratingPipes {
     isGameInProgress = YES;
@@ -139,13 +143,22 @@ static NSInteger const kVerticalPipeGap = 100;
     
     [self removeActionForKey:@"pipes"];
     SKAction* spawn = [SKAction performSelector:@selector(spawnPipes) onTarget:self];
-//    float speed = 1;
-//    if (!isGameEasy)
-//        speed = HARD_LEVEL_SPEED_FACTOR;
     SKAction* delay = [SKAction waitForDuration:2.0/_moving.speed];
     SKAction* spawnThenDelay = [SKAction sequence:@[spawn, delay]];
     SKAction* spawnThenDelayForever = [SKAction repeatActionForever:spawnThenDelay];
     [self runAction:spawnThenDelayForever withKey:@"pipes"];
+}
+
+#pragma mark - Bullet generation
+
+-(void) startGeneratingBulletsWithDelay:(CGFloat)delayInterval {
+    
+    [self removeActionForKey:@"bullets"];
+    SKAction* spawn = [SKAction performSelector:@selector(spawnBullets) onTarget:self];
+    SKAction* delay = [SKAction waitForDuration:delayInterval/_moving.speed];
+    SKAction* spawnThenDelay = [SKAction sequence:@[spawn, delay]];
+    SKAction* spawnBulletThenDelayForever = [SKAction repeatActionForever:spawnThenDelay];
+    [self runAction:spawnBulletThenDelayForever withKey:@"bullets"];
 }
 
 -(void)resetScene {
@@ -158,6 +171,7 @@ static NSInteger const kVerticalPipeGap = 100;
     
     self.physicsWorld.gravity = CGVectorMake( 0.0, 0.0 );
     [self removeActionForKey:@"pipes"];
+    [self removeActionForKey:@"bullets"];
 
     // Move bird to original position and reset velocity
     _bird.position = CGPointMake(self.frame.size.width / 4, CGRectGetMidY(self.frame));
@@ -167,6 +181,10 @@ static NSInteger const kVerticalPipeGap = 100;
     _bird.zRotation = 0.0;
     // Remove all existing pipes
     [_pipes removeAllChildren];
+    while ([_moving childNodeWithName:@"bullet"] ) {
+        [[_moving childNodeWithName:@"bullet"] removeFromParent];
+    }
+    
     
     // Reset _canRestart
     _canRestart = NO;
@@ -192,13 +210,35 @@ static NSInteger const kVerticalPipeGap = 100;
     
 }
 
+#pragma mark Spawn Bullets and Pipes
+
+-(void)spawnBullets {
+//    SKNode* bullet = [SKNode node];
+//    bullet.position = CGPointMake( self.frame.size.width + _bulletTexture.size.width*pipeScale, 0 );
+//    bullet.zPosition = -10;
+    CGFloat range = 0.5;
+    CGFloat y = arc4random() % (NSInteger)( self.frame.size.height*range )+ self.frame.size.height*(0.65-range/2.);
+    
+    SKSpriteNode* bulletSprite = [SKSpriteNode spriteNodeWithTexture:_bulletTexture];
+    [bulletSprite setScale:bulletScale];
+    bulletSprite.position = CGPointMake( self.frame.size.width + _bulletTexture.size.width*bulletScale, y );
+    bulletSprite.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:bulletSprite.size.height ];
+    bulletSprite.physicsBody.dynamic = NO;
+    bulletSprite.physicsBody.categoryBitMask = bulletCategory;
+    bulletSprite.physicsBody.contactTestBitMask = birdCategory;
+
+    [bulletSprite runAction:_moveBulletAndRemove];
+    bulletSprite.name = @"bullet";
+    [_moving addChild:bulletSprite];
+
+}
 
 -(void)spawnPipes {
     SKNode* pipePair = [SKNode node];
     pipePair.position = CGPointMake( self.frame.size.width + _pipeTexture1.size.width*pipeScale, 0 );
     pipePair.zPosition = -10;
     
-    CGFloat y = arc4random() % (NSInteger)( self.frame.size.height / 3 );
+    CGFloat y = arc4random() % (NSInteger)( self.frame.size.height / 3 ) ;
     
     SKSpriteNode* pipe1 = [SKSpriteNode spriteNodeWithTexture:_pipeTexture1];
     [pipe1 setScale:pipeScale];
@@ -413,9 +453,9 @@ static NSInteger const kVerticalPipeGap = 100;
         ////////////////
         
         _pipeTexture1 = [SKTexture textureWithImageNamed:@"bricks1"];
-        _pipeTexture1.filteringMode = SKTextureFilteringNearest;
+//        _pipeTexture1.filteringMode = SKTextureFilteringNearest;
         _pipeTexture2 = [SKTexture textureWithImageNamed:@"bricks2"];
-        _pipeTexture2.filteringMode = SKTextureFilteringNearest;
+//        _pipeTexture2.filteringMode = SKTextureFilteringNearest;
         pipeScale = 0.25;
         
         CGFloat distanceToMove = self.frame.size.width + 1 * _pipeTexture1.size.width;
@@ -423,7 +463,21 @@ static NSInteger const kVerticalPipeGap = 100;
         SKAction* removePipes = [SKAction removeFromParent];
         _movePipesAndRemove = [SKAction sequence:@[movePipes, removePipes]];
         
+
+        // Create bullet
+        ////////////////
         
+        _bulletTexture = [SKTexture textureWithImageNamed:@"Bullet-B"];
+        bulletScale = 0.1;
+        
+        CGFloat bulletDistanceToMove = self.frame.size.width + 1 * _bulletTexture.size.width;
+        SKAction* moveBullets = [SKAction moveByX:-bulletDistanceToMove y:0 duration:speedScale*0.01/2. * bulletDistanceToMove];
+        SKAction* removeBullets = [SKAction removeFromParent];
+        _moveBulletAndRemove = [SKAction sequence:@[moveBullets, removeBullets]];
+
+        
+        // Create bird
+        ////////////////
         NSArray *birdTextures = @[[SKTexture textureWithImageNamed:@"a1"],
                                   [SKTexture textureWithImageNamed:@"a2"],
                                   [SKTexture textureWithImageNamed:@"a3"],
@@ -653,6 +707,14 @@ static NSInteger const kVerticalPipeGap = 100;
         [hoverButton removeFromParent];
         [difficultyButton removeFromParent];
         
+        if (_score >= 10) {
+            [self startGeneratingBulletsWithDelay:2.0];
+        }
+        if (_score >= 20) {
+            [self startGeneratingBulletsWithDelay:1.0];
+        }
+
+        
         [self startGeneratingPipes];
         if (isHoverEnabled)
             [self.videoCamera start];
@@ -710,15 +772,20 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             _score++;
             if ((_score > 20) || (_score > 50))
                 [self updateAchievements];
-            if (_score == 10)
+            if (_score == 10) {
                 _moving.speed = AFTER_10_SPEED_FACTOR*_moving.speed;
+                [self startGeneratingBulletsWithDelay:2.0];
+            }
+            if (_score == 20) {
+                [self startGeneratingBulletsWithDelay:1.0];
+            }
+
             
             _scoreLabelNode.text = [NSString stringWithFormat:@"%ld", (long)_score];
             // Add a little visual feedback for the score increment
             [_scoreLabelNode runAction:[SKAction sequence:@[scoreSound, [SKAction scaleTo:1.5 duration:0.1], [SKAction scaleTo:1.0 duration:0.1]]]];
         } else {
-            // Bird has collided with world
-//            [self updateAchievements];
+            // Bird has collided with world or a bullet
             isTouchEnabled = NO;
             if (isHoverEnabled)
                 [self.videoCamera stop];
@@ -820,34 +887,23 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
 
 
 -(void)updateAchievements{
-    NSString *achievementIdentifier;
     float progressPercentage = 0.0;
+    NSArray *scoreAchievementIDs = @[@"Achieved20Score_ID", @"Achieved50Score_ID"];
+    NSArray *scoreThreshold = @[@20, @50];
+    NSMutableArray *scoreAchievements = [NSMutableArray array];
     
     GKAchievement *scoreAchievement = nil;
-    
-    if (_score >= 20 ) {
-        achievementIdentifier = @"Achieved20Score_ID";
-        progressPercentage = 100.0;
-    }
-    else {
-        achievementIdentifier = @"Achieved20Score_ID";
-        progressPercentage = _score/20.*100.0;
+
+    for (int k=0; k < scoreAchievementIDs.count; k++) {
+        NSNumber *threshold = scoreThreshold[k];
+        progressPercentage = MIN(_score/threshold.integerValue*100., 100.);
+
+        scoreAchievement = [[GKAchievement alloc] initWithIdentifier:scoreAchievementIDs[k]];
+        scoreAchievement.percentComplete = progressPercentage;
+        [scoreAchievements addObject:scoreAchievement];
     }
 
-    if (_score >= 50 ) {
-        achievementIdentifier = @"Achieved50Score_ID";
-        progressPercentage = 100.0;
-    }
-    else if (_score > 20 ){
-        achievementIdentifier = @"Achieved50Score_ID";
-        progressPercentage = _score/50.*100.0;
-    }
-    
-    
-    scoreAchievement = [[GKAchievement alloc] initWithIdentifier:achievementIdentifier];
-    scoreAchievement.percentComplete = progressPercentage;
-
-    [GKAchievement reportAchievements:@[scoreAchievement] withCompletionHandler:^(NSError *error) {
+    [GKAchievement reportAchievements:scoreAchievements withCompletionHandler:^(NSError *error) {
         if (error != nil) {
             NSLog(@"%@", [error localizedDescription]);
         }
