@@ -914,7 +914,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             if (isIPAD)
                 [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[1]*(-5), -meanFlow.val[0]*5)];
             else
-                [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[0]*5, -meanFlow.val[1]*5)];
+                [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[0]*4, -meanFlow.val[1]*4)];
         }
     }
     std::swap(prevGrayImage, grayImage);
