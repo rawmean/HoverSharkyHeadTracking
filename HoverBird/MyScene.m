@@ -111,7 +111,7 @@ static NSInteger const kVerticalPipeGap = 100;
 - (SKSpriteNode *)startButtonNode
 {
     SKSpriteNode *startNode = [SKSpriteNode spriteNodeWithImageNamed:@"startButton.png"];
-    startNode.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame)*1.3);
+    startNode.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame)*1.);
     startNode.name = @"startButtonNode";//how the node is identified later
     startNode.zPosition = 1.0;
     [startNode setScale:.50];
@@ -276,7 +276,6 @@ static NSInteger const kVerticalPipeGap = 100;
     pipe2.physicsBody.dynamic = NO;
     pipe2.physicsBody.categoryBitMask = pipeCategory;
     pipe2.physicsBody.contactTestBitMask = birdCategory;
-//    pipe2.physicsBody.restitution = 0.1;
     
     [pipePair addChild:pipe2];
     
@@ -286,13 +285,14 @@ static NSInteger const kVerticalPipeGap = 100;
     contactNode.physicsBody.dynamic = NO;
     contactNode.physicsBody.categoryBitMask = scoreCategory;
     contactNode.physicsBody.contactTestBitMask = birdCategory;
+    contactNode.name = @"scoreNode";
     [pipePair addChild:contactNode];
+    
+    pipePair.name = @"pipePair";
     
     [pipePair runAction:_movePipesAndRemove];
     
     [_pipes addChild:pipePair];
-//    [_pipes removeFromParent];
-//    [_moving addChild:_pipes];
 }
 
 -(void) drawNumberOfLivesLeft:(NSInteger)numLives {
@@ -423,7 +423,11 @@ static NSInteger const kVerticalPipeGap = 100;
         
         SKTexture* groundTexture = [SKTexture textureWithImageNamed:@"ground_flower"];
 //        groundTexture.filteringMode = SKTextureFilteringNearest;
-        float groundScale = .25;
+        float groundScale;
+        if (isIPAD)
+            groundScale = 0.3;
+        else
+            groundScale = .15;
 
         SKAction* moveGroundSprite = [SKAction moveByX:-groundTexture.size.width*groundScale y:0 duration:speedScale*0.02 * groundTexture.size.width*groundScale];
         SKAction* resetGroundSprite = [SKAction moveByX:groundTexture.size.width*groundScale y:0 duration:0];
@@ -482,7 +486,10 @@ static NSInteger const kVerticalPipeGap = 100;
         [_pipeTexturesUp addObject:[SKTexture textureWithImageNamed:@"bricks_white_up"]];
         [_pipeTexturesDown addObject:[SKTexture textureWithImageNamed:@"bricks_white_down"]];
 
-        pipeScale = 0.25;
+        if (isIPAD)
+            pipeScale = 0.25;
+        else
+            pipeScale = 0.13;
         SKTexture *pipetexture = _pipeTexturesUp[0];
         CGFloat distanceToMove = self.frame.size.width + 1 * pipetexture.size.width;
         SKAction* movePipes = [SKAction moveByX:-distanceToMove y:0 duration:speedScale*0.01 * distanceToMove];
@@ -728,6 +735,7 @@ static NSInteger const kVerticalPipeGap = 100;
     
     //if start button touched, bring the pipes and gravity
     if ([node.name isEqualToString:@"startButtonNode"]) {
+        [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
         [node removeFromParent];
         [musicButton removeFromParent];
         [hoverButton removeFromParent];
@@ -749,7 +757,7 @@ static NSInteger const kVerticalPipeGap = 100;
         isGameInProgress = YES;
 
 //        _bird.physicsBody.velocity = CGVectorMake(0, 0);
-        [_bird.physicsBody applyImpulse:CGVectorMake(0, 12)];
+//        [_bird.physicsBody applyImpulse:CGVectorMake(0, 12)];
 
     } else if ([node.name isEqualToString:@"restartButtonNode"])
     {
@@ -796,6 +804,13 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
         if( ( contact.bodyA.categoryBitMask & scoreCategory ) == scoreCategory || ( contact.bodyB.categoryBitMask & scoreCategory ) == scoreCategory ) {
             // Bird has contact with score entity
             
+            if ( (contact.bodyA.categoryBitMask & scoreCategory ) == scoreCategory) {
+                [contact.bodyA.node removeFromParent];
+            }
+            if ( (contact.bodyB.categoryBitMask & scoreCategory ) == scoreCategory) {
+                [contact.bodyB.node removeFromParent];
+            }
+            
             _score++;
             if ((_score > 20) || (_score > 50))
                 [self updateAchievements];
@@ -818,7 +833,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             // Add a little visual feedback for the score increment
             [_scoreLabelNode runAction:[SKAction sequence:@[scoreSound, [SKAction scaleTo:1.5 duration:0.1], [SKAction scaleTo:1.0 duration:0.1]]]];
         } else {
-//            return;
+            [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
             // Bird has collided with world or a bullet
             isTouchEnabled = NO;
             if (isHoverEnabled)
@@ -914,7 +929,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             if (isIPAD)
                 [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[1]*(-5), -meanFlow.val[0]*5)];
             else
-                [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[0]*4, -meanFlow.val[1]*4)];
+                [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[1]*(-4), -meanFlow.val[0]*4)];
         }
     }
     std::swap(prevGrayImage, grayImage);

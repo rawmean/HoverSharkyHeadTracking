@@ -59,7 +59,7 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+
     BOOL hasWatchedVideo = [[NSUserDefaults standardUserDefaults] boolForKey:HAS_WATCHED_VIDEO];
     if (hasWatchedVideo) {
         GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
@@ -109,7 +109,7 @@
 - (NSUInteger)supportedInterfaceOrientations
 {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        return UIInterfaceOrientationMaskPortrait;
+        return UIInterfaceOrientationMaskLandscape;
     } else {
         return UIInterfaceOrientationMaskLandscape ;
     }
