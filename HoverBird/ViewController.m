@@ -61,6 +61,7 @@
     [super viewDidAppear:animated];
 
     BOOL hasWatchedVideo = [[NSUserDefaults standardUserDefaults] boolForKey:HAS_WATCHED_VIDEO];
+//    hasWatchedVideo = NO;
     if (hasWatchedVideo) {
         GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
         [localPlayer setAuthenticateHandler:(^(UIViewController* viewcontroller, NSError *error) {

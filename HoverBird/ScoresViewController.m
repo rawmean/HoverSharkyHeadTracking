@@ -9,7 +9,7 @@
 #import "ScoresViewController.h"
 #import <iAd/iAd.h>
 
-#define LEADERBOARD_ID @"hoverflappy_leaderboardID"
+#define LEADERBOARD_ID @"HoverSharkyLeaderBoardID"
 
 @interface ScoresViewController ()<ADBannerViewDelegate> {
     NSDictionary* scoreDict;

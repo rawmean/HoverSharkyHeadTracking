@@ -42,6 +42,7 @@
     if(self.webView == nil) {
         self.webView = [[UIWebView alloc] initWithFrame:frame];
         
+        self.webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleHeight;
         UITapGestureRecognizer *webViewTapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didPlayVideo)];
         webViewTapped.numberOfTapsRequired = 1;
         webViewTapped.delegate = self;
@@ -62,6 +63,8 @@
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         w = self.view.frame.size.width/1.5;
         h = self.view.frame.size.height/4.;
+        w = 560*.5;
+        h = 315*.5;
         frame = CGRectMake(self.view.frame.size.width/2.-w/2., self.view.frame.size.height/2.-h/2., w, h);
     }
     else {

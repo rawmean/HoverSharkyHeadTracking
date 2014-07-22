@@ -15,17 +15,23 @@
 using namespace cv;
 
 #define HARD_LEVEL_SPEED_FACTOR 1.3
-#define AFTER_10_SPEED_FACTOR 1.2
+#define AFTER_10_SPEED_FACTOR 1.3
 
 @interface MyScene ()<SKPhysicsContactDelegate, CvVideoCameraDelegate> {
-    SKSpriteNode* _bird;
+    SKSpriteNode* _shark;
+    NSArray *sharkTexturesNormal;
+    NSArray *fishTextures;
+    SKAction *_moveFishesAndRemove;
     SKColor* _skyColor;
     NSMutableArray* _pipeTexturesUp;
     NSMutableArray* _pipeTexturesDown;
     SKTexture* _bulletTexture;
+    SKTexture* _chainTexture;
+    SKTexture* _goldMineTexture;
+    float chainScale;
     float bulletScale;
     SKAction* _movePipesAndRemove;
-    SKAction* _moveBulletAndRemove;
+    SKAction* _moveMineAndRemove;
     SKNode* _moving;
     SKNode* _pipes;
     SKNode* _ground;
@@ -55,6 +61,10 @@ using namespace cv;
     BOOL isGameEasy;
     float speedScale;
     BOOL isIPAD;
+    NSInteger groundHeight;
+    SKTexture *torpedoTexture;
+    SKAction *_moveTorpedoAndRemove;
+    
 }
 @property (nonatomic, strong) CvVideoCamera* videoCamera;
 
@@ -62,11 +72,13 @@ using namespace cv;
 
 @implementation MyScene
 
-static const uint32_t birdCategory = 1 << 0;
+static const uint32_t sharkCategory = 1 << 0;
 static const uint32_t worldCategory = 1 << 1;
 static const uint32_t pipeCategory = 1 << 2;
 static const uint32_t scoreCategory = 1 << 3;
-static const uint32_t bulletCategory = 1 << 4;
+static const uint32_t mineCategory = 1 << 4;
+static const uint32_t fishCategory = 1 << 5;
+static const uint32_t torpedoCategory = 1 << 6;
 static NSInteger const kVerticalPipeGap = 100;
 
 @synthesize scoreDelegate = _scoreDelegate;
@@ -133,7 +145,7 @@ static NSInteger const kVerticalPipeGap = 100;
 
 #pragma mark - Pipes generation
 
--(void) startGeneratingPipes {
+-(void) startGeneratingMines {
     isGameInProgress = YES;
     if (isMusicEnabled) {
         if (_score <10)
@@ -145,27 +157,42 @@ static NSInteger const kVerticalPipeGap = 100;
     if (isHoverEnabled)
         self.physicsWorld.gravity = CGVectorMake( 0.0, 0.0 );
     else
-        self.physicsWorld.gravity = CGVectorMake( 0.0, -5.0 );
+        self.physicsWorld.gravity = CGVectorMake( 0.0, -1.0 );
     
-    [self removeActionForKey:@"pipes"];
-    SKAction* spawn = [SKAction performSelector:@selector(spawnPipes) onTarget:self];
-    SKAction* delay = [SKAction waitForDuration:2.0/_moving.speed];
+    [self removeActionForKey:@"mineSpawn"];
+    SKAction* spawn = [SKAction performSelector:@selector(spawnMines) onTarget:self];
+    SKAction* delay = [SKAction waitForDuration:7.0/_moving.speed];
     SKAction* spawnThenDelay = [SKAction sequence:@[spawn, delay]];
     SKAction* spawnThenDelayForever = [SKAction repeatActionForever:spawnThenDelay];
-    [self runAction:spawnThenDelayForever withKey:@"pipes"];
+    [self runAction:spawnThenDelayForever withKey:@"mineSpawn"];
+
+    [self removeActionForKey:@"fishSpawn"];
+    SKAction* spawnFish = [SKAction performSelector:@selector(spawnLittleFishes) onTarget:self];
+    SKAction* delayFish = [SKAction waitForDuration:3.0/_moving.speed];
+    SKAction* spawnThenDelayFish = [SKAction sequence:@[spawnFish, delayFish]];
+    SKAction* spawnThenDelayFishForever = [SKAction repeatActionForever:spawnThenDelayFish];
+    [self runAction:spawnThenDelayFishForever withKey:@"fishSpawn"];
+
+    [self removeActionForKey:@"torpedoSpawn"];
+    SKAction* spawnTorpedo = [SKAction performSelector:@selector(spawnTorpedos) onTarget:self];
+    SKAction* delayTorpedo = [SKAction waitForDuration:3.0/_moving.speed];
+    SKAction* spawnThenDelayTorpedo = [SKAction sequence:@[spawnTorpedo, delayTorpedo]];
+    SKAction* spawnThenDelayTorpedoForever = [SKAction repeatActionForever:spawnThenDelayTorpedo];
+    [self runAction:spawnThenDelayTorpedoForever withKey:@"torpedoSpawn"];
+
 }
 
 #pragma mark - Bullet generation
 
--(void) startGeneratingBulletsWithDelay:(CGFloat)delayInterval {
-    
-    [self removeActionForKey:@"bullets"];
-    SKAction* spawn = [SKAction performSelector:@selector(spawnBullets) onTarget:self];
-    SKAction* delay = [SKAction waitForDuration:delayInterval/_moving.speed];
-    SKAction* spawnThenDelay = [SKAction sequence:@[spawn, delay]];
-    SKAction* spawnBulletThenDelayForever = [SKAction repeatActionForever:spawnThenDelay];
-    [self runAction:spawnBulletThenDelayForever withKey:@"bullets"];
-}
+//-(void) startGeneratingBulletsWithDelay:(CGFloat)delayInterval {
+//    
+//    [self removeActionForKey:@"bullets"];
+//    SKAction* spawn = [SKAction performSelector:@selector(spawnBullets) onTarget:self];
+//    SKAction* delay = [SKAction waitForDuration:delayInterval/_moving.speed];
+//    SKAction* spawnThenDelay = [SKAction sequence:@[spawn, delay]];
+//    SKAction* spawnBulletThenDelayForever = [SKAction repeatActionForever:spawnThenDelay];
+//    [self runAction:spawnBulletThenDelayForever withKey:@"bullets"];
+//}
 
 -(void)resetScene {
     
@@ -176,21 +203,28 @@ static NSInteger const kVerticalPipeGap = 100;
         [self addChild: hoverButton];
     
     self.physicsWorld.gravity = CGVectorMake( 0.0, 0.0 );
-    [self removeActionForKey:@"pipes"];
-    [self removeActionForKey:@"bullets"];
+    [self removeActionForKey:@"mineSpawn"];
+    [self removeActionForKey:@"fishSpawn"];
+    [self removeActionForKey:@"torpedoSpawn"];
 
     // Move bird to original position and reset velocity
-    _bird.position = CGPointMake(self.frame.size.width / 4, CGRectGetMidY(self.frame));
-    _bird.physicsBody.velocity = CGVectorMake( 0, 0 );
-    _bird.physicsBody.collisionBitMask = worldCategory | pipeCategory;
-    _bird.speed = 1.0;
-    _bird.zRotation = 0.0;
+    _shark.position = CGPointMake(self.frame.size.width / 4, CGRectGetMidY(self.frame));
+    _shark.physicsBody.velocity = CGVectorMake( 0, 0 );
+    _shark.physicsBody.collisionBitMask = worldCategory | pipeCategory;
+    _shark.speed = 1.0;
+    _shark.zRotation = 0.0;
     // Remove all existing pipes
     [_pipes removeAllChildren];
-    while ([_moving childNodeWithName:@"bullet"] ) {
-        [[_moving childNodeWithName:@"bullet"] removeFromParent];
-    }
     
+    while ([_moving childNodeWithName:@"fish"] ) {
+        [[_moving childNodeWithName:@"fish"] removeFromParent];
+    }
+    while ([_moving childNodeWithName:@"mine"] ) {
+        [[_moving childNodeWithName:@"mine"] removeFromParent];
+    }
+    while ([_moving childNodeWithName:@"torpedo"] ) {
+        [[_moving childNodeWithName:@"torpedo"] removeFromParent];
+    }
     
     // Reset _canRestart
     _canRestart = NO;
@@ -216,25 +250,91 @@ static NSInteger const kVerticalPipeGap = 100;
     
 }
 
-#pragma mark Spawn Bullets and Pipes
+#pragma mark Spawn Stuff
 
--(void)spawnBullets {
-//    CGFloat range = 0.5;
-//    CGFloat y = arc4random() % (NSInteger)( self.frame.size.height*range )+ self.frame.size.height*(0.65-range/2.);
-    CGFloat y = arc4random() % (NSInteger)( self.frame.size.height );
+-(void)spawnMines {
+    if (_moving.speed == 0) {
+        return;
+    }
     
-    SKSpriteNode* bulletSprite = [SKSpriteNode spriteNodeWithTexture:_bulletTexture];
-    [bulletSprite setScale:bulletScale];
-    bulletSprite.position = CGPointMake( self.frame.size.width + _bulletTexture.size.width*bulletScale, y );
-    bulletSprite.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:bulletSprite.size.height*0.5 ];
-    bulletSprite.physicsBody.dynamic = NO;
-    bulletSprite.physicsBody.categoryBitMask = bulletCategory;
-    bulletSprite.physicsBody.contactTestBitMask = birdCategory;
+    NSInteger numLinks = arc4random() % 7 + 3;
+    
+    SKNode *chainNode = [SKNode node];
+    chainNode.position = CGPointMake( self.frame.size.width + _chainTexture.size.width*chainScale, 0 );
+    chainNode.zPosition = -10;
+    for (int k=0; k<numLinks; k++) {
+        SKSpriteNode* linkSprite = [SKSpriteNode spriteNodeWithTexture:_chainTexture];
+        linkSprite.position = CGPointMake(0, k*_chainTexture.size.height*chainScale);
+        [linkSprite setScale:chainScale];
+        
+        linkSprite.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:linkSprite.size];
+        linkSprite.physicsBody.dynamic = NO;
+        linkSprite.physicsBody.categoryBitMask = mineCategory;
+        linkSprite.physicsBody.contactTestBitMask = sharkCategory;
+        [chainNode addChild:linkSprite];
+    }
+    
+    SKSpriteNode *mineHeadNode = [SKSpriteNode spriteNodeWithTexture:_goldMineTexture];
+    mineHeadNode.position = CGPointMake(0, numLinks*_chainTexture.size.height*chainScale);
+    
+    mineHeadNode.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:_goldMineTexture.size.height/2.];
+    mineHeadNode.physicsBody.dynamic = NO;
+    mineHeadNode.physicsBody.categoryBitMask = mineCategory;
+    mineHeadNode.physicsBody.contactTestBitMask = sharkCategory;
 
-    [bulletSprite runAction:_moveBulletAndRemove];
-    bulletSprite.name = @"bullet";
-    [_moving addChild:bulletSprite];
+    [chainNode addChild:mineHeadNode];
+    chainNode.name = @"mine";
+    [chainNode runAction:_moveMineAndRemove];
+    [_moving addChild:chainNode];
 
+}
+
+-(void)spawnLittleFishes {
+    if (_moving.speed == 0) {
+        return;
+    }
+    
+    NSInteger fishType = arc4random() % fishTextures.count;
+    NSInteger fishYPos = arc4random() % (NSInteger)(self.size.height- groundHeight - 15) +  groundHeight;
+    
+    
+    SKSpriteNode *fishNode = [SKSpriteNode spriteNodeWithTexture:fishTextures[fishType]];
+    fishNode.position = CGPointMake(self.frame.size.width + ((SKTexture *)fishTextures[fishType]).size.width/2, fishYPos);
+    fishNode.zPosition = -10;
+    
+    fishNode.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:((SKTexture *)fishTextures[fishType]).size.height/2.];
+    fishNode.physicsBody.dynamic = NO;
+    fishNode.physicsBody.categoryBitMask = fishCategory;
+    fishNode.physicsBody.contactTestBitMask = sharkCategory;
+    
+    fishNode.name = @"fish";
+    [fishNode runAction:_moveFishesAndRemove];
+    [_moving addChild:fishNode];
+    
+}
+
+
+-(void)spawnTorpedos {
+    if (_moving.speed == 0) {
+        return;
+    }
+    
+    NSInteger YPos = arc4random() % (NSInteger)(self.size.height- groundHeight - 25) +  groundHeight;
+    
+    
+    SKSpriteNode *torpedoNode = [SKSpriteNode spriteNodeWithTexture:torpedoTexture];
+    torpedoNode.position = CGPointMake(self.frame.size.width + torpedoTexture.size.width/2, YPos);
+    torpedoNode.zPosition = -10;
+    
+    torpedoNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:torpedoTexture.size];
+    torpedoNode.physicsBody.dynamic = NO;
+    torpedoNode.physicsBody.categoryBitMask = torpedoCategory;
+    torpedoNode.physicsBody.contactTestBitMask = sharkCategory;
+    
+    torpedoNode.name = @"torpedo";
+    [torpedoNode runAction:_moveTorpedoAndRemove];
+    [_moving addChild:torpedoNode];
+    
 }
 
 -(void)spawnPipes {
@@ -256,7 +356,7 @@ static NSInteger const kVerticalPipeGap = 100;
     pipe1.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:pipe1.size];
     pipe1.physicsBody.dynamic = NO;
     pipe1.physicsBody.categoryBitMask = pipeCategory;
-    pipe1.physicsBody.contactTestBitMask = birdCategory;
+    pipe1.physicsBody.contactTestBitMask = sharkCategory;
 //    pipe1.physicsBody.restitution = 0.1;
     
     [pipePair addChild:pipe1];
@@ -275,16 +375,16 @@ static NSInteger const kVerticalPipeGap = 100;
     pipe2.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:pipe2.size];
     pipe2.physicsBody.dynamic = NO;
     pipe2.physicsBody.categoryBitMask = pipeCategory;
-    pipe2.physicsBody.contactTestBitMask = birdCategory;
+    pipe2.physicsBody.contactTestBitMask = sharkCategory;
     
     [pipePair addChild:pipe2];
     
     SKNode* contactNode = [SKNode node];
-    contactNode.position = CGPointMake( pipe1.size.width + _bird.size.width / 2, CGRectGetMidY( self.frame ) );
+    contactNode.position = CGPointMake( pipe1.size.width + _shark.size.width / 2, CGRectGetMidY( self.frame ) );
     contactNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake( pipe2.size.width, self.frame.size.height )];
     contactNode.physicsBody.dynamic = NO;
     contactNode.physicsBody.categoryBitMask = scoreCategory;
-    contactNode.physicsBody.contactTestBitMask = birdCategory;
+    contactNode.physicsBody.contactTestBitMask = sharkCategory;
     contactNode.name = @"scoreNode";
     [pipePair addChild:contactNode];
     
@@ -310,9 +410,9 @@ static NSInteger const kVerticalPipeGap = 100;
         lifeIconArray[k] = lifeIcon;
         [self addChild:lifeIcon];
         
-        //    lifeIcon.physicsBody.categoryBitMask = birdCategory;
-        //    _bird.physicsBody.collisionBitMask = worldCategory | pipeCategory;
-        //    _bird.physicsBody.contactTestBitMask = worldCategory | pipeCategory;
+        //    lifeIcon.physicsBody.categoryBitMask = sharkCategory;
+        //    _shark.physicsBody.collisionBitMask = worldCategory | pipeCategory;
+        //    _shark.physicsBody.contactTestBitMask = worldCategory | pipeCategory;
     }
 }
 
@@ -405,7 +505,6 @@ static NSInteger const kVerticalPipeGap = 100;
         _scoreLabelNode.text = [NSString stringWithFormat:@"%ld", (long)_score];
         [self addChild:_scoreLabelNode];
 
-//        self.physicsWorld.gravity = CGVectorMake( 0.0, -5.0 );
         self.physicsWorld.gravity = CGVectorMake( 0.0, -0.0 );
         self.physicsWorld.contactDelegate = self;
         
@@ -421,13 +520,15 @@ static NSInteger const kVerticalPipeGap = 100;
         // Create ground
         //////////////////
         
-        SKTexture* groundTexture = [SKTexture textureWithImageNamed:@"ground_flower"];
+        SKTexture* groundTexture = [SKTexture textureWithImageNamed:@"Ocean1_FG"];
 //        groundTexture.filteringMode = SKTextureFilteringNearest;
         float groundScale;
         if (isIPAD)
-            groundScale = 0.3;
+            groundScale = 0.3*4;
         else
-            groundScale = .15;
+            groundScale = .15*4;
+        
+        groundHeight = groundTexture.size.height*groundScale;
 
         SKAction* moveGroundSprite = [SKAction moveByX:-groundTexture.size.width*groundScale y:0 duration:speedScale*0.02 * groundTexture.size.width*groundScale];
         SKAction* resetGroundSprite = [SKAction moveByX:groundTexture.size.width*groundScale y:0 duration:0];
@@ -448,7 +549,7 @@ static NSInteger const kVerticalPipeGap = 100;
         _ground.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.frame.size.width, groundTexture.size.height * groundScale)];
         _ground.physicsBody.dynamic = NO;
         _ground.physicsBody.categoryBitMask = worldCategory;
-    //    _ground.physicsBody.contactTestBitMask = birdCategory;
+//    _ground.physicsBody.contactTestBitMask = sharkCategory;
         _ground.physicsBody.restitution = 0.5;
 
         [self addChild:_ground];
@@ -456,9 +557,9 @@ static NSInteger const kVerticalPipeGap = 100;
         // Create skyline
         /////////////////
         
-        SKTexture* skylineTexture = [SKTexture textureWithImageNamed:@"Skyline_red"];
+        SKTexture* skylineTexture = [SKTexture textureWithImageNamed:@"Ocean2"];
 //        skylineTexture.filteringMode = SKTextureFilteringNearest;
-        float skylineScale = 0.12;
+        float skylineScale = 0.63;
         
         SKAction* moveSkylineSprite = [SKAction moveByX:-skylineTexture.size.width*skylineScale y:0 duration:speedScale*0.1 * skylineTexture.size.width*skylineScale];
         SKAction* resetSkylineSprite = [SKAction moveByX:skylineTexture.size.width*skylineScale y:0 duration:0];
@@ -468,23 +569,48 @@ static NSInteger const kVerticalPipeGap = 100;
             SKSpriteNode* sprite = [SKSpriteNode spriteNodeWithTexture:skylineTexture];
             [sprite setScale:skylineScale];
             sprite.zPosition = -20;
-            sprite.position = CGPointMake(i * sprite.size.width, sprite.size.height / 2 + groundTexture.size.height * groundScale);
+            sprite.position = CGPointMake(i * sprite.size.width, sprite.size.height / 2 + 0*groundTexture.size.height * groundScale);
             [sprite runAction:moveSkylineSpritesForever];
             [_moving addChild:sprite];
         }
-        
-        // Create pipes
-        ////////////////
-        _pipeTexturesUp = [NSMutableArray arrayWithCapacity:3];
-        _pipeTexturesDown = [NSMutableArray arrayWithCapacity:3];
-        [_pipeTexturesUp addObject:[SKTexture textureWithImageNamed:@"bricks1"]];
-        [_pipeTexturesDown addObject:[SKTexture textureWithImageNamed:@"bricks2"]];
-        
-        [_pipeTexturesUp addObject:[SKTexture textureWithImageNamed:@"bricks_gray_up"]];
-        [_pipeTexturesDown addObject:[SKTexture textureWithImageNamed:@"bricks_gray_down"]];
 
-        [_pipeTexturesUp addObject:[SKTexture textureWithImageNamed:@"bricks_white_up"]];
-        [_pipeTexturesDown addObject:[SKTexture textureWithImageNamed:@"bricks_white_down"]];
+        
+        // Create Mine
+        ////////////////
+        _chainTexture = [SKTexture textureWithImageNamed:@"Chain"];
+        _goldMineTexture = [SKTexture textureWithImageNamed:@"goldMine"];
+        chainScale = 1;
+        
+        CGFloat mineDistanceToMove = self.frame.size.width + 1 * _goldMineTexture.size.width;
+        SKAction* moveMine = [SKAction moveByX:-mineDistanceToMove y:0 duration:speedScale*0.01*2. * mineDistanceToMove];
+        SKAction* removeMine = [SKAction removeFromParent];
+        _moveMineAndRemove = [SKAction sequence:@[moveMine, removeMine]];
+
+        
+        // Create fishes
+        ////////////////
+        fishTextures = @[[SKTexture textureWithImageNamed:@"SmallFishGreen"],
+                         [SKTexture textureWithImageNamed:@"SmallFishRed"],
+                         [SKTexture textureWithImageNamed:@"SmallFishYellow"],
+                         [SKTexture textureWithImageNamed:@"MediumFishBrown"],
+                         [SKTexture textureWithImageNamed:@"MediumFishGreen"],
+                         [SKTexture textureWithImageNamed:@"MediumFishPurple"],
+
+                         ];
+        CGFloat fishDistanceToMove = self.frame.size.width + 1 * ((SKTexture *)fishTextures[0]).size.width;
+        SKAction* movefishes = [SKAction moveByX:-fishDistanceToMove y:0 duration:speedScale*0.01/2. * fishDistanceToMove];
+        SKAction* removeFishes = [SKAction removeFromParent];
+        _moveFishesAndRemove = [SKAction sequence:@[movefishes, removeFishes]];
+
+        // Create torpedo
+        ////////////////
+        torpedoTexture = [SKTexture textureWithImageNamed:@"Torpedo"];
+        CGFloat torpedoDistanceToMove = self.frame.size.width + 1 * torpedoTexture.size.width;
+        SKAction* moveTorpedos = [SKAction moveByX:-torpedoDistanceToMove y:0 duration:speedScale*0.01/3. * torpedoDistanceToMove];
+        SKAction* removetorpedo = [SKAction removeFromParent];
+        _moveTorpedoAndRemove = [SKAction sequence:@[moveTorpedos, removetorpedo]];
+        
+
 
         if (isIPAD)
             pipeScale = 0.25;
@@ -492,52 +618,45 @@ static NSInteger const kVerticalPipeGap = 100;
             pipeScale = 0.13;
         SKTexture *pipetexture = _pipeTexturesUp[0];
         CGFloat distanceToMove = self.frame.size.width + 1 * pipetexture.size.width;
-        SKAction* movePipes = [SKAction moveByX:-distanceToMove y:0 duration:speedScale*0.01 * distanceToMove];
+        SKAction* movePipes = [SKAction moveByX:-distanceToMove y:0 duration:speedScale*0.2 * distanceToMove];
         SKAction* removePipes = [SKAction removeFromParent];
         _movePipesAndRemove = [SKAction sequence:@[movePipes, removePipes]];
         
 
-        // Create bullet
+        
+        // Create shark
         ////////////////
+        [self createSharkRegular];
+        /*
+        sharkTexturesNormal = @[[SKTexture textureWithImageNamed:@"Shark1-01"],
+                                  [SKTexture textureWithImageNamed:@"Shark2-01"],
+                                  [SKTexture textureWithImageNamed:@"Shark3-01"],
+                                  [SKTexture textureWithImageNamed:@"Shark4-01"],
+                                  [SKTexture textureWithImageNamed:@"Shark5-01"],
+                                  [SKTexture textureWithImageNamed:@"Shark6-01"],
+                                  [SKTexture textureWithImageNamed:@"Shark8-01"],
+                                  [SKTexture textureWithImageNamed:@"Shark9-01"]];
         
-        _bulletTexture = [SKTexture textureWithImageNamed:@"Bullet-B"];
-        bulletScale = 0.1;
+        SKAction* flap = [SKAction repeatActionForever:[SKAction animateWithTextures:sharkTexturesNormal timePerFrame:0.15]];
+        _shark = [SKSpriteNode spriteNodeWithTexture:sharkTexturesNormal[0]];
+        [_shark setScale:.7];
         
-        CGFloat bulletDistanceToMove = self.frame.size.width + 1 * _bulletTexture.size.width;
-        SKAction* moveBullets = [SKAction moveByX:-bulletDistanceToMove y:0 duration:speedScale*0.01/2. * bulletDistanceToMove];
-        SKAction* removeBullets = [SKAction removeFromParent];
-        _moveBulletAndRemove = [SKAction sequence:@[moveBullets, removeBullets]];
-
+        _shark.position = CGPointMake(self.frame.size.width/5, CGRectGetMidY(self.frame));
+        _shark.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:_shark.size.height / 2];
+        _shark.physicsBody.dynamic = YES;
+        _shark.physicsBody.allowsRotation = NO;
+        _shark.physicsBody.restitution = 0.3;
+        _shark.physicsBody.friction = 0.9;
         
-        // Create bird
-        ////////////////
-        NSArray *birdTextures = @[[SKTexture textureWithImageNamed:@"a1"],
-                                  [SKTexture textureWithImageNamed:@"a2"],
-                                  [SKTexture textureWithImageNamed:@"a3"],
-                                  [SKTexture textureWithImageNamed:@"a4"],
-                                  [SKTexture textureWithImageNamed:@"a5"],
-                                  [SKTexture textureWithImageNamed:@"a6"],
-                                  [SKTexture textureWithImageNamed:@"a7"],
-                                  [SKTexture textureWithImageNamed:@"a8"]];
-        
-        SKAction* flap = [SKAction repeatActionForever:[SKAction animateWithTextures:birdTextures timePerFrame:0.05]];
-        _bird = [SKSpriteNode spriteNodeWithTexture:birdTextures[0]];
-        [_bird setScale:.05];
-        
-        _bird.position = CGPointMake(self.frame.size.width / 4, CGRectGetMidY(self.frame));
-        _bird.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:_bird.size.height / 2];
-        _bird.physicsBody.dynamic = YES;
-        _bird.physicsBody.allowsRotation = NO;
-        _bird.physicsBody.restitution = 0.3;
-        _bird.physicsBody.friction = 0.9;
-        
-        _bird.physicsBody.categoryBitMask = birdCategory;
-        _bird.physicsBody.collisionBitMask = worldCategory | pipeCategory;
-        _bird.physicsBody.contactTestBitMask = worldCategory | pipeCategory;
+        _shark.physicsBody.categoryBitMask = sharkCategory;
+        _shark.physicsBody.collisionBitMask = worldCategory | pipeCategory;
+        _shark.physicsBody.contactTestBitMask = worldCategory | pipeCategory;
         
         
-        [self addChild:_bird];
-        [_bird runAction:flap withKey:@"flapRegular"];
+        [self addChild:_shark];
+        [_shark runAction:flap withKey:@"flapRegular"];
+        */
+        
         [self addChild:[self startButtonNode]];
     }
     return self;
@@ -551,113 +670,67 @@ static NSInteger const kVerticalPipeGap = 100;
 
 }
 
-#pragma mark - Bird Creation
+#pragma mark - Shark Creation
 
 
--(void) createDeadBird {
-    CGPoint lastPosition = _bird.position;
-    [_bird removeFromParent];
-    NSArray *birdTextures = @[[SKTexture textureWithImageNamed:@"g1"],
-                              [SKTexture textureWithImageNamed:@"g2"],
-                              [SKTexture textureWithImageNamed:@"g3"],
-                              [SKTexture textureWithImageNamed:@"g4"],
-                              [SKTexture textureWithImageNamed:@"g5"],
-                              [SKTexture textureWithImageNamed:@"g6"],
-                              [SKTexture textureWithImageNamed:@"g7"],
-                              [SKTexture textureWithImageNamed:@"g8"]];
+
+
+
+-(void) createCrashedShark {
+    CGPoint lastPosition = _shark.position;
+    [_shark removeFromParent];
+
+    _shark = [SKSpriteNode spriteNodeWithTexture:[SKTexture textureWithImageNamed:@"DeadShark"]];
+    [_shark setScale:.7];
+
+    _shark.position = lastPosition;
+    _shark.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:_shark.size.height / 2];
+    _shark.physicsBody.dynamic = YES;
+    _shark.physicsBody.allowsRotation = NO;
+    _shark.physicsBody.restitution = 0.3;
+    _shark.physicsBody.friction = 0.9;
     
-    SKAction* flap = [SKAction repeatActionForever:[SKAction animateWithTextures:birdTextures timePerFrame:0.15]];
-    _bird = [SKSpriteNode spriteNodeWithTexture:birdTextures[0]];
-    [_bird setScale:.05];
-    
-    _bird.position = lastPosition;
-    _bird.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:_bird.size.height / 2];
-    _bird.physicsBody.dynamic = YES;
-    _bird.physicsBody.allowsRotation = NO;
-    _bird.physicsBody.restitution = 0.3;
-    _bird.physicsBody.friction = 0.9;
-    
-    _bird.physicsBody.categoryBitMask = birdCategory;
-    _bird.physicsBody.collisionBitMask = worldCategory;
-    _bird.physicsBody.contactTestBitMask = worldCategory | pipeCategory;
-    
-    
-    [self addChild:_bird];
-//    SKAction* delay = [SKAction waitForDuration:5.0];
-//    SKAction* delayThenGotoHeaven = [SKAction sequence:@[delay, flap]];
-
-//    [self removeActionForKey:@"flapAfterCrash"];
-    [_bird runAction:flap withKey:@"flapAfterDeath"];
-    [self performSelector:@selector(reverseGravity) withObject:nil afterDelay:1];
-
-
-}
-
-
--(void) createCrashedBird {
-    CGPoint lastPosition = _bird.position;
-    [_bird removeFromParent];
-    NSArray *birdTextures = @[[SKTexture textureWithImageNamed:@"d1"],
-                              [SKTexture textureWithImageNamed:@"d2"],
-                              [SKTexture textureWithImageNamed:@"d3"],
-                              [SKTexture textureWithImageNamed:@"d4"],
-                              [SKTexture textureWithImageNamed:@"d5"],
-                              [SKTexture textureWithImageNamed:@"d6"],
-                              [SKTexture textureWithImageNamed:@"d7"],
-                              [SKTexture textureWithImageNamed:@"d8"]];
-    
-    SKAction* flap = [SKAction repeatActionForever:[SKAction animateWithTextures:birdTextures timePerFrame:0.15]];
-    _bird = [SKSpriteNode spriteNodeWithTexture:birdTextures[0]];
-    [_bird setScale:.05];
-
-    _bird.position = lastPosition;
-    _bird.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:_bird.size.height / 2];
-    _bird.physicsBody.dynamic = YES;
-    _bird.physicsBody.allowsRotation = NO;
-    _bird.physicsBody.restitution = 0.3;
-    _bird.physicsBody.friction = 0.9;
-    
-    _bird.physicsBody.categoryBitMask = birdCategory;
-    _bird.physicsBody.collisionBitMask = worldCategory | pipeCategory;
-    _bird.physicsBody.contactTestBitMask = worldCategory | pipeCategory;
+    _shark.physicsBody.categoryBitMask = sharkCategory;
+    _shark.physicsBody.collisionBitMask = worldCategory | pipeCategory;
+    _shark.physicsBody.contactTestBitMask = worldCategory | pipeCategory;
 
     
-    [self addChild:_bird];
-//    [self removeActionForKey:@"flapRegular"];
-    [_bird runAction:flap withKey:@"flapAfterCrash"];
+    [self addChild:_shark];
     [self createSmoke];
 }
 
--(void) createBirdRegular {
-    [_bird removeFromParent];
-    NSArray *birdTextures = @[[SKTexture textureWithImageNamed:@"a1"],
-                              [SKTexture textureWithImageNamed:@"a2"],
-                              [SKTexture textureWithImageNamed:@"a3"],
-                              [SKTexture textureWithImageNamed:@"a4"],
-                              [SKTexture textureWithImageNamed:@"a5"],
-                              [SKTexture textureWithImageNamed:@"a6"],
-                              [SKTexture textureWithImageNamed:@"a7"],
-                              [SKTexture textureWithImageNamed:@"a8"]];
+-(void) createSharkRegular {
+    [_shark removeFromParent];
     
-    SKAction* flap = [SKAction repeatActionForever:[SKAction animateWithTextures:birdTextures timePerFrame:0.15]];
-    _bird = [SKSpriteNode spriteNodeWithTexture:birdTextures[0]];
-    [_bird setScale:.05];
-    
-    _bird.position = CGPointMake(self.frame.size.width / 4, CGRectGetMidY(self.frame));
-    _bird.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:_bird.size.height / 2];
-    _bird.physicsBody.dynamic = YES;
-    _bird.physicsBody.allowsRotation = NO;
-    _bird.physicsBody.restitution = 0.3;
-    _bird.physicsBody.friction = 0.9;
-    
-    _bird.physicsBody.categoryBitMask = birdCategory;
-    _bird.physicsBody.collisionBitMask = worldCategory | pipeCategory;
-    _bird.physicsBody.contactTestBitMask = worldCategory | pipeCategory;
+    sharkTexturesNormal = @[[SKTexture textureWithImageNamed:@"Shark1-01"],
+                            [SKTexture textureWithImageNamed:@"Shark2-01"],
+                            [SKTexture textureWithImageNamed:@"Shark3-01"],
+                            [SKTexture textureWithImageNamed:@"Shark4-01"],
+                            [SKTexture textureWithImageNamed:@"Shark5-01"],
+                            [SKTexture textureWithImageNamed:@"Shark6-01"],
+                            [SKTexture textureWithImageNamed:@"Shark8-01"],
+                            [SKTexture textureWithImageNamed:@"Shark9-01"]];
 
     
-    [self addChild:_bird];
+    SKAction* flap = [SKAction repeatActionForever:[SKAction animateWithTextures:sharkTexturesNormal timePerFrame:0.15]];
+    _shark = [SKSpriteNode spriteNodeWithTexture:sharkTexturesNormal[0]];
+    [_shark setScale:.7];
+    
+    _shark.position = CGPointMake(self.frame.size.width/5, CGRectGetMidY(self.frame));
+    _shark.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:_shark.size.height / 2];
+    _shark.physicsBody.dynamic = YES;
+    _shark.physicsBody.allowsRotation = NO;
+    _shark.physicsBody.restitution = 0.3;
+    _shark.physicsBody.friction = 0.9;
+    
+    _shark.physicsBody.categoryBitMask = sharkCategory;
+    _shark.physicsBody.collisionBitMask = worldCategory | pipeCategory;
+    _shark.physicsBody.contactTestBitMask = worldCategory | pipeCategory;
+
+    
+    [self addChild:_shark];
     [self removeActionForKey:@"flapAfterCrash"];
-    [_bird runAction:flap withKey:@"flapRegular"];
+    [_shark runAction:flap withKey:@"flapRegular"];
 }
 
 -(void) createSmoke {
@@ -671,7 +744,7 @@ static NSInteger const kVerticalPipeGap = 100;
     SKSpriteNode* smokeNode = [SKSpriteNode spriteNodeWithTexture:smokeTextures[0]];
     [smokeNode setScale:.05];
     
-    smokeNode.position = _bird.position;
+    smokeNode.position = _shark.position;
     [self addChild:smokeNode];
     SKAction* explodeThenRemove = [SKAction sequence:@[explode, [SKAction removeFromParent]]];
     [smokeNode runAction:explodeThenRemove];
@@ -742,22 +815,22 @@ static NSInteger const kVerticalPipeGap = 100;
         [difficultyButton removeFromParent];
         
         if (_score >= 10) {
-            [self startGeneratingBulletsWithDelay:2.0];
+//            [self startGeneratingBulletsWithDelay:2.0];
         }
         if (_score >= 20) {
-            [self startGeneratingBulletsWithDelay:1.0];
+//            [self startGeneratingBulletsWithDelay:1.0];
             _bulletTexture = [SKTexture textureWithImageNamed:@"Bullet-A"];
         }
 
         
-        [self startGeneratingPipes];
+        [self startGeneratingMines];
         if (isHoverEnabled)
             [self.videoCamera start];
 
         isGameInProgress = YES;
 
-//        _bird.physicsBody.velocity = CGVectorMake(0, 0);
-//        [_bird.physicsBody applyImpulse:CGVectorMake(0, 12)];
+//        _shark.physicsBody.velocity = CGVectorMake(0, 0);
+//        [_shark.physicsBody applyImpulse:CGVectorMake(0, 12)];
 
     } else if ([node.name isEqualToString:@"restartButtonNode"])
     {
@@ -765,19 +838,19 @@ static NSInteger const kVerticalPipeGap = 100;
         [self removeActionForKey:@"organPlaying"];
         
         [self resetScene];
-        [self createBirdRegular];
+        [self createSharkRegular];
     } else if (isGameInProgress)
     {
-        _bird.physicsBody.velocity = CGVectorMake(0, 0);
-        [_bird.physicsBody applyImpulse:CGVectorMake(0, 10)];
+        _shark.physicsBody.velocity = CGVectorMake(0, 0);
+        [_shark.physicsBody applyImpulse:CGVectorMake(0, 10)];
     }
     
     
     
     /* Called when a touch begins */
 //    if( _moving.speed > 0 ) {
-//        _bird.physicsBody.velocity = CGVectorMake(0, 0);
-//        [_bird.physicsBody applyImpulse:CGVectorMake(0, 6)];
+//        _shark.physicsBody.velocity = CGVectorMake(0, 0);
+//        [_shark.physicsBody applyImpulse:CGVectorMake(0, 6)];
 //    } else if( _canRestart ) {
 //        [self resetScene];
 //    }
@@ -801,13 +874,13 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
     // Flash background if contact is detected
     if( _moving.speed > 0 ) {
         
-        if( ( contact.bodyA.categoryBitMask & scoreCategory ) == scoreCategory || ( contact.bodyB.categoryBitMask & scoreCategory ) == scoreCategory ) {
+        if( ( contact.bodyA.categoryBitMask & fishCategory ) == fishCategory || ( contact.bodyB.categoryBitMask & fishCategory ) == fishCategory ) {
             // Bird has contact with score entity
             
-            if ( (contact.bodyA.categoryBitMask & scoreCategory ) == scoreCategory) {
+            if ( (contact.bodyA.categoryBitMask & fishCategory ) == fishCategory) {
                 [contact.bodyA.node removeFromParent];
             }
-            if ( (contact.bodyB.categoryBitMask & scoreCategory ) == scoreCategory) {
+            if ( (contact.bodyB.categoryBitMask & fishCategory ) == fishCategory) {
                 [contact.bodyB.node removeFromParent];
             }
             
@@ -816,7 +889,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                 [self updateAchievements];
             if (_score == 10) {
                 _moving.speed = AFTER_10_SPEED_FACTOR*_moving.speed;
-                [self startGeneratingBulletsWithDelay:2.0];
+//                [self startGeneratingBulletsWithDelay:2.0];
             }
             if (_score == 10)
                 if (isMusicEnabled) {
@@ -824,8 +897,8 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                     [gameSceneLoop2 play];
                 }
             if (_score == 20) {
-                _bulletTexture = [SKTexture textureWithImageNamed:@"Bullet-A"];
-                [self startGeneratingBulletsWithDelay:1.0];
+//                _bulletTexture = [SKTexture textureWithImageNamed:@"Bullet-A"];
+//                [self startGeneratingBulletsWithDelay:1.0];
             }
 
             
@@ -834,11 +907,12 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             [_scoreLabelNode runAction:[SKAction sequence:@[scoreSound, [SKAction scaleTo:1.5 duration:0.1], [SKAction scaleTo:1.0 duration:0.1]]]];
         } else {
             [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
+
             // Bird has collided with world or a bullet
             isTouchEnabled = NO;
             if (isHoverEnabled)
                 [self.videoCamera stop];
-            [self createCrashedBird];
+            [self createCrashedShark];
             if (isMusicEnabled) {
                 [gameSceneLoop stop];
                 [gameSceneLoop2 stop];
@@ -849,10 +923,10 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             
             _moving.speed = 0;
             
-            _bird.physicsBody.collisionBitMask = worldCategory;
+            _shark.physicsBody.collisionBitMask = worldCategory;
             
-            [_bird runAction:[SKAction rotateByAngle:M_PI * _bird.position.y * 0.01 duration:_bird.position.y * 0.003] completion:^{
-                _bird.speed = 0;
+            [_shark runAction:[SKAction rotateByAngle:M_PI * _shark.position.y * 0.01 duration:_shark.position.y * 0.003] completion:^{
+                _shark.speed = 0;
             }];
             
 
@@ -875,7 +949,8 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                 isTouchEnabled = YES;
             }
             else {
-                [self performSelector:@selector(createDeadBird) withObject:nil afterDelay:.5];
+//                [self performSelector:@selector(createDeadBird) withObject:nil afterDelay:.5];
+                [self performSelector:@selector(reverseGravity) withObject:nil afterDelay:1];
                 [self addChild: [self restartButtonNode]];
             }
 
@@ -887,14 +962,14 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
     [self.scoreDelegate didFinishGameWithScore:_score];
 //    [[self childNodeWithName:@"restartButtonNode"] removeFromParent];
     [self resetScene];
-    [self createBirdRegular];
+    [self createSharkRegular];
 
 }
 
 -(void)update:(CFTimeInterval)currentTime {
     /* Called before each frame is rendered */
     if( _moving.speed > 0 ) {
-        _bird.zRotation = clamp( -1, 0.5, _bird.physicsBody.velocity.dy * ( _bird.physicsBody.velocity.dy < 0 ? 0.003 : 0.001 ) );
+        _shark.zRotation = clamp( -1, 0.5, _shark.physicsBody.velocity.dy * ( _shark.physicsBody.velocity.dy < 0 ? 0.003 : 0.001 ) );
     }
 }
 
@@ -918,18 +993,18 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
         
 //        if( _moving.speed >0  ) {
 //            if (meanFlow.val[1] < -1.) {
-//                _bird.physicsBody.velocity = CGVectorMake(0, 0);
-//                [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[0]*0, 9)];
+//                _shark.physicsBody.velocity = CGVectorMake(0, 0);
+//                [_shark.physicsBody applyImpulse:CGVectorMake(meanFlow.val[0]*0, 9)];
 //            }
 //        }
 
         
         if( _moving.speed > 0 ) {
-            _bird.physicsBody.velocity = CGVectorMake(0, 0);
+            _shark.physicsBody.velocity = CGVectorMake(0, 0);
             if (isIPAD)
-                [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[1]*(-5), -meanFlow.val[0]*5)];
+                [_shark.physicsBody applyImpulse:CGVectorMake(meanFlow.val[1]*(-5), -meanFlow.val[0]*5)];
             else
-                [_bird.physicsBody applyImpulse:CGVectorMake(meanFlow.val[1]*(-4), -meanFlow.val[0]*4)];
+                [_shark.physicsBody applyImpulse:CGVectorMake(meanFlow.val[1]*(-8), -meanFlow.val[0]*8)];
         }
     }
     std::swap(prevGrayImage, grayImage);

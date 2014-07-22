@@ -93,6 +93,27 @@
 		F555DE33196283E900E0841A /* ground3.png in Resources */ = {isa = PBXBuildFile; fileRef = F555DE32196283E900E0841A /* ground3.png */; };
 		F555DE351962852900E0841A /* grass4.png in Resources */ = {isa = PBXBuildFile; fileRef = F555DE341962852900E0841A /* grass4.png */; };
 		F555DE371962899E00E0841A /* ground_flower.png in Resources */ = {isa = PBXBuildFile; fileRef = F555DE361962899E00E0841A /* ground_flower.png */; };
+		F574E6D6197CE81E004644D6 /* Shark9-01.png in Resources */ = {isa = PBXBuildFile; fileRef = F574E6D5197CE81E004644D6 /* Shark9-01.png */; };
+		F574E6DB197CE892004644D6 /* Ocean1_BG.png in Resources */ = {isa = PBXBuildFile; fileRef = F574E6D8197CE892004644D6 /* Ocean1_BG.png */; };
+		F574E6DC197CE892004644D6 /* Ocean1_FG.png in Resources */ = {isa = PBXBuildFile; fileRef = F574E6D9197CE892004644D6 /* Ocean1_FG.png */; };
+		F574E6DD197CE892004644D6 /* Ocean2.png in Resources */ = {isa = PBXBuildFile; fileRef = F574E6DA197CE892004644D6 /* Ocean2.png */; };
+		F574E6E0197CF505004644D6 /* Chain.png in Resources */ = {isa = PBXBuildFile; fileRef = F574E6DF197CF505004644D6 /* Chain.png */; };
+		F574E6E3197CF819004644D6 /* goldMine.png in Resources */ = {isa = PBXBuildFile; fileRef = F574E6E2197CF819004644D6 /* goldMine.png */; };
+		F574E6E5197DEF72004644D6 /* DeadShark.png in Resources */ = {isa = PBXBuildFile; fileRef = F574E6E4197DEF72004644D6 /* DeadShark.png */; };
+		F574E6E9197DF7F1004644D6 /* SmallFishGreen.png in Resources */ = {isa = PBXBuildFile; fileRef = F574E6E6197DF7F1004644D6 /* SmallFishGreen.png */; };
+		F574E6EA197DF7F1004644D6 /* SmallFishRed.png in Resources */ = {isa = PBXBuildFile; fileRef = F574E6E7197DF7F1004644D6 /* SmallFishRed.png */; };
+		F574E6EB197DF7F1004644D6 /* SmallFishYellow.png in Resources */ = {isa = PBXBuildFile; fileRef = F574E6E8197DF7F1004644D6 /* SmallFishYellow.png */; };
+		F574E6EE197E24F8004644D6 /* Torpedo.png in Resources */ = {isa = PBXBuildFile; fileRef = F574E6ED197E24F8004644D6 /* Torpedo.png */; };
+		F574E6F2197E2B65004644D6 /* MediumFishBrown.png in Resources */ = {isa = PBXBuildFile; fileRef = F574E6EF197E2B65004644D6 /* MediumFishBrown.png */; };
+		F574E6F3197E2B65004644D6 /* MediumFishGreen.png in Resources */ = {isa = PBXBuildFile; fileRef = F574E6F0197E2B65004644D6 /* MediumFishGreen.png */; };
+		F574E6F4197E2B65004644D6 /* MediumFishPurple.png in Resources */ = {isa = PBXBuildFile; fileRef = F574E6F1197E2B65004644D6 /* MediumFishPurple.png */; };
+		F575ED0B197CE15E006BE357 /* Shark1-01.png in Resources */ = {isa = PBXBuildFile; fileRef = F575ED03197CE15E006BE357 /* Shark1-01.png */; };
+		F575ED0C197CE15E006BE357 /* Shark2-01.png in Resources */ = {isa = PBXBuildFile; fileRef = F575ED04197CE15E006BE357 /* Shark2-01.png */; };
+		F575ED0D197CE15E006BE357 /* Shark3-01.png in Resources */ = {isa = PBXBuildFile; fileRef = F575ED05197CE15E006BE357 /* Shark3-01.png */; };
+		F575ED0E197CE15E006BE357 /* Shark4-01.png in Resources */ = {isa = PBXBuildFile; fileRef = F575ED06197CE15E006BE357 /* Shark4-01.png */; };
+		F575ED0F197CE15E006BE357 /* Shark5-01.png in Resources */ = {isa = PBXBuildFile; fileRef = F575ED07197CE15E006BE357 /* Shark5-01.png */; };
+		F575ED10197CE15E006BE357 /* Shark6-01.png in Resources */ = {isa = PBXBuildFile; fileRef = F575ED08197CE15E006BE357 /* Shark6-01.png */; };
+		F575ED11197CE15E006BE357 /* Shark8-01.png in Resources */ = {isa = PBXBuildFile; fileRef = F575ED09197CE15E006BE357 /* Shark8-01.png */; };
 		F57750C9195F25F6005205FF /* whack4.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F57750C8195F25F6005205FF /* whack4.m4a */; };
 		F57750CC195F2D72005205FF /* DateScore.m in Sources */ = {isa = PBXBuildFile; fileRef = F57750CB195F2D72005205FF /* DateScore.m */; };
 		F57750D0195F6B2A005205FF /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F57750CF195F6B2A005205FF /* GameKit.framework */; };
@@ -140,15 +161,15 @@
 		F5354EA6194FE3510049F406 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		F5354EA9194FE4CD0049F406 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		F5354EAB195011C60049F406 /* heart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heart.png; sourceTree = "<group>"; };
-		F53CCA69194D2F3B00A9AB63 /* HoverFlappy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HoverFlappy.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F53CCA69194D2F3B00A9AB63 /* HoverShark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HoverShark.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F53CCA6C194D2F3B00A9AB63 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F53CCA6E194D2F3B00A9AB63 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		F53CCA70194D2F3B00A9AB63 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F53CCA72194D2F3B00A9AB63 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
-		F53CCA76194D2F3B00A9AB63 /* HoverFlappy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HoverFlappy-Info.plist"; sourceTree = "<group>"; };
+		F53CCA76194D2F3B00A9AB63 /* HoverShark-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HoverShark-Info.plist"; sourceTree = "<group>"; };
 		F53CCA78194D2F3B00A9AB63 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F53CCA7A194D2F3B00A9AB63 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		F53CCA7C194D2F3B00A9AB63 /* HoverFlappy-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HoverFlappy-Prefix.pch"; sourceTree = "<group>"; };
+		F53CCA7C194D2F3B00A9AB63 /* HoverShark-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HoverShark-Prefix.pch"; sourceTree = "<group>"; };
 		F53CCA7D194D2F3B00A9AB63 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F53CCA7E194D2F3B00A9AB63 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		F53CCA81194D2F3B00A9AB63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
@@ -158,9 +179,9 @@
 		F53CCA89194D2F3B00A9AB63 /* MyScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyScene.h; sourceTree = "<group>"; };
 		F53CCA8A194D2F3B00A9AB63 /* MyScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyScene.m; sourceTree = "<group>"; };
 		F53CCA8E194D2F3B00A9AB63 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		F53CCA94194D2F3B00A9AB63 /* HoverFlappyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HoverFlappyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F53CCA94194D2F3B00A9AB63 /* HoverSharkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HoverSharkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F53CCA95194D2F3B00A9AB63 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		F53CCA9D194D2F3B00A9AB63 /* HoverFlappyTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HoverFlappyTests-Info.plist"; sourceTree = "<group>"; };
+		F53CCA9D194D2F3B00A9AB63 /* HoverSharkTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HoverSharkTests-Info.plist"; sourceTree = "<group>"; };
 		F53CCA9F194D2F3B00A9AB63 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F53CCAA1194D2F3B00A9AB63 /* HoverBirdTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HoverBirdTests.m; sourceTree = "<group>"; };
 		F53CCAAB194D306D00A9AB63 /* Bird1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bird1.png; sourceTree = "<group>"; };
@@ -223,6 +244,27 @@
 		F555DE32196283E900E0841A /* ground3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground3.png; sourceTree = "<group>"; };
 		F555DE341962852900E0841A /* grass4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grass4.png; sourceTree = "<group>"; };
 		F555DE361962899E00E0841A /* ground_flower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground_flower.png; sourceTree = "<group>"; };
+		F574E6D5197CE81E004644D6 /* Shark9-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Shark9-01.png"; sourceTree = "<group>"; };
+		F574E6D8197CE892004644D6 /* Ocean1_BG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Ocean1_BG.png; sourceTree = "<group>"; };
+		F574E6D9197CE892004644D6 /* Ocean1_FG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Ocean1_FG.png; sourceTree = "<group>"; };
+		F574E6DA197CE892004644D6 /* Ocean2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Ocean2.png; sourceTree = "<group>"; };
+		F574E6DF197CF505004644D6 /* Chain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Chain.png; sourceTree = "<group>"; };
+		F574E6E2197CF819004644D6 /* goldMine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = goldMine.png; sourceTree = "<group>"; };
+		F574E6E4197DEF72004644D6 /* DeadShark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DeadShark.png; sourceTree = "<group>"; };
+		F574E6E6197DF7F1004644D6 /* SmallFishGreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SmallFishGreen.png; sourceTree = "<group>"; };
+		F574E6E7197DF7F1004644D6 /* SmallFishRed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SmallFishRed.png; sourceTree = "<group>"; };
+		F574E6E8197DF7F1004644D6 /* SmallFishYellow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SmallFishYellow.png; sourceTree = "<group>"; };
+		F574E6ED197E24F8004644D6 /* Torpedo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Torpedo.png; sourceTree = "<group>"; };
+		F574E6EF197E2B65004644D6 /* MediumFishBrown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MediumFishBrown.png; path = ../MediumFishBrown.png; sourceTree = "<group>"; };
+		F574E6F0197E2B65004644D6 /* MediumFishGreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MediumFishGreen.png; path = ../MediumFishGreen.png; sourceTree = "<group>"; };
+		F574E6F1197E2B65004644D6 /* MediumFishPurple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MediumFishPurple.png; path = ../MediumFishPurple.png; sourceTree = "<group>"; };
+		F575ED03197CE15E006BE357 /* Shark1-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Shark1-01.png"; sourceTree = "<group>"; };
+		F575ED04197CE15E006BE357 /* Shark2-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Shark2-01.png"; sourceTree = "<group>"; };
+		F575ED05197CE15E006BE357 /* Shark3-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Shark3-01.png"; sourceTree = "<group>"; };
+		F575ED06197CE15E006BE357 /* Shark4-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Shark4-01.png"; sourceTree = "<group>"; };
+		F575ED07197CE15E006BE357 /* Shark5-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Shark5-01.png"; sourceTree = "<group>"; };
+		F575ED08197CE15E006BE357 /* Shark6-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Shark6-01.png"; sourceTree = "<group>"; };
+		F575ED09197CE15E006BE357 /* Shark8-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Shark8-01.png"; sourceTree = "<group>"; };
 		F57750C8195F25F6005205FF /* whack4.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = whack4.m4a; sourceTree = "<group>"; };
 		F57750CA195F2D72005205FF /* DateScore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateScore.h; sourceTree = "<group>"; };
 		F57750CB195F2D72005205FF /* DateScore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateScore.m; sourceTree = "<group>"; };
@@ -331,8 +373,8 @@
 		F53CCA6A194D2F3B00A9AB63 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F53CCA69194D2F3B00A9AB63 /* HoverFlappy.app */,
-				F53CCA94194D2F3B00A9AB63 /* HoverFlappyTests.xctest */,
+				F53CCA69194D2F3B00A9AB63 /* HoverShark.app */,
+				F53CCA94194D2F3B00A9AB63 /* HoverSharkTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -391,6 +433,11 @@
 		F53CCA75194D2F3B00A9AB63 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F574E6ED197E24F8004644D6 /* Torpedo.png */,
+				F574E6EC197DF7F7004644D6 /* LittleFishes */,
+				F574E6E1197CF512004644D6 /* Enemies */,
+				F574E6DE197CE89B004644D6 /* Ocean */,
+				F574E6D7197CE84E004644D6 /* Shark */,
 				F5892367197B70340064C68B /* HoverFlappy_level2.m4a */,
 				F5892366197B469C0064C68B /* Bullets */,
 				F5E84535196A17B5007738C6 /* help8-3.png */,
@@ -426,10 +473,10 @@
 				F53CCAB2194D33AB00A9AB63 /* Skyline.png */,
 				F53CCAAB194D306D00A9AB63 /* Bird1.png */,
 				F53CCAAC194D306D00A9AB63 /* Bird2.png */,
-				F53CCA76194D2F3B00A9AB63 /* HoverFlappy-Info.plist */,
+				F53CCA76194D2F3B00A9AB63 /* HoverShark-Info.plist */,
 				F53CCA77194D2F3B00A9AB63 /* InfoPlist.strings */,
 				F53CCA7A194D2F3B00A9AB63 /* main.m */,
-				F53CCA7C194D2F3B00A9AB63 /* HoverFlappy-Prefix.pch */,
+				F53CCA7C194D2F3B00A9AB63 /* HoverShark-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -446,7 +493,7 @@
 		F53CCA9C194D2F3B00A9AB63 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				F53CCA9D194D2F3B00A9AB63 /* HoverFlappyTests-Info.plist */,
+				F53CCA9D194D2F3B00A9AB63 /* HoverSharkTests-Info.plist */,
 				F53CCA9E194D2F3B00A9AB63 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -519,6 +566,55 @@
 			name = smoke;
 			sourceTree = "<group>";
 		};
+		F574E6D7197CE84E004644D6 /* Shark */ = {
+			isa = PBXGroup;
+			children = (
+				F574E6E4197DEF72004644D6 /* DeadShark.png */,
+				F574E6D5197CE81E004644D6 /* Shark9-01.png */,
+				F575ED03197CE15E006BE357 /* Shark1-01.png */,
+				F575ED04197CE15E006BE357 /* Shark2-01.png */,
+				F575ED05197CE15E006BE357 /* Shark3-01.png */,
+				F575ED06197CE15E006BE357 /* Shark4-01.png */,
+				F575ED07197CE15E006BE357 /* Shark5-01.png */,
+				F575ED08197CE15E006BE357 /* Shark6-01.png */,
+				F575ED09197CE15E006BE357 /* Shark8-01.png */,
+			);
+			name = Shark;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		F574E6DE197CE89B004644D6 /* Ocean */ = {
+			isa = PBXGroup;
+			children = (
+				F574E6D8197CE892004644D6 /* Ocean1_BG.png */,
+				F574E6D9197CE892004644D6 /* Ocean1_FG.png */,
+				F574E6DA197CE892004644D6 /* Ocean2.png */,
+			);
+			name = Ocean;
+			sourceTree = "<group>";
+		};
+		F574E6E1197CF512004644D6 /* Enemies */ = {
+			isa = PBXGroup;
+			children = (
+				F574E6E2197CF819004644D6 /* goldMine.png */,
+				F574E6DF197CF505004644D6 /* Chain.png */,
+			);
+			name = Enemies;
+			sourceTree = "<group>";
+		};
+		F574E6EC197DF7F7004644D6 /* LittleFishes */ = {
+			isa = PBXGroup;
+			children = (
+				F574E6EF197E2B65004644D6 /* MediumFishBrown.png */,
+				F574E6F0197E2B65004644D6 /* MediumFishGreen.png */,
+				F574E6F1197E2B65004644D6 /* MediumFishPurple.png */,
+				F574E6E6197DF7F1004644D6 /* SmallFishGreen.png */,
+				F574E6E7197DF7F1004644D6 /* SmallFishRed.png */,
+				F574E6E8197DF7F1004644D6 /* SmallFishYellow.png */,
+			);
+			name = LittleFishes;
+			sourceTree = "<group>";
+		};
 		F5892366197B469C0064C68B /* Bullets */ = {
 			isa = PBXGroup;
 			children = (
@@ -549,9 +645,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F53CCA68194D2F3B00A9AB63 /* HoverFlappy */ = {
+		F53CCA68194D2F3B00A9AB63 /* HoverSharky */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F53CCAA5194D2F3B00A9AB63 /* Build configuration list for PBXNativeTarget "HoverFlappy" */;
+			buildConfigurationList = F53CCAA5194D2F3B00A9AB63 /* Build configuration list for PBXNativeTarget "HoverSharky" */;
 			buildPhases = (
 				F53CCA65194D2F3B00A9AB63 /* Sources */,
 				F53CCA66194D2F3B00A9AB63 /* Frameworks */,
@@ -561,14 +657,14 @@
 			);
 			dependencies = (
 			);
-			name = HoverFlappy;
+			name = HoverSharky;
 			productName = HoverBird;
-			productReference = F53CCA69194D2F3B00A9AB63 /* HoverFlappy.app */;
+			productReference = F53CCA69194D2F3B00A9AB63 /* HoverShark.app */;
 			productType = "com.apple.product-type.application";
 		};
-		F53CCA93194D2F3B00A9AB63 /* HoverFlappyTests */ = {
+		F53CCA93194D2F3B00A9AB63 /* HoverSharkTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F53CCAA8194D2F3B00A9AB63 /* Build configuration list for PBXNativeTarget "HoverFlappyTests" */;
+			buildConfigurationList = F53CCAA8194D2F3B00A9AB63 /* Build configuration list for PBXNativeTarget "HoverSharkTests" */;
 			buildPhases = (
 				F53CCA90194D2F3B00A9AB63 /* Sources */,
 				F53CCA91194D2F3B00A9AB63 /* Frameworks */,
@@ -579,9 +675,9 @@
 			dependencies = (
 				F53CCA9A194D2F3B00A9AB63 /* PBXTargetDependency */,
 			);
-			name = HoverFlappyTests;
+			name = HoverSharkTests;
 			productName = HoverBirdTests;
-			productReference = F53CCA94194D2F3B00A9AB63 /* HoverFlappyTests.xctest */;
+			productReference = F53CCA94194D2F3B00A9AB63 /* HoverSharkTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -606,7 +702,7 @@
 					};
 				};
 			};
-			buildConfigurationList = F53CCA64194D2F3B00A9AB63 /* Build configuration list for PBXProject "HoverFlappy" */;
+			buildConfigurationList = F53CCA64194D2F3B00A9AB63 /* Build configuration list for PBXProject "HoverShark" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -619,8 +715,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F53CCA68194D2F3B00A9AB63 /* HoverFlappy */,
-				F53CCA93194D2F3B00A9AB63 /* HoverFlappyTests */,
+				F53CCA68194D2F3B00A9AB63 /* HoverSharky */,
+				F53CCA93194D2F3B00A9AB63 /* HoverSharkTests */,
 			);
 		};
 /* End PBXProject section */
@@ -636,10 +732,14 @@
 				F5E84500196892DB007738C6 /* hover.png in Resources */,
 				F555DDFD196103C400E0841A /* d5.png in Resources */,
 				F5892370197C420C0064C68B /* column2b.png in Resources */,
+				F575ED0F197CE15E006BE357 /* Shark5-01.png in Resources */,
+				F574E6E0197CF505004644D6 /* Chain.png in Resources */,
 				F51927DB1965084B004D1D5F /* bricks1.png in Resources */,
 				F555DE1C196134DE00E0841A /* s5.png in Resources */,
+				F574E6F4197E2B65004644D6 /* MediumFishPurple.png in Resources */,
 				F5E844FA19687EE7007738C6 /* Easy.png in Resources */,
 				F51927D41964CE35004D1D5F /* bricks.png in Resources */,
+				F574E6F2197E2B65004644D6 /* MediumFishBrown.png in Resources */,
 				F53CCA8F194D2F3B00A9AB63 /* Images.xcassets in Resources */,
 				F555DE2D1962802B00E0841A /* grass5.png in Resources */,
 				F555DDFF196103C400E0841A /* d7.png in Resources */,
@@ -648,8 +748,10 @@
 				F555DDFA196103C400E0841A /* d2.png in Resources */,
 				F555DE0E19610BF300E0841A /* g5.png in Resources */,
 				F5E844FB19687EE7007738C6 /* Hard.png in Resources */,
+				F575ED0D197CE15E006BE357 /* Shark3-01.png in Resources */,
 				F555DDE91960FCD100E0841A /* a2.png in Resources */,
 				F53CCA82194D2F3B00A9AB63 /* Main_iPhone.storyboard in Resources */,
+				F574E6DB197CE892004644D6 /* Ocean1_BG.png in Resources */,
 				F555DE2B19627EBE00E0841A /* grass.png in Resources */,
 				F5354E9A194EC1B20049F406 /* blur1.png in Resources */,
 				F555DE1119610BF300E0841A /* g8.png in Resources */,
@@ -657,27 +759,38 @@
 				F555DE371962899E00E0841A /* ground_flower.png in Resources */,
 				F555DDF9196103C400E0841A /* d1.png in Resources */,
 				F555DE2F1962806D00E0841A /* grass2.png in Resources */,
+				F575ED10197CE15E006BE357 /* Shark6-01.png in Resources */,
 				F555DE2919627D6900E0841A /* Skyline_red.png in Resources */,
 				F5354EAC195011C60049F406 /* heart.png in Resources */,
 				F53CCAB4194D33AB00A9AB63 /* Pipe1.png in Resources */,
+				F574E6F3197E2B65004644D6 /* MediumFishGreen.png in Resources */,
+				F575ED0E197CE15E006BE357 /* Shark4-01.png in Resources */,
 				F53CCAAD194D306D00A9AB63 /* Bird1.png in Resources */,
+				F574E6EA197DF7F1004644D6 /* SmallFishRed.png in Resources */,
 				F5892368197B70340064C68B /* HoverFlappy_level2.m4a in Resources */,
 				F555DDEB1960FCD100E0841A /* a4.png in Resources */,
 				F555DE1F1962591300E0841A /* startButton.png in Resources */,
+				F575ED11197CE15E006BE357 /* Shark8-01.png in Resources */,
 				F51927DC1965084B004D1D5F /* bricks2.png in Resources */,
 				F555DE231962742E00E0841A /* organ.wav in Resources */,
+				F575ED0B197CE15E006BE357 /* Shark1-01.png in Resources */,
 				F555DDFB196103C400E0841A /* d3.png in Resources */,
 				F5892363197B00DD0064C68B /* Bullet-B.png in Resources */,
 				F555DDEC1960FCD100E0841A /* a5.png in Resources */,
 				F555DE0D19610BF300E0841A /* g4.png in Resources */,
+				F575ED0C197CE15E006BE357 /* Shark2-01.png in Resources */,
 				F555DDE81960FCD100E0841A /* a1.png in Resources */,
 				F555DDEE1960FCD100E0841A /* a7.png in Resources */,
+				F574E6E3197CF819004644D6 /* goldMine.png in Resources */,
 				F589236D197C420C0064C68B /* column_3a.png in Resources */,
 				F555DDD619609D8F00E0841A /* Loopy_trimmed.m4a in Resources */,
 				F589236E197C420C0064C68B /* column_3b.png in Resources */,
+				F574E6D6197CE81E004644D6 /* Shark9-01.png in Resources */,
 				F555DE1019610BF300E0841A /* g7.png in Resources */,
 				F555DDED1960FCD100E0841A /* a6.png in Resources */,
 				F57750DC195F9C84005205FF /*  GameOver.wav in Resources */,
+				F574E6E5197DEF72004644D6 /* DeadShark.png in Resources */,
+				F574E6DD197CE892004644D6 /* Ocean2.png in Resources */,
 				F555DE33196283E900E0841A /* ground3.png in Resources */,
 				F57750C9195F25F6005205FF /* whack4.m4a in Resources */,
 				F555DE19196134DE00E0841A /* s2.png in Resources */,
@@ -688,6 +801,7 @@
 				F5E84536196A17B5007738C6 /* help8-3.png in Resources */,
 				F53CCA79194D2F3B00A9AB63 /* InfoPlist.strings in Resources */,
 				F555DE251962756800E0841A /* restartButton.png in Resources */,
+				F574E6E9197DF7F1004644D6 /* SmallFishGreen.png in Resources */,
 				F5892376197C857E0064C68B /* bricks_gray_up.png in Resources */,
 				F53CCAAE194D306D00A9AB63 /* Bird2.png in Resources */,
 				F555DDFC196103C400E0841A /* d4.png in Resources */,
@@ -696,6 +810,7 @@
 				F555DDFE196103C400E0841A /* d6.png in Resources */,
 				F53CCAB3194D33AB00A9AB63 /* Ground.png in Resources */,
 				F555DE1B196134DE00E0841A /* s4.png in Resources */,
+				F574E6DC197CE892004644D6 /* Ocean1_FG.png in Resources */,
 				F5E84501196892DB007738C6 /* tap.png in Resources */,
 				F555DE0C19610BF300E0841A /* g3.png in Resources */,
 				F555DE00196103C400E0841A /* d8.png in Resources */,
@@ -704,6 +819,8 @@
 				F555DDD4195F9E2A00E0841A /* game_over.wav in Resources */,
 				F555DDEF1960FCD100E0841A /* a8.png in Resources */,
 				F5892365197B46920064C68B /* Bullet-A.png in Resources */,
+				F574E6EB197DF7F1004644D6 /* SmallFishYellow.png in Resources */,
+				F574E6EE197E24F8004644D6 /* Torpedo.png in Resources */,
 				F53CCAB6194D33AB00A9AB63 /* Skyline.png in Resources */,
 				F589236F197C420C0064C68B /* column2a.png in Resources */,
 				F555DE1A196134DE00E0841A /* s3.png in Resources */,
@@ -750,7 +867,7 @@
 /* Begin PBXTargetDependency section */
 		F53CCA9A194D2F3B00A9AB63 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F53CCA68194D2F3B00A9AB63 /* HoverFlappy */;
+			target = F53CCA68194D2F3B00A9AB63 /* HoverSharky */;
 			targetProxy = F53CCA99194D2F3B00A9AB63 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -877,10 +994,10 @@
 				);
 				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "HoverBird/HoverFlappy-Prefix.pch";
-				INFOPLIST_FILE = "HoverBird/HoverFlappy-Info.plist";
+				GCC_PREFIX_HEADER = "HoverBird/HoverShark-Prefix.pch";
+				INFOPLIST_FILE = "HoverBird/HoverShark-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				PRODUCT_NAME = HoverFlappy;
+				PRODUCT_NAME = HoverShark;
 				PROVISIONING_PROFILE = "";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
 				WRAPPER_EXTENSION = app;
@@ -901,10 +1018,10 @@
 				);
 				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "HoverBird/HoverFlappy-Prefix.pch";
-				INFOPLIST_FILE = "HoverBird/HoverFlappy-Info.plist";
+				GCC_PREFIX_HEADER = "HoverBird/HoverShark-Prefix.pch";
+				INFOPLIST_FILE = "HoverBird/HoverShark-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				PRODUCT_NAME = HoverFlappy;
+				PRODUCT_NAME = HoverShark;
 				PROVISIONING_PROFILE = "";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
 				WRAPPER_EXTENSION = app;
@@ -926,8 +1043,8 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "HoverBirdTests/HoverFlappyTests-Info.plist";
-				PRODUCT_NAME = HoverFlappyTests;
+				INFOPLIST_FILE = "HoverBirdTests/HoverSharkTests-Info.plist";
+				PRODUCT_NAME = HoverSharkTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -944,8 +1061,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HoverBird/HoverBird-Prefix.pch";
-				INFOPLIST_FILE = "HoverBirdTests/HoverFlappyTests-Info.plist";
-				PRODUCT_NAME = HoverFlappyTests;
+				INFOPLIST_FILE = "HoverBirdTests/HoverSharkTests-Info.plist";
+				PRODUCT_NAME = HoverSharkTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -954,7 +1071,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F53CCA64194D2F3B00A9AB63 /* Build configuration list for PBXProject "HoverFlappy" */ = {
+		F53CCA64194D2F3B00A9AB63 /* Build configuration list for PBXProject "HoverShark" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F53CCAA3194D2F3B00A9AB63 /* Debug */,
@@ -963,7 +1080,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F53CCAA5194D2F3B00A9AB63 /* Build configuration list for PBXNativeTarget "HoverFlappy" */ = {
+		F53CCAA5194D2F3B00A9AB63 /* Build configuration list for PBXNativeTarget "HoverSharky" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F53CCAA6194D2F3B00A9AB63 /* Debug */,
@@ -972,7 +1089,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F53CCAA8194D2F3B00A9AB63 /* Build configuration list for PBXNativeTarget "HoverFlappyTests" */ = {
+		F53CCAA8194D2F3B00A9AB63 /* Build configuration list for PBXNativeTarget "HoverSharkTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F53CCAA9194D2F3B00A9AB63 /* Debug */,
