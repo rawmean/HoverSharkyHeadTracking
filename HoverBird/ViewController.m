@@ -36,8 +36,8 @@
         NSLog(@"user authenticated!");
         // Configure the view.
         SKView * skView = (SKView *)self.view;
-//        skView.showsFPS = YES;
-//        skView.showsNodeCount = YES;
+        skView.showsFPS = YES;
+        skView.showsNodeCount = YES;
         
         // Create and configure the scene.
         MyScene * scene = [MyScene sceneWithSize:skView.bounds.size];
