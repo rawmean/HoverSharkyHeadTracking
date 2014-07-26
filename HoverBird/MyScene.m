@@ -16,7 +16,7 @@ using namespace cv;
 
 #define HARD_LEVEL_SPEED_FACTOR 1.3
 #define AFTER_10_SPEED_FACTOR 1.3
-#define BARREL_SCORE  10
+#define BARREL_SCORE  0
 #define TORPEDO_SCORE 15
 
 @interface MyScene ()<SKPhysicsContactDelegate, CvVideoCameraDelegate> {
@@ -85,6 +85,7 @@ static const uint32_t mineCategory = 1 << 3;
 static const uint32_t fishCategory = 1 << 4;
 static const uint32_t torpedoCategory = 1 << 5;
 static const uint32_t worldBoundaryCategory = 1 << 5;
+static const uint32_t worldBoundaryUpCategory = 1 << 6;
 
 @synthesize scoreDelegate = _scoreDelegate;
 
@@ -234,7 +235,7 @@ static const uint32_t worldBoundaryCategory = 1 << 5;
     // Move bird to original position and reset velocity
     _shark.position = CGPointMake(self.frame.size.width / 4, CGRectGetMidY(self.frame));
     _shark.physicsBody.velocity = CGVectorMake( 0, 0 );
-    _shark.physicsBody.collisionBitMask = worldBoundaryCategory | barrelCategory | mineCategory | torpedoCategory;
+    _shark.physicsBody.collisionBitMask = worldBoundaryCategory | worldBoundaryUpCategory| barrelCategory | mineCategory | torpedoCategory;
     _shark.speed = 1.0;
     _shark.zRotation = 0.0;
     
@@ -305,9 +306,9 @@ static const uint32_t worldBoundaryCategory = 1 << 5;
     { // only spawn 3 out of 5 times
         
         NSInteger barrelType = arc4random() % barrelTextures.count;
-        NSInteger barrelXPos = arc4random() % NSInteger(self.size.width);
-        
         SKTexture *barrelTexture = barrelTextures[barrelType];
+        NSInteger barrelXPos = arc4random() % (NSInteger(self.size.width) - NSInteger(barrelTexture.size.width)) + barrelTexture.size.width;
+        NSLog(@"barrel xPos = %lu", barrelXPos);
         SKSpriteNode *barrelNode = [SKSpriteNode spriteNodeWithTexture:barrelTexture];
         barrelNode.zPosition = -10;
         barrelNode.name = @"barrel";
@@ -315,7 +316,8 @@ static const uint32_t worldBoundaryCategory = 1 << 5;
         barrelNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:barrelTexture.size];
         barrelNode.physicsBody.dynamic = YES;
         barrelNode.physicsBody.categoryBitMask = barrelCategory;
-        barrelNode.physicsBody.contactTestBitMask = sharkCategory | worldCategory | mineCategory;
+        barrelNode.physicsBody.collisionBitMask = sharkCategory | worldBoundaryCategory | mineCategory;
+        barrelNode.physicsBody.contactTestBitMask = sharkCategory | mineCategory;
         [self addChild:barrelNode];
         [self runAction:splashSound];
     }
@@ -597,7 +599,7 @@ static const uint32_t worldBoundaryCategory = 1 << 5;
         worldBoundaryUP.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.frame.size.width, 10)];
         worldBoundaryUP.physicsBody.dynamic = NO;
         worldBoundaryUP.physicsBody.collisionBitMask = sharkCategory;
-        worldBoundaryUP.physicsBody.categoryBitMask = worldBoundaryCategory;
+        worldBoundaryUP.physicsBody.categoryBitMask = worldBoundaryUpCategory;
         [self addChild:worldBoundaryUP];
 
         
@@ -749,7 +751,7 @@ static const uint32_t worldBoundaryCategory = 1 << 5;
     _shark.physicsBody.friction = 0.9;
     
     _shark.physicsBody.categoryBitMask = sharkCategory;
-    _shark.physicsBody.collisionBitMask = worldBoundaryCategory;
+    _shark.physicsBody.collisionBitMask = worldBoundaryCategory | worldBoundaryUpCategory;
     _shark.physicsBody.contactTestBitMask = worldCategory;
 
     
@@ -784,9 +786,9 @@ static const uint32_t worldBoundaryCategory = 1 << 5;
                                [SKTexture textureWithImageNamed:@"exp6-01"],
                                [SKTexture textureWithImageNamed:@"exp7-01"]];
     
-    SKAction* explode = [SKAction animateWithTextures:smokeTextures timePerFrame:0.2];
+    SKAction* explode = [SKAction animateWithTextures:smokeTextures timePerFrame:0.1];
     SKSpriteNode* smokeNode = [SKSpriteNode spriteNodeWithTexture:smokeTextures[0]];
-//    [smokeNode setScale:.05];
+    [smokeNode setScale:.8];
     
     smokeNode.position = position;
     [self addChild:smokeNode];
