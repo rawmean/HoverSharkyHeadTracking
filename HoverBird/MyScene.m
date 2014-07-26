@@ -80,11 +80,11 @@ using namespace cv;
 
 static const uint32_t sharkCategory = 1 << 0;
 static const uint32_t worldCategory = 1 << 1;
-static const uint32_t pipeCategory = 1 << 2;
-static const uint32_t barrelCategory = 1 << 3;
-static const uint32_t mineCategory = 1 << 4;
-static const uint32_t fishCategory = 1 << 5;
-static const uint32_t torpedoCategory = 1 << 6;
+static const uint32_t barrelCategory = 1 << 2;
+static const uint32_t mineCategory = 1 << 3;
+static const uint32_t fishCategory = 1 << 4;
+static const uint32_t torpedoCategory = 1 << 5;
+static const uint32_t worldBoundaryCategory = 1 << 5;
 
 @synthesize scoreDelegate = _scoreDelegate;
 
@@ -171,35 +171,35 @@ static const uint32_t torpedoCategory = 1 << 6;
 
     [self removeActionForKey:@"mineSpawn"];
     SKAction* spawn = [SKAction performSelector:@selector(spawnMines) onTarget:self];
-    SKAction* delay = [SKAction waitForDuration:7.0/_moving.speed];
+    SKAction* delay = [SKAction waitForDuration:7.0/_moving.speed withRange:3.0/_moving.speed];
     SKAction* spawnThenDelay = [SKAction sequence:@[spawn, delay]];
     SKAction* spawnThenDelayForever = [SKAction repeatActionForever:spawnThenDelay];
     [self runAction:spawnThenDelayForever withKey:@"mineSpawn"];
 
     [self removeActionForKey:@"fishSpawn"];
     SKAction* spawnFish = [SKAction performSelector:@selector(spawnLittleFishes) onTarget:self];
-    SKAction* delayFish = [SKAction waitForDuration:3.0/_moving.speed];
+    SKAction* delayFish = [SKAction waitForDuration:3.0/_moving.speed withRange:3./_moving.speed];
     SKAction* spawnThenDelayFish = [SKAction sequence:@[spawnFish, delayFish]];
     SKAction* spawnThenDelayFishForever = [SKAction repeatActionForever:spawnThenDelayFish];
     [self runAction:spawnThenDelayFishForever withKey:@"fishSpawn"];
 
     [self removeActionForKey:@"torpedoSpawn"];
     SKAction* spawnTorpedo = [SKAction performSelector:@selector(spawnTorpedos) onTarget:self];
-    SKAction* delayTorpedo = [SKAction waitForDuration:4.0/_moving.speed];
+    SKAction* delayTorpedo = [SKAction waitForDuration:4.0/_moving.speed withRange:4.0/_moving.speed];
     SKAction* spawnThenDelayTorpedo = [SKAction sequence:@[spawnTorpedo, delayTorpedo]];
     SKAction* spawnThenDelayTorpedoForever = [SKAction repeatActionForever:spawnThenDelayTorpedo];
     [self runAction:spawnThenDelayTorpedoForever withKey:@"torpedoSpawn"];
 
     [self removeActionForKey:@"barrelSpawn"];
     SKAction* spawnbarrel = [SKAction performSelector:@selector(spawnBarrles) onTarget:self];
-    SKAction* delayBarrels = [SKAction waitForDuration:5.0/_moving.speed];
+    SKAction* delayBarrels = [SKAction waitForDuration:5.0/_moving.speed withRange:3/_moving.speed];
     SKAction* spawnThenDelayBarrels = [SKAction sequence:@[delayBarrels, spawnbarrel]];
     SKAction* spawnThenDelayBarrelForever = [SKAction repeatActionForever:spawnThenDelayBarrels];
     [self runAction:spawnThenDelayBarrelForever withKey:@"barrelSpawn"];
 
     [self removeActionForKey:@"bubbleSpawn"];
     SKAction* spawnBubbles = [SKAction performSelector:@selector(spawnBubbles) onTarget:self];
-    SKAction* delayBubble = [SKAction waitForDuration:3.0/_moving.speed];
+    SKAction* delayBubble = [SKAction waitForDuration:3.0/_moving.speed withRange:3.0/_moving.speed] ;
     SKAction* spawnThenDelayBubble = [SKAction sequence:@[spawnBubbles, delayBubble]];
     SKAction* spawnThenDelayBubblesForever = [SKAction repeatActionForever:spawnThenDelayBubble];
     [self runAction:spawnThenDelayBubblesForever withKey:@"bubbleSpawn"];
@@ -234,7 +234,7 @@ static const uint32_t torpedoCategory = 1 << 6;
     // Move bird to original position and reset velocity
     _shark.position = CGPointMake(self.frame.size.width / 4, CGRectGetMidY(self.frame));
     _shark.physicsBody.velocity = CGVectorMake( 0, 0 );
-    _shark.physicsBody.collisionBitMask = worldCategory | barrelCategory | mineCategory;
+    _shark.physicsBody.collisionBitMask = worldBoundaryCategory | barrelCategory | mineCategory | torpedoCategory;
     _shark.speed = 1.0;
     _shark.zRotation = 0.0;
     
@@ -282,8 +282,9 @@ static const uint32_t torpedoCategory = 1 << 6;
 #pragma mark - Spawn Stuff
 
 -(void)spawnBubbles {
-    NSInteger shouldSpawn = arc4random() % 5;
-    if (shouldSpawn <= 2) { // only spawn 3 out of 5 times
+//    NSInteger shouldSpawn = arc4random() % 5;
+//    if (shouldSpawn <= 2)
+    { // only spawn 3 out of 5 times
         [self runAction:bubbleSound];
         NSInteger XPos = arc4random() % (NSInteger)(self.size.width);
         SKSpriteNode *bubbleNode = [SKSpriteNode spriteNodeWithTexture:bubbleTexture];
@@ -299,8 +300,9 @@ static const uint32_t torpedoCategory = 1 << 6;
 -(void) spawnBarrles {
     if (_score < BARREL_SCORE)
         return;
-    NSInteger shouldSpawn = arc4random() % 5;
-    if (shouldSpawn <= 2) { // only spawn 3 out of 5 times
+//    NSInteger shouldSpawn = arc4random() % 5;
+//    if (shouldSpawn <= 2)
+    { // only spawn 3 out of 5 times
         
         NSInteger barrelType = arc4random() % barrelTextures.count;
         NSInteger barrelXPos = arc4random() % NSInteger(self.size.width);
@@ -329,7 +331,8 @@ static const uint32_t torpedoCategory = 1 << 6;
     SKNode *chainNode = [SKNode node];
     chainNode.position = CGPointMake( self.frame.size.width + _chainTexture.size.width*chainScale, 0 );
     chainNode.zPosition = -10;
-    for (int k=0; k<numLinks; k++) {
+    for (int k=0; k<numLinks; k++)
+    {
         SKSpriteNode* linkSprite = [SKSpriteNode spriteNodeWithTexture:_chainTexture];
         linkSprite.position = CGPointMake(0, k*_chainTexture.size.height*chainScale);
         [linkSprite setScale:chainScale];
@@ -379,7 +382,14 @@ static const uint32_t torpedoCategory = 1 << 6;
     else
         fishNode.name = @"fish";
     
-    [fishNode runAction:_moveFishesAndRemove];
+    NSInteger r = arc4random() % 3;
+    CGFloat fishDistanceToMove = self.frame.size.width + 1 * ((SKTexture *)fishTextures[0]).size.width;
+    SKAction* movefishes = [SKAction moveByX:-fishDistanceToMove y:0 duration:speedScale*0.01/(2.5+r/1.5) * fishDistanceToMove];
+    SKAction* removeFishes = [SKAction removeFromParent];
+    SKAction *moveFishesAndRemove = [SKAction sequence:@[movefishes, removeFishes]];
+
+    
+    [fishNode runAction:moveFishesAndRemove];
     [_moving addChild:fishNode];
     
 }
@@ -389,8 +399,9 @@ static const uint32_t torpedoCategory = 1 << 6;
     if (_score < TORPEDO_SCORE)
         return;
 
-    NSInteger shouldSpawn = arc4random() % 5;
-    if (shouldSpawn <= 2) { // only spawn 3 out of 5 times
+//    NSInteger shouldSpawn = arc4random() % 5;
+//    if (shouldSpawn <= 2)
+    { // only spawn 3 out of 5 times
         NSInteger YPos = arc4random() % (NSInteger)(self.size.height- groundHeight - 25) +  groundHeight;
         [self runAction:torpedoSound];
         SKSpriteNode *torpedoNode = [SKSpriteNode spriteNodeWithTexture:torpedoTexture];
@@ -421,15 +432,9 @@ static const uint32_t torpedoCategory = 1 << 6;
         [lifeIcon setScale:.70];
         
         lifeIcon.position = CGPointMake(self.frame.size.width*0.08 + k*lifeTexture.size.width*.80, self.frame.size.height*0.9);
-//        lifeIcon.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:lifeIcon.size.height / 2];
-//        lifeIcon.physicsBody.dynamic = NO;
-//        lifeIcon.physicsBody.allowsRotation = NO;
         lifeIconArray[k] = lifeIcon;
         [self addChild:lifeIcon];
-        
-        //    lifeIcon.physicsBody.categoryBitMask = sharkCategory;
-        //    _shark.physicsBody.collisionBitMask = worldCategory | pipeCategory;
-        //    _shark.physicsBody.contactTestBitMask = worldCategory | pipeCategory;
+
     }
 }
 
@@ -536,6 +541,14 @@ static const uint32_t torpedoCategory = 1 << 6;
         _moving = [SKNode node];
         [self addChild:_moving];
         
+        
+        
+        // Create shark
+        ////////////////
+        sharkScale = 0.55;
+        [self createSharkRegular];
+        [self addChild:[self startButtonNode]];
+        
         // Create ground
         //////////////////
         
@@ -563,20 +576,36 @@ static const uint32_t torpedoCategory = 1 << 6;
         
         // Create ground physics container
         
-        _ground = [SKNode node];
-        _ground.position = CGPointMake(0, groundTexture.size.height* groundScale/2);
-        _ground.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.frame.size.width, groundTexture.size.height * groundScale)];
-        _ground.physicsBody.dynamic = NO;
-        _ground.physicsBody.categoryBitMask = 0;
-        _ground.physicsBody.restitution = 0.5;
+//        _ground = [SKNode node];
+//        _ground.position = CGPointMake(0, groundTexture.size.height* groundScale/2);
+//        _ground.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.frame.size.width, groundTexture.size.height * groundScale)];
+//        _ground.physicsBody.dynamic = NO;
+//        _ground.physicsBody.categoryBitMask = 0;
+//        _ground.physicsBody.restitution = 0.5;
+//        [self addChild:_ground];
+        
+        SKNode *worldBoundary = [SKNode node];
+        worldBoundary.position = CGPointMake(0, groundTexture.size.height* groundScale/6);
+        worldBoundary.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.frame.size.width, groundTexture.size.height * groundScale/3)];
+        worldBoundary.physicsBody.dynamic = NO;
+        worldBoundary.physicsBody.collisionBitMask = sharkCategory;
+        worldBoundary.physicsBody.categoryBitMask = worldBoundaryCategory;
+        [self addChild:worldBoundary];
 
-        [self addChild:_ground];
+        SKNode *worldBoundaryUP = [SKNode node];
+        worldBoundaryUP.position = CGPointMake(0, self.frame.size.height+_shark.texture.size.height*sharkScale);
+        worldBoundaryUP.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.frame.size.width, 10)];
+        worldBoundaryUP.physicsBody.dynamic = NO;
+        worldBoundaryUP.physicsBody.collisionBitMask = sharkCategory;
+        worldBoundaryUP.physicsBody.categoryBitMask = worldBoundaryCategory;
+        [self addChild:worldBoundaryUP];
+
         
         // Create skyline
         /////////////////
         
         SKTexture* skylineTexture = [SKTexture textureWithImageNamed:@"Ocean2"];
-        skylineTexture.filteringMode = SKTextureFilteringNearest;
+//        skylineTexture.filteringMode = SKTextureFilteringNearest;
         float skylineScale = .63;
         
         SKAction* moveSkylineSprite = [SKAction moveByX:-skylineTexture.size.width*skylineScale y:0 duration:speedScale*0.1 * skylineTexture.size.width*skylineScale];
@@ -617,7 +646,7 @@ static const uint32_t torpedoCategory = 1 << 6;
 
                          ];
         CGFloat fishDistanceToMove = self.frame.size.width + 1 * ((SKTexture *)fishTextures[0]).size.width;
-        SKAction* movefishes = [SKAction moveByX:-fishDistanceToMove y:0 duration:speedScale*0.01/2. * fishDistanceToMove];
+        SKAction* movefishes = [SKAction moveByX:-fishDistanceToMove y:0 duration:speedScale*0.01/3. * fishDistanceToMove];
         SKAction* removeFishes = [SKAction removeFromParent];
         _moveFishesAndRemove = [SKAction sequence:@[movefishes, removeFishes]];
 
@@ -657,12 +686,7 @@ static const uint32_t torpedoCategory = 1 << 6;
 //        _movePipesAndRemove = [SKAction sequence:@[movePipes, removePipes]];
 //        
 
-        
-        // Create shark
-        ////////////////
-        sharkScale = 0.55;
-        [self createSharkRegular];
-        [self addChild:[self startButtonNode]];
+
     }
     return self;
 }
@@ -725,8 +749,8 @@ static const uint32_t torpedoCategory = 1 << 6;
     _shark.physicsBody.friction = 0.9;
     
     _shark.physicsBody.categoryBitMask = sharkCategory;
-    _shark.physicsBody.collisionBitMask = worldCategory | pipeCategory;
-    _shark.physicsBody.contactTestBitMask = worldCategory | pipeCategory;
+    _shark.physicsBody.collisionBitMask = worldBoundaryCategory;
+    _shark.physicsBody.contactTestBitMask = worldCategory;
 
     
     [self addChild:_shark];
@@ -744,6 +768,25 @@ static const uint32_t torpedoCategory = 1 << 6;
     SKAction* explode = [SKAction animateWithTextures:smokeTextures timePerFrame:0.2];
     SKSpriteNode* smokeNode = [SKSpriteNode spriteNodeWithTexture:smokeTextures[0]];
     [smokeNode setScale:.05];
+    
+    smokeNode.position = position;
+    [self addChild:smokeNode];
+    SKAction* explodeThenRemove = [SKAction sequence:@[explode, [SKAction removeFromParent]]];
+    [smokeNode runAction:explodeThenRemove];
+}
+
+-(void) createExplosionAtPosition:(CGPoint)position {
+    NSArray *smokeTextures = @[[SKTexture textureWithImageNamed:@"exp1-01"],
+                               [SKTexture textureWithImageNamed:@"exp2-01"],
+                               [SKTexture textureWithImageNamed:@"exp3-01"],
+                               [SKTexture textureWithImageNamed:@"exp4-01"],
+                               [SKTexture textureWithImageNamed:@"exp5-01"],
+                               [SKTexture textureWithImageNamed:@"exp6-01"],
+                               [SKTexture textureWithImageNamed:@"exp7-01"]];
+    
+    SKAction* explode = [SKAction animateWithTextures:smokeTextures timePerFrame:0.2];
+    SKSpriteNode* smokeNode = [SKSpriteNode spriteNodeWithTexture:smokeTextures[0]];
+//    [smokeNode setScale:.05];
     
     smokeNode.position = position;
     [self addChild:smokeNode];
@@ -864,11 +907,11 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
         // object has hit something
         if ( (contact.bodyA.categoryBitMask & category ) == category) {
             [contact.bodyA.node removeFromParent];
-            [self createSmokeAtPosition:contact.bodyA.node.position];
+            [self createExplosionAtPosition:contact.bodyA.node.position];
         }
         if ( (contact.bodyB.categoryBitMask & category ) == category) {
             [contact.bodyB.node removeFromParent];
-            [self createSmokeAtPosition:contact.bodyB.node.position];
+            [self createExplosionAtPosition:contact.bodyB.node.position];
         }
         [self runAction:popSound];
     }
@@ -940,7 +983,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                     
                     _moving.speed = 0;
                     
-                    _shark.physicsBody.collisionBitMask = worldCategory;
+                    _shark.physicsBody.collisionBitMask = _shark.physicsBody.collisionBitMask;
                     
                     [_shark runAction:[SKAction rotateByAngle:M_PI * _shark.position.y * 0.01 duration:_shark.position.y * 0.003] completion:^{
                         _shark.speed = 0;
@@ -950,6 +993,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                     [ lifeIconArray[numLivesLeft] runAction:[SKAction removeFromParent] ];
                     if (numLivesLeft == 0) {
                         // Game over
+                        [self updateAchievements];
                         [self runAction:gameOverSound];
                         [self performSelector:@selector(restartGame) withObject:nil afterDelay:2];
                         isTouchEnabled = YES;
@@ -1030,7 +1074,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
 
 -(void)updateAchievements{
     float progressPercentage = 0.0;
-    NSArray *scoreAchievementIDs = @[@"Achieved20Score_ID", @"Achieved50Score_ID"];
+    NSArray *scoreAchievementIDs = @[@"SharkAchieved20Score_ID", @"SharkAchieved50Score_ID"];
     NSArray *scoreThreshold = @[@20, @50];
     NSMutableArray *scoreAchievements = [NSMutableArray array];
     

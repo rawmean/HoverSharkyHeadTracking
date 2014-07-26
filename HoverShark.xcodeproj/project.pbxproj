@@ -19,6 +19,13 @@
 		F5354EA7194FE3510049F406 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = F5354EA6194FE3510049F406 /* UIImage+ImageEffects.m */; };
 		F5354EAA194FE4CD0049F406 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5354EA9194FE4CD0049F406 /* Accelerate.framework */; };
 		F5354EAC195011C60049F406 /* heart.png in Resources */ = {isa = PBXBuildFile; fileRef = F5354EAB195011C60049F406 /* heart.png */; };
+		F538678E19840C760039404F /* exp1-01.png in Resources */ = {isa = PBXBuildFile; fileRef = F538678719840C760039404F /* exp1-01.png */; };
+		F538678F19840C760039404F /* exp2-01.png in Resources */ = {isa = PBXBuildFile; fileRef = F538678819840C760039404F /* exp2-01.png */; };
+		F538679019840C760039404F /* exp3-01.png in Resources */ = {isa = PBXBuildFile; fileRef = F538678919840C760039404F /* exp3-01.png */; };
+		F538679119840C760039404F /* exp4-01.png in Resources */ = {isa = PBXBuildFile; fileRef = F538678A19840C760039404F /* exp4-01.png */; };
+		F538679219840C760039404F /* exp5-01.png in Resources */ = {isa = PBXBuildFile; fileRef = F538678B19840C760039404F /* exp5-01.png */; };
+		F538679319840C760039404F /* exp6-01.png in Resources */ = {isa = PBXBuildFile; fileRef = F538678C19840C760039404F /* exp6-01.png */; };
+		F538679419840C760039404F /* exp7-01.png in Resources */ = {isa = PBXBuildFile; fileRef = F538678D19840C760039404F /* exp7-01.png */; };
 		F53CCA6D194D2F3B00A9AB63 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCA6C194D2F3B00A9AB63 /* Foundation.framework */; };
 		F53CCA6F194D2F3B00A9AB63 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCA6E194D2F3B00A9AB63 /* CoreGraphics.framework */; };
 		F53CCA71194D2F3B00A9AB63 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCA70194D2F3B00A9AB63 /* UIKit.framework */; };
@@ -176,6 +183,13 @@
 		F5354EA6194FE3510049F406 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		F5354EA9194FE4CD0049F406 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		F5354EAB195011C60049F406 /* heart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heart.png; sourceTree = "<group>"; };
+		F538678719840C760039404F /* exp1-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exp1-01.png"; sourceTree = "<group>"; };
+		F538678819840C760039404F /* exp2-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exp2-01.png"; sourceTree = "<group>"; };
+		F538678919840C760039404F /* exp3-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exp3-01.png"; sourceTree = "<group>"; };
+		F538678A19840C760039404F /* exp4-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exp4-01.png"; sourceTree = "<group>"; };
+		F538678B19840C760039404F /* exp5-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exp5-01.png"; sourceTree = "<group>"; };
+		F538678C19840C760039404F /* exp6-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exp6-01.png"; sourceTree = "<group>"; };
+		F538678D19840C760039404F /* exp7-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exp7-01.png"; sourceTree = "<group>"; };
 		F53CCA69194D2F3B00A9AB63 /* HoverShark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HoverShark.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F53CCA6C194D2F3B00A9AB63 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F53CCA6E194D2F3B00A9AB63 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -384,6 +398,20 @@
 			name = BlurEffects;
 			sourceTree = "<group>";
 		};
+		F538679519840C7F0039404F /* explode */ = {
+			isa = PBXGroup;
+			children = (
+				F538678719840C760039404F /* exp1-01.png */,
+				F538678819840C760039404F /* exp2-01.png */,
+				F538678919840C760039404F /* exp3-01.png */,
+				F538678A19840C760039404F /* exp4-01.png */,
+				F538678B19840C760039404F /* exp5-01.png */,
+				F538678C19840C760039404F /* exp6-01.png */,
+				F538678D19840C760039404F /* exp7-01.png */,
+			);
+			name = explode;
+			sourceTree = "<group>";
+		};
 		F53CCA60194D2F3B00A9AB63 = {
 			isa = PBXGroup;
 			children = (
@@ -458,6 +486,7 @@
 		F53CCA75194D2F3B00A9AB63 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F538679519840C7F0039404F /* explode */,
 				F5F81C671981F04C00072D50 /* sounds */,
 				F548E0521981853500BC11C9 /* Barrles */,
 				F574E6ED197E24F8004644D6 /* Torpedo.png */,
@@ -790,14 +819,17 @@
 				F51927DB1965084B004D1D5F /* bricks1.png in Resources */,
 				F555DE1C196134DE00E0841A /* s5.png in Resources */,
 				F574E6F4197E2B65004644D6 /* MediumFishPurple.png in Resources */,
+				F538679419840C760039404F /* exp7-01.png in Resources */,
 				F5E844FA19687EE7007738C6 /* Easy.png in Resources */,
 				F51927D41964CE35004D1D5F /* bricks.png in Resources */,
+				F538679019840C760039404F /* exp3-01.png in Resources */,
 				F574E6F2197E2B65004644D6 /* MediumFishBrown.png in Resources */,
 				F53CCA8F194D2F3B00A9AB63 /* Images.xcassets in Resources */,
 				F555DE2D1962802B00E0841A /* grass5.png in Resources */,
 				F555DDFF196103C400E0841A /* d7.png in Resources */,
 				F53CCA85194D2F3B00A9AB63 /* Main_iPad.storyboard in Resources */,
 				F5892378197C857E0064C68B /* bricks_white_up.png in Resources */,
+				F538678F19840C760039404F /* exp2-01.png in Resources */,
 				F555DDFA196103C400E0841A /* d2.png in Resources */,
 				F555DE0E19610BF300E0841A /* g5.png in Resources */,
 				F5E844FB19687EE7007738C6 /* Hard.png in Resources */,
@@ -806,7 +838,9 @@
 				F53CCA82194D2F3B00A9AB63 /* Main_iPhone.storyboard in Resources */,
 				F574E6DB197CE892004644D6 /* Ocean1_BG.png in Resources */,
 				F555DE2B19627EBE00E0841A /* grass.png in Resources */,
+				F538679119840C760039404F /* exp4-01.png in Resources */,
 				F5354E9A194EC1B20049F406 /* blur1.png in Resources */,
+				F538679319840C760039404F /* exp6-01.png in Resources */,
 				F518E4241982014000C8A12D /* swallow_trimmed.m4a in Resources */,
 				F555DE1119610BF300E0841A /* g8.png in Resources */,
 				F53CCAB5194D33AB00A9AB63 /* Pipe2.png in Resources */,
@@ -836,6 +870,7 @@
 				F555DDEC1960FCD100E0841A /* a5.png in Resources */,
 				F555DE0D19610BF300E0841A /* g4.png in Resources */,
 				F575ED0C197CE15E006BE357 /* Shark2-01.png in Resources */,
+				F538678E19840C760039404F /* exp1-01.png in Resources */,
 				F5F81C611981E62C00072D50 /* Barrel1.png in Resources */,
 				F555DDE81960FCD100E0841A /* a1.png in Resources */,
 				F555DDEE1960FCD100E0841A /* a7.png in Resources */,
@@ -872,6 +907,7 @@
 				F53CCAB3194D33AB00A9AB63 /* Ground.png in Resources */,
 				F555DE1B196134DE00E0841A /* s4.png in Resources */,
 				F574E6DC197CE892004644D6 /* Ocean1_FG.png in Resources */,
+				F538679219840C760039404F /* exp5-01.png in Resources */,
 				F5F81C631981E62C00072D50 /* Barrel3.png in Resources */,
 				F5E84501196892DB007738C6 /* tap.png in Resources */,
 				F555DE0C19610BF300E0841A /* g3.png in Resources */,
