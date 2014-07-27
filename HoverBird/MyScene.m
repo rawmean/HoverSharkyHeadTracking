@@ -598,7 +598,7 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
         [self addChild:worldBoundary];
 
         SKNode *worldBoundaryUP = [SKNode node];
-        worldBoundaryUP.position = CGPointMake(0, self.frame.size.height+_shark.texture.size.height*sharkScale);
+        worldBoundaryUP.position = CGPointMake(0, self.frame.size.height+_shark.texture.size.height*sharkScale*.9);
         worldBoundaryUP.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.frame.size.width, 10)];
         worldBoundaryUP.physicsBody.dynamic = NO;
         worldBoundaryUP.physicsBody.collisionBitMask = sharkCategory;
