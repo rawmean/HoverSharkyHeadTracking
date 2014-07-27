@@ -16,7 +16,7 @@ using namespace cv;
 
 #define HARD_LEVEL_SPEED_FACTOR 1.3
 #define AFTER_10_SPEED_FACTOR 1.3
-#define BARREL_SCORE  0
+#define BARREL_SCORE  10
 #define TORPEDO_SCORE 15
 
 @interface MyScene ()<SKPhysicsContactDelegate, CvVideoCameraDelegate> {
@@ -167,6 +167,9 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
     
     if (isHoverEnabled)
         _shark.physicsBody.mass = 0.1;
+    else
+        _shark.physicsBody.mass = 0.1;
+    
     
     self.physicsWorld.gravity = CGVectorMake( 0.0, -1.0 );
 
@@ -327,8 +330,11 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
     if (_moving.speed == 0) {
         return;
     }
-    
-    NSInteger numLinks = arc4random() % 7 + 3;
+    NSInteger numLinks;
+    if (isIPAD)
+        numLinks = arc4random() % 10 + 7;
+    else
+        numLinks = arc4random() % 7 + 3;
     
     SKNode *chainNode = [SKNode node];
     chainNode.position = CGPointMake( self.frame.size.width + _chainTexture.size.width*chainScale, 0 );
@@ -401,9 +407,6 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
     if (_score < TORPEDO_SCORE)
         return;
 
-//    NSInteger shouldSpawn = arc4random() % 5;
-//    if (shouldSpawn <= 2)
-    { // only spawn 3 out of 5 times
         NSInteger YPos = arc4random() % (NSInteger)(self.size.height- groundHeight - 25) +  groundHeight;
         [self runAction:torpedoSound];
         SKSpriteNode *torpedoNode = [SKSpriteNode spriteNodeWithTexture:torpedoTexture];
@@ -416,12 +419,9 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
         torpedoNode.physicsBody.contactTestBitMask = sharkCategory | worldCategory;
         
         torpedoNode.name = @"torpedo";
-        //    [torpedoNode runAction:_moveTorpedoAndRemove];
         [_moving addChild:torpedoNode];
         torpedoNode.physicsBody.velocity = CGVectorMake(0, 0);
         [torpedoNode.physicsBody applyImpulse:CGVectorMake(-20, 3+5*(self.size.height/YPos))];
-        
-    }
 }
 
 
@@ -547,7 +547,10 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
         
         // Create shark
         ////////////////
-        sharkScale = 0.55;
+        if (isIPAD)
+            sharkScale = 1.;
+        else
+            sharkScale = 0.55;
         [self createSharkRegular];
         [self addChild:[self startButtonNode]];
         
@@ -608,7 +611,11 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
         
         SKTexture* skylineTexture = [SKTexture textureWithImageNamed:@"Ocean2"];
 //        skylineTexture.filteringMode = SKTextureFilteringNearest;
-        float skylineScale = .63;
+        float skylineScale;
+        if (isIPAD)
+            skylineScale = 1.5;
+        else
+            skylineScale = .63;
         
         SKAction* moveSkylineSprite = [SKAction moveByX:-skylineTexture.size.width*skylineScale y:0 duration:speedScale*0.1 * skylineTexture.size.width*skylineScale];
         SKAction* resetSkylineSprite = [SKAction moveByX:skylineTexture.size.width*skylineScale y:0 duration:0];
@@ -1064,7 +1071,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
         if( _moving.speed > 0 ) {
             _shark.physicsBody.velocity = CGVectorMake(0, 0);
             if (isIPAD)
-                [_shark.physicsBody applyImpulse:CGVectorMake(meanFlow.val[1]*(-5), -meanFlow.val[0]*5)];
+                [_shark.physicsBody applyImpulse:CGVectorMake(meanFlow.val[1]*(-10), -meanFlow.val[0]*10)];
             else
                 [_shark.physicsBody applyImpulse:CGVectorMake(meanFlow.val[1]*(-8), -meanFlow.val[0]*8)];
         }

@@ -76,7 +76,7 @@
         
     }
     
-    [self embedYouTube:@"http://www.youtube.com/embed/bw21wo2FzyI" frame:frame];
+    [self embedYouTube:@"http://www.youtube.com/embed/aYKC8WYJHv4?list=UUQUz1b_unjkYBWAAJa-V24g" frame:frame];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
