@@ -130,7 +130,6 @@
 		F57750C9195F25F6005205FF /* whack4.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F57750C8195F25F6005205FF /* whack4.m4a */; };
 		F57750CC195F2D72005205FF /* DateScore.m in Sources */ = {isa = PBXBuildFile; fileRef = F57750CB195F2D72005205FF /* DateScore.m */; };
 		F57750D0195F6B2A005205FF /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F57750CF195F6B2A005205FF /* GameKit.framework */; };
-		F57750D2195F9883005205FF /* score.wav in Resources */ = {isa = PBXBuildFile; fileRef = F57750D1195F9883005205FF /* score.wav */; };
 		F57750DC195F9C84005205FF /*  GameOver.wav in Resources */ = {isa = PBXBuildFile; fileRef = F57750DB195F9C84005205FF /*  GameOver.wav */; };
 		F5892363197B00DD0064C68B /* Bullet-B.png in Resources */ = {isa = PBXBuildFile; fileRef = F5892362197B00DD0064C68B /* Bullet-B.png */; };
 		F5892365197B46920064C68B /* Bullet-A.png in Resources */ = {isa = PBXBuildFile; fileRef = F5892364197B46920064C68B /* Bullet-A.png */; };
@@ -301,7 +300,6 @@
 		F57750CA195F2D72005205FF /* DateScore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateScore.h; sourceTree = "<group>"; };
 		F57750CB195F2D72005205FF /* DateScore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateScore.m; sourceTree = "<group>"; };
 		F57750CF195F6B2A005205FF /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
-		F57750D1195F9883005205FF /* score.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = score.wav; path = ../../../../../Downloads/score.wav; sourceTree = "<group>"; };
 		F57750DB195F9C84005205FF /*  GameOver.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = " GameOver.wav"; sourceTree = "<group>"; };
 		F5892362197B00DD0064C68B /* Bullet-B.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bullet-B.png"; sourceTree = "<group>"; };
 		F5892364197B46920064C68B /* Bullet-A.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bullet-A.png"; sourceTree = "<group>"; };
@@ -508,7 +506,6 @@
 				F555DDD519609D8F00E0841A /* Loopy_trimmed.m4a */,
 				F555DDD3195F9E2A00E0841A /* game_over.wav */,
 				F57750DB195F9C84005205FF /*  GameOver.wav */,
-				F57750D1195F9883005205FF /* score.wav */,
 				F57750C8195F25F6005205FF /* whack4.m4a */,
 				F5354EAB195011C60049F406 /* heart.png */,
 				F5354E99194EC1B20049F406 /* blur1.png */,
@@ -809,7 +806,6 @@
 			files = (
 				F555DE0B19610BF300E0841A /* g2.png in Resources */,
 				F548E0541981B7E600BC11C9 /* splash.wav in Resources */,
-				F57750D2195F9883005205FF /* score.wav in Resources */,
 				F555DE0F19610BF300E0841A /* g6.png in Resources */,
 				F5E84500196892DB007738C6 /* hover.png in Resources */,
 				F555DDFD196103C400E0841A /* d5.png in Resources */,
@@ -1088,6 +1084,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1112,6 +1109,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
