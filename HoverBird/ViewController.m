@@ -34,24 +34,24 @@
     if (localPlayer.isAuthenticated)
     {
         NSLog(@"user authenticated!");
-        // Configure the view.
-        SKView * skView = (SKView *)self.view;
-//        skView.showsFPS = YES;
-//        skView.showsNodeCount = YES;
-        
-        // Create and configure the scene.
-        MyScene * scene = [MyScene sceneWithSize:skView.bounds.size];
-        scene.scaleMode = SKSceneScaleModeAspectFill;
-        scene.scoreDelegate = self; // for game over
-        
-        // Present the scene.
-        [skView presentScene:scene];
     }
     else
     {
         /* Perform additional tasks for the non-authenticated player here */
         NSLog(@"user failed to authenticate");
     }
+    // Configure the view.
+    SKView * skView = (SKView *)self.view;
+    //        skView.showsFPS = YES;
+    //        skView.showsNodeCount = YES;
+    
+    // Create and configure the scene.
+    MyScene * scene = [MyScene sceneWithSize:skView.bounds.size];
+    scene.scaleMode = SKSceneScaleModeAspectFill;
+    scene.scoreDelegate = self; // for game over
+    
+    // Present the scene.
+    [skView presentScene:scene];
 }
 
 
