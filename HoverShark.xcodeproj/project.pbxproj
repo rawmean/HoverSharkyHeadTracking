@@ -129,8 +129,8 @@
 		F575ED11197CE15E006BE357 /* Shark8-01.png in Resources */ = {isa = PBXBuildFile; fileRef = F575ED09197CE15E006BE357 /* Shark8-01.png */; };
 		F57750C9195F25F6005205FF /* whack4.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F57750C8195F25F6005205FF /* whack4.m4a */; };
 		F57750CC195F2D72005205FF /* DateScore.m in Sources */ = {isa = PBXBuildFile; fileRef = F57750CB195F2D72005205FF /* DateScore.m */; };
-		F57750D0195F6B2A005205FF /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F57750CF195F6B2A005205FF /* GameKit.framework */; };
 		F57750DC195F9C84005205FF /*  GameOver.wav in Resources */ = {isa = PBXBuildFile; fileRef = F57750DB195F9C84005205FF /*  GameOver.wav */; };
+		F588A84E1F64D54200571935 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F588A84D1F64D54200571935 /* GameKit.framework */; };
 		F5892363197B00DD0064C68B /* Bullet-B.png in Resources */ = {isa = PBXBuildFile; fileRef = F5892362197B00DD0064C68B /* Bullet-B.png */; };
 		F5892365197B46920064C68B /* Bullet-A.png in Resources */ = {isa = PBXBuildFile; fileRef = F5892364197B46920064C68B /* Bullet-A.png */; };
 		F5892368197B70340064C68B /* HoverFlappy_level2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F5892367197B70340064C68B /* HoverFlappy_level2.m4a */; };
@@ -299,8 +299,8 @@
 		F57750C8195F25F6005205FF /* whack4.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = whack4.m4a; sourceTree = "<group>"; };
 		F57750CA195F2D72005205FF /* DateScore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateScore.h; sourceTree = "<group>"; };
 		F57750CB195F2D72005205FF /* DateScore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateScore.m; sourceTree = "<group>"; };
-		F57750CF195F6B2A005205FF /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		F57750DB195F9C84005205FF /*  GameOver.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = " GameOver.wav"; sourceTree = "<group>"; };
+		F588A84D1F64D54200571935 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		F5892362197B00DD0064C68B /* Bullet-B.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bullet-B.png"; sourceTree = "<group>"; };
 		F5892364197B46920064C68B /* Bullet-A.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bullet-A.png"; sourceTree = "<group>"; };
 		F5892367197B70340064C68B /* HoverFlappy_level2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = HoverFlappy_level2.m4a; sourceTree = "<group>"; };
@@ -348,7 +348,7 @@
 				F53CCAC0194E602100A9AB63 /* CoreMedia.framework in Frameworks */,
 				F53CCABE194E601A00A9AB63 /* CoreVideo.framework in Frameworks */,
 				F53CCABA194E56C700A9AB63 /* AVFoundation.framework in Frameworks */,
-				F57750D0195F6B2A005205FF /* GameKit.framework in Frameworks */,
+				F588A84E1F64D54200571935 /* GameKit.framework in Frameworks */,
 				F53CCA6F194D2F3B00A9AB63 /* CoreGraphics.framework in Frameworks */,
 				F53CCA71194D2F3B00A9AB63 /* UIKit.framework in Frameworks */,
 				F53CCA73194D2F3B00A9AB63 /* SpriteKit.framework in Frameworks */,
@@ -432,7 +432,7 @@
 		F53CCA6B194D2F3B00A9AB63 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F57750CF195F6B2A005205FF /* GameKit.framework */,
+				F588A84D1F64D54200571935 /* GameKit.framework */,
 				F5354EA9194FE4CD0049F406 /* Accelerate.framework */,
 				F5D56B17194EBBEB0063D43A /* iAd.framework */,
 				F53CCACF194E611400A9AB63 /* QuartzCore.framework */,
@@ -764,7 +764,7 @@
 		F53CCA61194D2F3B00A9AB63 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = maadotaa.com;
 				TargetAttributes = {
 					F53CCA68194D2F3B00A9AB63 = {
@@ -1017,13 +1017,19 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1036,7 +1042,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1056,20 +1062,25 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1093,7 +1104,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HoverBird/HoverShark-Prefix.pch";
 				INFOPLIST_FILE = "HoverBird/HoverShark-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.maadotaa.hoverSharky;
 				PRODUCT_NAME = HoverShark;
 				PROVISIONING_PROFILE = "";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
@@ -1118,7 +1130,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HoverBird/HoverShark-Prefix.pch";
 				INFOPLIST_FILE = "HoverBird/HoverShark-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.maadotaa.hoverSharky;
 				PRODUCT_NAME = HoverShark;
 				PROVISIONING_PROFILE = "";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
@@ -1142,6 +1155,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "HoverBirdTests/HoverSharkTests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "RR.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = HoverSharkTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
@@ -1160,6 +1174,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HoverBird/HoverBird-Prefix.pch";
 				INFOPLIST_FILE = "HoverBirdTests/HoverSharkTests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "RR.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = HoverSharkTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;

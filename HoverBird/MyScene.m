@@ -6,7 +6,11 @@
 //  Copyright (c) 2014 maadotaa.com. All rights reserved.
 //
 
-#import <opencv2/highgui/ios.h>
+
+#import <opencv2/videoio/cap_ios.h>
+#import "opencv2/imgcodecs/ios.h"
+
+//#import <opencv2/highgui/ios.h>
 #import "MyScene.h"
 #import "DateScore.h"
 #import <GameKit/GameKit.h>
