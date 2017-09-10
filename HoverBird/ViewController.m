@@ -54,11 +54,61 @@
     [skView presentScene:scene];
 }
 
-
+//-(void)authenticateLocalPlayer
+//{
+//    GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
+//    
+//    //Block is called each time GameKit automatically authenticates
+//    localPlayer.authenticateHandler = ^(UIViewController *viewController, NSError *error)
+//    {
+//        if (viewController)
+//        {
+////            self.authenticationViewController = viewController;
+//            [self disableGameCenter];
+//        }
+//        else if (localPlayer.isAuthenticated)
+//        {
+//            [self authenticatedPlayer];
+//        }
+//        else
+//        {
+//            [self disableGameCenter];
+//        }
+//    };
+//}
+//
+//-(void)authenticatedPlayer
+//{
+//    GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
+////    [[NSNotificationCenter defaultCenter]postNotificationName:AUTHENTICATED_NOTIFICATION object:nil];
+//    NSLog(@"Local player:%@ authenticated into game center",localPlayer.playerID);
+//    
+//    // Configure the view.
+//    SKView * skView = (SKView *)self.view;
+//    //        skView.showsFPS = YES;
+//    //        skView.showsNodeCount = YES;
+//    
+//    // Create and configure the scene.
+//    MyScene * scene = [MyScene sceneWithSize:skView.bounds.size];
+//    scene.scaleMode = SKSceneScaleModeAspectFill;
+//    scene.scoreDelegate = self; // for game over
+//    
+//    // Present the scene.
+//    [skView presentScene:scene];}
+//
+//-(void)disableGameCenter
+//{
+//    //A notification so that every observer responds appropriately to disable game center features
+////    [[NSNotificationCenter defaultCenter]postNotificationName:UNAUTHENTICATED_NOTIFICATION object:nil];
+//    NSLog(@"Disabled game center");
+//}
 
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+//    [self authenticateLocalPlayer];
+    [self checkLocalPlayer];
 
     BOOL hasWatchedVideo = [[NSUserDefaults standardUserDefaults] boolForKey:HAS_WATCHED_VIDEO];
 //    hasWatchedVideo = NO;
@@ -71,7 +121,7 @@
             }
             else
             {
-                [self checkLocalPlayer];
+//                [self checkLocalPlayer];
             }
         })];
     }
@@ -95,10 +145,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-
-
-
 
 }
 
