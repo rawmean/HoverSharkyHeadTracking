@@ -28,6 +28,8 @@
 	<string>Camera access is needed to detect hand motion which is used to control the shark</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Camera access is needed to detect hand motion which is used to control the shark</string>
+	<key>UILaunchStoryboardName</key>
+	<string>Main_iPhone</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main_iPhone</string>
 	<key>UIMainStoryboardFile~ipad</key>

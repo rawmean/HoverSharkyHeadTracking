@@ -62,9 +62,9 @@
     float w, h;
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         w = self.view.frame.size.width/1.5;
-        h = self.view.frame.size.height/4.;
-        w = 560*.5;
-        h = 315*.5;
+        h = self.view.frame.size.height/1.5;
+//        w = 560;
+//        h = 315;
         frame = CGRectMake(self.view.frame.size.width/2.-w/2., self.view.frame.size.height/2.-h/2., w, h);
     }
     else {
@@ -73,10 +73,10 @@
         w = 560;
         h = 315;
         frame = CGRectMake(self.view.frame.size.width/2.-w/2., self.view.frame.size.height/2.-h/2., w, h);
-        
+
     }
     
-    [self embedYouTube:@"https://www.youtube.com/embed/aYKC8WYJHv4?list=UUQUz1b_unjkYBWAAJa-V24g" frame:frame];
+    [self embedYouTube:@"https://www.youtube.com/embed/aYKC8WYJHv4" frame:frame];
 }
 
 -(void)viewDidAppear:(BOOL)animated {

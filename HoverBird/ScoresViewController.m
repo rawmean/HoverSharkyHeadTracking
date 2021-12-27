@@ -7,17 +7,15 @@
 //
 
 #import "ScoresViewController.h"
-#import <iAd/iAd.h>
 
 #define LEADERBOARD_ID @"HoverSharkyLeaderBoardID"
 
-@interface ScoresViewController ()<ADBannerViewDelegate> {
+@interface ScoresViewController () {
     NSDictionary* scoreDict;
     NSMutableArray* scoreArray;
     NSMutableArray* dateArray;
     NSInteger maxScore;
 }
-@property (strong, nonatomic) ADBannerView *rectangleAdView;
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImage;
 @property (weak, nonatomic) IBOutlet UILabel *highestScoreLabel;
 @property (weak, nonatomic) IBOutlet UILabel *currentScore;
@@ -97,16 +95,7 @@
 {
     [super viewDidLoad];
 
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        self.rectangleAdView = [[ADBannerView alloc]
-                                initWithAdType:ADAdTypeMediumRectangle];
-        self.rectangleAdView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2);
-        self.rectangleAdView.center = CGPointMake(CGRectGetMidY(self.view.frame), CGRectGetMidX(self.view.frame)*1.5);
-        
-        self.rectangleAdView.delegate = self;
-    }
-    else
-        self.canDisplayBannerAds = YES;
+
     
     // Do any additional setup after loading the view.
 //    [self.scoresTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"scores"];
@@ -146,7 +135,6 @@
 
 
 - (IBAction)didTapLeaderboard:(id)sender {
-    self.canDisplayBannerAds = NO;
     [self presentLeaderboards];
     
 }
@@ -159,22 +147,6 @@
     [self performSegueWithIdentifier:@"ShowHelp" sender:self];
 }
 
-#pragma iAd Delegate
-
-- (void) bannerViewDidLoadAd:(ADBannerView *)banner
-{
-    NSLog(@"Did get iAd!");
-    [self.view addSubview:banner];
-    [self.view layoutIfNeeded];
-}
-
-- (void) bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
-{
-    NSLog(@"No iAd!, error:%@", error.description);
-    
-    [banner removeFromSuperview];
-    [self.view layoutIfNeeded];
-}
 
 
 #pragma mark - Reporting Score to GameCenter
@@ -219,15 +191,12 @@
     gameCenterController.viewState = GKGameCenterViewControllerStateLeaderboards;
 //    gameCenterController.viewState = GKGameCenterViewControllerStateAchievements;
     gameCenterController.gameCenterDelegate = self;
-    gameCenterController.topViewController.canDisplayBannerAds = YES;
     [self presentViewController:gameCenterController animated:YES completion: nil];
 
 }
 
 - (void) gameCenterViewControllerDidFinish:(GKGameCenterViewController*) gameCenterViewController {
     [self dismissViewControllerAnimated:YES completion:nil];
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-        self.canDisplayBannerAds = YES;
 }
 
 
