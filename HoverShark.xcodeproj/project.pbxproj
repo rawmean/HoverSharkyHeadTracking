@@ -1095,6 +1095,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 7;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1105,6 +1106,7 @@
 				GCC_PREFIX_HEADER = "HoverBird/HoverShark-Prefix.pch";
 				INFOPLIST_FILE = "HoverBird/HoverShark-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.maadotaa.hoverSharky;
 				PRODUCT_NAME = HoverShark;
 				PROVISIONING_PROFILE = "";
@@ -1120,6 +1122,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 7;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1130,6 +1133,7 @@
 				GCC_PREFIX_HEADER = "HoverBird/HoverShark-Prefix.pch";
 				INFOPLIST_FILE = "HoverBird/HoverShark-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.maadotaa.hoverSharky;
 				PRODUCT_NAME = HoverShark;
 				PROVISIONING_PROFILE = "";
