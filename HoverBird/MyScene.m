@@ -27,6 +27,7 @@
 #define AFTER_10_SPEED_FACTOR 1.3
 #define BARREL_SCORE  10
 #define TORPEDO_SCORE 15
+#define SUBMARINE_SCORE 20
 
 @interface MyScene ()<SKPhysicsContactDelegate, GKGameCenterControllerDelegate> {
     SKSpriteNode* _shark;
@@ -76,6 +77,8 @@
     SKAction *_moveTorpedoAndRemove;
     NSArray *barrelTextures;
     SKTexture *bubbleTexture;
+    NSArray *submarineTextures;
+    SKAction *_moveSubmarineAndRemove;
     SKAction *splashSound, *torpedoSound, *popSound, *bubbleSound, *gulpSound;
     float sharkScale;
     SKAction* _moveBubbleAndRemove;
@@ -94,6 +97,7 @@ static const uint32_t fishCategory = 1 << 4;
 static const uint32_t torpedoCategory = 1 << 5;
 static const uint32_t worldBoundaryCategory = 1 << 5;
 static const uint32_t worldBoundaryUpCategory = 1 << 6;
+static const uint32_t submarineCategory = 1 << 7;
 
 @synthesize scoreDelegate = _scoreDelegate;
 
@@ -157,6 +161,32 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
     return startNode;
 }
 
+//Play Again button (shown after game over)
+- (SKLabelNode *)playAgainButtonNode
+{
+    SKLabelNode *playAgainButton = [SKLabelNode labelNodeWithFontNamed:@"MarkerFelt-Wide"];
+    playAgainButton.text = @"Play Again";
+    playAgainButton.fontSize = 40;
+    playAgainButton.fontColor = [SKColor whiteColor];
+    playAgainButton.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame) - 50);
+    playAgainButton.name = @"playAgainButtonNode";
+    playAgainButton.zPosition = 100;
+    return playAgainButton;
+}
+
+//Leaderboard button (shown after game over)
+- (SKLabelNode *)leaderboardButtonNode
+{
+    SKLabelNode *leaderboardButton = [SKLabelNode labelNodeWithFontNamed:@"MarkerFelt-Wide"];
+    leaderboardButton.text = @"Leaderboard";
+    leaderboardButton.fontSize = 30;
+    leaderboardButton.fontColor = [SKColor yellowColor];
+    leaderboardButton.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame) - 110);
+    leaderboardButton.name = @"leaderboardButtonNode";
+    leaderboardButton.zPosition = 100;
+    return leaderboardButton;
+}
+
 //Calibrate button (Text based)
 - (SKLabelNode *)calibrateButtonNode
 {
@@ -208,12 +238,7 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
     SKAction* spawnThenDelayFishForever = [SKAction repeatActionForever:spawnThenDelayFish];
     [self runAction:spawnThenDelayFishForever withKey:@"fishSpawn"];
 
-    [self removeActionForKey:@"torpedoSpawn"];
-    SKAction* spawnTorpedo = [SKAction performSelector:@selector(spawnTorpedos) onTarget:self];
-    SKAction* delayTorpedo = [SKAction waitForDuration:4.0/_moving.speed withRange:4.0/_moving.speed];
-    SKAction* spawnThenDelayTorpedo = [SKAction sequence:@[spawnTorpedo, delayTorpedo]];
-    SKAction* spawnThenDelayTorpedoForever = [SKAction repeatActionForever:spawnThenDelayTorpedo];
-    [self runAction:spawnThenDelayTorpedoForever withKey:@"torpedoSpawn"];
+    // Note: Torpedoes now only come from submarines, so no independent torpedo spawning
 
     [self removeActionForKey:@"barrelSpawn"];
     SKAction* spawnbarrel = [SKAction performSelector:@selector(spawnBarrles) onTarget:self];
@@ -228,6 +253,14 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
     SKAction* spawnThenDelayBubble = [SKAction sequence:@[spawnBubbles, delayBubble]];
     SKAction* spawnThenDelayBubblesForever = [SKAction repeatActionForever:spawnThenDelayBubble];
     [self runAction:spawnThenDelayBubblesForever withKey:@"bubbleSpawn"];
+
+    // Submarine spawning - less frequent, torpedoes fire from submarines
+    [self removeActionForKey:@"submarineSpawn"];
+    SKAction* spawnSubmarine = [SKAction performSelector:@selector(spawnSubmarines) onTarget:self];
+    SKAction* delaySubmarine = [SKAction waitForDuration:15.0/_moving.speed withRange:5.0/_moving.speed];
+    SKAction* spawnThenDelaySubmarine = [SKAction sequence:@[spawnSubmarine, delaySubmarine]];
+    SKAction* spawnThenDelaySubmarineForever = [SKAction repeatActionForever:spawnThenDelaySubmarine];
+    [self runAction:spawnThenDelaySubmarineForever withKey:@"submarineSpawn"];
   
 }
 
@@ -259,11 +292,12 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
     [self removeActionForKey:@"mineSpawn"];
     [self removeActionForKey:@"fishSpawn"];
     [self removeActionForKey:@"torpedoSpawn"];
+    [self removeActionForKey:@"submarineSpawn"];
 
     // Move bird to original position and reset velocity
     _shark.position = CGPointMake(self.frame.size.width / 4, CGRectGetMidY(self.frame));
     _shark.physicsBody.velocity = CGVectorMake( 0, 0 );
-    _shark.physicsBody.collisionBitMask = worldBoundaryCategory | worldBoundaryUpCategory| barrelCategory | mineCategory | torpedoCategory;
+    _shark.physicsBody.collisionBitMask = worldBoundaryCategory | worldBoundaryUpCategory| barrelCategory | mineCategory | torpedoCategory | submarineCategory;
     _shark.speed = 1.0;
     _shark.zRotation = 0.0;
     
@@ -281,6 +315,9 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
     }
     while ([self childNodeWithName:@"barrel"] ) {
         [[self childNodeWithName:@"barrel"] removeFromParent];
+    }
+    while ([_moving childNodeWithName:@"submarine"] ) {
+        [[_moving childNodeWithName:@"submarine"] removeFromParent];
     }
 
     
@@ -447,6 +484,69 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
         [_moving addChild:torpedoNode];
         torpedoNode.physicsBody.velocity = CGVectorMake(0, 0);
         [torpedoNode.physicsBody applyImpulse:CGVectorMake(-20, 3+5*(self.size.height/YPos))];
+}
+
+-(void)spawnSubmarines {
+    if (_score < SUBMARINE_SCORE)
+        return;
+    
+    if (_moving.speed == 0)
+        return;
+    
+    // Pick a random submarine type (yellow or red)
+    NSInteger subType = arc4random() % submarineTextures.count;
+    SKTexture *subTexture = submarineTextures[subType];
+    
+    // Random Y position above ground
+    NSInteger YPos = arc4random() % (NSInteger)(self.size.height - groundHeight - subTexture.size.height) + groundHeight + subTexture.size.height/2;
+    
+    SKSpriteNode *submarineNode = [SKSpriteNode spriteNodeWithTexture:subTexture];
+    submarineNode.position = CGPointMake(self.frame.size.width + subTexture.size.width/2, YPos);
+    submarineNode.zPosition = 40;
+    submarineNode.name = @"submarine";
+    
+    // Physics body for collision detection
+    submarineNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:subTexture.size];
+    submarineNode.physicsBody.dynamic = NO;
+    submarineNode.physicsBody.categoryBitMask = submarineCategory;
+    submarineNode.physicsBody.contactTestBitMask = sharkCategory;
+    
+    // Movement action
+    [submarineNode runAction:_moveSubmarineAndRemove];
+    
+    // Fire torpedo after 1-2 seconds delay
+    CGFloat fireDelay = 1.0 + (arc4random() % 100) / 100.0;
+    __weak typeof(self) weakSelf = self;
+    SKAction *waitAction = [SKAction waitForDuration:fireDelay];
+    SKAction *fireAction = [SKAction runBlock:^{
+        [weakSelf fireTorpedoFromSubmarine:submarineNode];
+    }];
+    [submarineNode runAction:[SKAction sequence:@[waitAction, fireAction]]];
+    
+    [_moving addChild:submarineNode];
+    [self runAction:torpedoSound]; // Play submarine appear sound
+}
+
+-(void)fireTorpedoFromSubmarine:(SKSpriteNode *)submarine {
+    if (!submarine.parent || _moving.speed == 0)
+        return;
+        
+    [self runAction:torpedoSound];
+    SKSpriteNode *torpedoNode = [SKSpriteNode spriteNodeWithTexture:torpedoTexture];
+    torpedoNode.position = CGPointMake(submarine.position.x - submarine.size.width/2, submarine.position.y);
+    torpedoNode.zPosition = 50;
+    
+    torpedoNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:torpedoTexture.size];
+    torpedoNode.physicsBody.dynamic = YES;
+    torpedoNode.physicsBody.categoryBitMask = torpedoCategory;
+    torpedoNode.physicsBody.contactTestBitMask = sharkCategory | worldCategory;
+    
+    torpedoNode.name = @"torpedo";
+    [_moving addChild:torpedoNode];
+    torpedoNode.physicsBody.velocity = CGVectorMake(0, 0);
+    // Fire torpedo toward the left with slight vertical variation
+    CGFloat verticalVariation = (arc4random() % 6) - 3; // -3 to +3
+    [torpedoNode.physicsBody applyImpulse:CGVectorMake(-25, verticalVariation)];
 }
 
 
@@ -708,6 +808,15 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
                            [SKTexture textureWithImageNamed:@"Barrel3"],
                            [SKTexture textureWithImageNamed:@"Barrel4"]];
         
+        // Create Submarines
+        ////////////////
+        submarineTextures = @[[SKTexture textureWithImageNamed:@"YellowSubmarine"],
+                              [SKTexture textureWithImageNamed:@"RedSubmarine"]];
+        CGFloat submarineDistanceToMove = self.frame.size.width + 200;
+        SKAction* moveSubmarine = [SKAction moveByX:-submarineDistanceToMove y:0 duration:speedScale*0.01*4. * submarineDistanceToMove];
+        SKAction* removeSubmarine = [SKAction removeFromParent];
+        _moveSubmarineAndRemove = [SKAction sequence:@[moveSubmarine, removeSubmarine]];
+        
 //
 //        if (isIPAD)
 //            pipeScale = 0.25;
@@ -900,6 +1009,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             } else {
                 [self removeContactObject:contact WithCategory:barrelCategory];
                 [self removeContactObject:contact WithCategory:torpedoCategory];
+                [self removeContactObject:contact WithCategory:submarineCategory];
                 
                 if( ( contact.bodyA.categoryBitMask & sharkCategory ) == sharkCategory || ( contact.bodyB.categoryBitMask & sharkCategory ) == sharkCategory ) {
                     
@@ -958,16 +1068,19 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
     gameOverLabel.text = @"GAME OVER";
     gameOverLabel.fontSize = 60;
     gameOverLabel.fontColor = [SKColor purpleColor];
-    gameOverLabel.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
+    gameOverLabel.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame) + 50);
     gameOverLabel.zPosition = 100;
     gameOverLabel.name = @"GameOverLabel";
     [self addChild:gameOverLabel];
     
+    // Add Play Again button
+    [self addChild:[self playAgainButtonNode]];
+    
+    // Add Leaderboard button
+    [self addChild:[self leaderboardButtonNode]];
+    
     [self runAction:[SKAction sequence:@[[SKAction scaleTo:1.2 duration:0.2], [SKAction scaleTo:1.0 duration:0.2]]]];
     [self runAction:gameOverSound];
-    
-    // Show leaderboard after delay
-    [self performSelector:@selector(showLeaderboard) withObject:nil afterDelay:2.0];
 }
 
 -(void)showLeaderboard {
@@ -987,6 +1100,8 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
 
 -(void) restartGame {
     [[self childNodeWithName:@"GameOverLabel"] removeFromParent]; // Remove label if it exists
+    [[self childNodeWithName:@"playAgainButtonNode"] removeFromParent]; // Remove play again button
+    [[self childNodeWithName:@"leaderboardButtonNode"] removeFromParent]; // Remove leaderboard button
     [self.scoreDelegate didFinishGameWithScore:_score];
     [[self childNodeWithName:@"restartButtonNode"] removeFromParent];
     [self resetScene];
@@ -1192,6 +1307,17 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
     if ([node.name isEqualToString:@"restartButtonNode"]) {
         [self restartGame];
         [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+        return;
+    }
+    
+    if ([node.name isEqualToString:@"playAgainButtonNode"]) {
+        [self restartGame];
+        [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+        return;
+    }
+    
+    if ([node.name isEqualToString:@"leaderboardButtonNode"]) {
+        [self showLeaderboard];
         return;
     }
     

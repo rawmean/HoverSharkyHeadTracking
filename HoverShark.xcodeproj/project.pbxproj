@@ -8,7 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		5EC0FC2CED81FAFCAEAA6FCB /* LeaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B8F71C26CADE25AEACB7F3 /* LeaderboardView.swift */; };
+		7CEBDBF1FE4A4D1A250093AF /* YellowSubmarine.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFB3BF5E202E7CE950B494E /* YellowSubmarine.png */; };
 		9799F62DE4D23A6A8F03BA34 /* LeaderboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C58AB041406B6A12D6D731 /* LeaderboardViewModel.swift */; };
+		B80E442CBBC45311C8CBF961 /* RedSubmarine.png in Resources */ = {isa = PBXBuildFile; fileRef = 6698E52751CBF249F70F7A09 /* RedSubmarine.png */; };
 		F518E4241982014000C8A12D /* swallow_trimmed.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F518E4231982014000C8A12D /* swallow_trimmed.m4a */; };
 		F518E4261982270C00C8A12D /* Bubble.png in Resources */ = {isa = PBXBuildFile; fileRef = F518E4251982270C00C8A12D /* Bubble.png */; };
 		F518E42819822D9100C8A12D /* bubble.wav in Resources */ = {isa = PBXBuildFile; fileRef = F518E42719822D9100C8A12D /* bubble.wav */; };
@@ -141,6 +143,8 @@
 		F5892377197C857E0064C68B /* bricks_white_down.png in Resources */ = {isa = PBXBuildFile; fileRef = F5892373197C857D0064C68B /* bricks_white_down.png */; };
 		F5892378197C857E0064C68B /* bricks_white_up.png in Resources */ = {isa = PBXBuildFile; fileRef = F5892374197C857D0064C68B /* bricks_white_up.png */; };
 		F5C676C72F2FD90500E4AF7A /* HeadTrackingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C676C62F2FD90500E4AF7A /* HeadTrackingManager.swift */; };
+		F5C676CB2F300EF100E4AF7A /* shark2.icon in Resources */ = {isa = PBXBuildFile; fileRef = F5C676CA2F300EF100E4AF7A /* shark2.icon */; };
+		F5C676CD2F300F3200E4AF7A /* shark.icon in Resources */ = {isa = PBXBuildFile; fileRef = F5C676CC2F300F3200E4AF7A /* shark.icon */; };
 		F5D56B10194E89D30063D43A /* ScoresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D56B0F194E89D30063D43A /* ScoresViewController.m */; };
 		F5D56B18194EBBEB0063D43A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D56B17194EBBEB0063D43A /* iAd.framework */; };
 		F5E844FA19687EE7007738C6 /* Easy.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E844F819687EE7007738C6 /* Easy.png */; };
@@ -168,8 +172,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6698E52751CBF249F70F7A09 /* RedSubmarine.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = RedSubmarine.png; sourceTree = "<group>"; };
 		89B8F71C26CADE25AEACB7F3 /* LeaderboardView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LeaderboardView.swift; path = HoverBird/LeaderboardView.swift; sourceTree = SOURCE_ROOT; };
 		B5C58AB041406B6A12D6D731 /* LeaderboardViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LeaderboardViewModel.swift; path = HoverBird/LeaderboardViewModel.swift; sourceTree = SOURCE_ROOT; };
+		BAFB3BF5E202E7CE950B494E /* YellowSubmarine.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = YellowSubmarine.png; sourceTree = "<group>"; };
 		F518E4231982014000C8A12D /* swallow_trimmed.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = swallow_trimmed.m4a; sourceTree = "<group>"; };
 		F518E4251982270C00C8A12D /* Bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bubble.png; sourceTree = "<group>"; };
 		F518E42719822D9100C8A12D /* bubble.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bubble.wav; sourceTree = "<group>"; };
@@ -310,6 +316,8 @@
 		F5C676C62F2FD90500E4AF7A /* HeadTrackingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadTrackingManager.swift; sourceTree = "<group>"; };
 		F5C676C82F2FD90900E4AF7A /* HoverSharky-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HoverSharky-Bridging-Header.h"; sourceTree = "<group>"; };
 		F5C676C92F2FDACF00E4AF7A /* HoverSharky.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HoverSharky.entitlements; sourceTree = "<group>"; };
+		F5C676CA2F300EF100E4AF7A /* shark2.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = shark2.icon; sourceTree = "<group>"; };
+		F5C676CC2F300F3200E4AF7A /* shark.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = shark.icon; sourceTree = "<group>"; };
 		F5D56B0E194E89D30063D43A /* ScoresViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoresViewController.h; sourceTree = "<group>"; };
 		F5D56B0F194E89D30063D43A /* ScoresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoresViewController.m; sourceTree = "<group>"; };
 		F5D56B17194EBBEB0063D43A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
@@ -474,6 +482,10 @@
 				F5C676C82F2FD90900E4AF7A /* HoverSharky-Bridging-Header.h */,
 				89B8F71C26CADE25AEACB7F3 /* LeaderboardView.swift */,
 				B5C58AB041406B6A12D6D731 /* LeaderboardViewModel.swift */,
+				F5C676CA2F300EF100E4AF7A /* shark2.icon */,
+				F5C676CC2F300F3200E4AF7A /* shark.icon */,
+				BAFB3BF5E202E7CE950B494E /* YellowSubmarine.png */,
+				6698E52751CBF249F70F7A09 /* RedSubmarine.png */,
 			);
 			path = HoverBird;
 			sourceTree = "<group>";
@@ -852,6 +864,7 @@
 				F5F81C5C1981E14D00072D50 /* torpedo1.wav in Resources */,
 				F53CCAAD194D306D00A9AB63 /* Bird1.png in Resources */,
 				F574E6EA197DF7F1004644D6 /* SmallFishRed.png in Resources */,
+				F5C676CB2F300EF100E4AF7A /* shark2.icon in Resources */,
 				F5892368197B70340064C68B /* HoverFlappy_level2.m4a in Resources */,
 				F555DDEB1960FCD100E0841A /* a4.png in Resources */,
 				F555DE1F1962591300E0841A /* startButton.png in Resources */,
@@ -907,6 +920,7 @@
 				F555DE0C19610BF300E0841A /* g3.png in Resources */,
 				F555DE00196103C400E0841A /* d8.png in Resources */,
 				F555DE31196282CE00E0841A /* Ground1.png in Resources */,
+				F5C676CD2F300F3200E4AF7A /* shark.icon in Resources */,
 				F5892377197C857E0064C68B /* bricks_white_down.png in Resources */,
 				F555DDD4195F9E2A00E0841A /* game_over.wav in Resources */,
 				F555DDEF1960FCD100E0841A /* a8.png in Resources */,
@@ -919,6 +933,8 @@
 				F589236F197C420C0064C68B /* column2a.png in Resources */,
 				F555DE1A196134DE00E0841A /* s3.png in Resources */,
 				F5892375197C857E0064C68B /* bricks_gray_down.png in Resources */,
+				7CEBDBF1FE4A4D1A250093AF /* YellowSubmarine.png in Resources */,
+				B80E442CBBC45311C8CBF961 /* RedSubmarine.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1113,7 +1129,7 @@
 		F53CCAA6194D2F3B00A9AB63 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = shark;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = HoverSharky.entitlements;
@@ -1146,7 +1162,7 @@
 		F53CCAA7194D2F3B00A9AB63 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = shark;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = HoverSharky.entitlements;
