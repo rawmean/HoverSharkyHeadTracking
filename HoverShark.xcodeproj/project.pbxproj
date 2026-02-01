@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -31,11 +31,8 @@
 		F53CCA71194D2F3B00A9AB63 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCA70194D2F3B00A9AB63 /* UIKit.framework */; };
 		F53CCA73194D2F3B00A9AB63 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCA72194D2F3B00A9AB63 /* SpriteKit.framework */; };
 		F53CCA79194D2F3B00A9AB63 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F53CCA77194D2F3B00A9AB63 /* InfoPlist.strings */; };
-		F53CCA7B194D2F3B00A9AB63 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F53CCA7A194D2F3B00A9AB63 /* main.m */; };
-		F53CCA7F194D2F3B00A9AB63 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F53CCA7E194D2F3B00A9AB63 /* AppDelegate.m */; };
 		F53CCA82194D2F3B00A9AB63 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F53CCA80194D2F3B00A9AB63 /* Main_iPhone.storyboard */; };
 		F53CCA85194D2F3B00A9AB63 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F53CCA83194D2F3B00A9AB63 /* Main_iPad.storyboard */; };
-		F53CCA88194D2F3B00A9AB63 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F53CCA87194D2F3B00A9AB63 /* ViewController.m */; };
 		F53CCA8B194D2F3B00A9AB63 /* MyScene.m in Sources */ = {isa = PBXBuildFile; fileRef = F53CCA8A194D2F3B00A9AB63 /* MyScene.m */; };
 		F53CCA8F194D2F3B00A9AB63 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F53CCA8E194D2F3B00A9AB63 /* Images.xcassets */; };
 		F53CCA96194D2F3B00A9AB63 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCA95194D2F3B00A9AB63 /* XCTest.framework */; };
@@ -49,7 +46,6 @@
 		F53CCAB4194D33AB00A9AB63 /* Pipe1.png in Resources */ = {isa = PBXBuildFile; fileRef = F53CCAB0194D33AB00A9AB63 /* Pipe1.png */; };
 		F53CCAB5194D33AB00A9AB63 /* Pipe2.png in Resources */ = {isa = PBXBuildFile; fileRef = F53CCAB1194D33AB00A9AB63 /* Pipe2.png */; };
 		F53CCAB6194D33AB00A9AB63 /* Skyline.png in Resources */ = {isa = PBXBuildFile; fileRef = F53CCAB2194D33AB00A9AB63 /* Skyline.png */; };
-		F53CCAB8194E544D00A9AB63 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCAB7194E544D00A9AB63 /* opencv2.framework */; };
 		F53CCABA194E56C700A9AB63 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCAB9194E56C700A9AB63 /* AVFoundation.framework */; };
 		F53CCABE194E601A00A9AB63 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCABD194E601A00A9AB63 /* CoreVideo.framework */; };
 		F53CCAC0194E602100A9AB63 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53CCABF194E602100A9AB63 /* CoreMedia.framework */; };
@@ -142,6 +138,7 @@
 		F5892376197C857E0064C68B /* bricks_gray_up.png in Resources */ = {isa = PBXBuildFile; fileRef = F5892372197C857D0064C68B /* bricks_gray_up.png */; };
 		F5892377197C857E0064C68B /* bricks_white_down.png in Resources */ = {isa = PBXBuildFile; fileRef = F5892373197C857D0064C68B /* bricks_white_down.png */; };
 		F5892378197C857E0064C68B /* bricks_white_up.png in Resources */ = {isa = PBXBuildFile; fileRef = F5892374197C857D0064C68B /* bricks_white_up.png */; };
+		F5C676C72F2FD90500E4AF7A /* HeadTrackingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C676C62F2FD90500E4AF7A /* HeadTrackingManager.swift */; };
 		F5D56B10194E89D30063D43A /* ScoresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D56B0F194E89D30063D43A /* ScoresViewController.m */; };
 		F5D56B18194EBBEB0063D43A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D56B17194EBBEB0063D43A /* iAd.framework */; };
 		F5E844FA19687EE7007738C6 /* Easy.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E844F819687EE7007738C6 /* Easy.png */; };
@@ -196,14 +193,9 @@
 		F53CCA72194D2F3B00A9AB63 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		F53CCA76194D2F3B00A9AB63 /* HoverShark-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HoverShark-Info.plist"; sourceTree = "<group>"; };
 		F53CCA78194D2F3B00A9AB63 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		F53CCA7A194D2F3B00A9AB63 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F53CCA7C194D2F3B00A9AB63 /* HoverShark-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HoverShark-Prefix.pch"; sourceTree = "<group>"; };
-		F53CCA7D194D2F3B00A9AB63 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		F53CCA7E194D2F3B00A9AB63 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		F53CCA81194D2F3B00A9AB63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		F53CCA84194D2F3B00A9AB63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
-		F53CCA86194D2F3B00A9AB63 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		F53CCA87194D2F3B00A9AB63 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		F53CCA89194D2F3B00A9AB63 /* MyScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyScene.h; sourceTree = "<group>"; };
 		F53CCA8A194D2F3B00A9AB63 /* MyScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyScene.m; sourceTree = "<group>"; };
 		F53CCA8E194D2F3B00A9AB63 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -218,7 +210,6 @@
 		F53CCAB0194D33AB00A9AB63 /* Pipe1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pipe1.png; sourceTree = "<group>"; };
 		F53CCAB1194D33AB00A9AB63 /* Pipe2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pipe2.png; sourceTree = "<group>"; };
 		F53CCAB2194D33AB00A9AB63 /* Skyline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Skyline.png; sourceTree = "<group>"; };
-		F53CCAB7194E544D00A9AB63 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 		F53CCAB9194E56C700A9AB63 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		F53CCABD194E601A00A9AB63 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		F53CCABF194E602100A9AB63 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -312,6 +303,9 @@
 		F5892372197C857D0064C68B /* bricks_gray_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bricks_gray_up.png; sourceTree = "<group>"; };
 		F5892373197C857D0064C68B /* bricks_white_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bricks_white_down.png; sourceTree = "<group>"; };
 		F5892374197C857D0064C68B /* bricks_white_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bricks_white_up.png; sourceTree = "<group>"; };
+		F5C676C62F2FD90500E4AF7A /* HeadTrackingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadTrackingManager.swift; sourceTree = "<group>"; };
+		F5C676C82F2FD90900E4AF7A /* HoverSharky-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HoverSharky-Bridging-Header.h"; sourceTree = "<group>"; };
+		F5C676C92F2FDACF00E4AF7A /* HoverSharky.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HoverSharky.entitlements; sourceTree = "<group>"; };
 		F5D56B0E194E89D30063D43A /* ScoresViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoresViewController.h; sourceTree = "<group>"; };
 		F5D56B0F194E89D30063D43A /* ScoresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoresViewController.m; sourceTree = "<group>"; };
 		F5D56B17194EBBEB0063D43A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
@@ -352,7 +346,6 @@
 				F53CCA6F194D2F3B00A9AB63 /* CoreGraphics.framework in Frameworks */,
 				F53CCA71194D2F3B00A9AB63 /* UIKit.framework in Frameworks */,
 				F53CCA73194D2F3B00A9AB63 /* SpriteKit.framework in Frameworks */,
-				F53CCAB8194E544D00A9AB63 /* opencv2.framework in Frameworks */,
 				F53CCA6D194D2F3B00A9AB63 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -413,6 +406,7 @@
 		F53CCA60194D2F3B00A9AB63 = {
 			isa = PBXGroup;
 			children = (
+				F5C676C92F2FDACF00E4AF7A /* HoverSharky.entitlements */,
 				F53CCA74194D2F3B00A9AB63 /* HoverBird */,
 				F53CCA9B194D2F3B00A9AB63 /* HoverBirdTests */,
 				F53CCA6B194D2F3B00A9AB63 /* Frameworks */,
@@ -446,7 +440,6 @@
 				F53CCABF194E602100A9AB63 /* CoreMedia.framework */,
 				F53CCABD194E601A00A9AB63 /* CoreVideo.framework */,
 				F53CCAB9194E56C700A9AB63 /* AVFoundation.framework */,
-				F53CCAB7194E544D00A9AB63 /* opencv2.framework */,
 				F53CCA6C194D2F3B00A9AB63 /* Foundation.framework */,
 				F53CCA6E194D2F3B00A9AB63 /* CoreGraphics.framework */,
 				F53CCA70194D2F3B00A9AB63 /* UIKit.framework */,
@@ -459,15 +452,12 @@
 		F53CCA74194D2F3B00A9AB63 /* HoverBird */ = {
 			isa = PBXGroup;
 			children = (
+				F5C676C62F2FD90500E4AF7A /* HeadTrackingManager.swift */,
 				F5354EA8194FE3580049F406 /* BlurEffects */,
-				F53CCA7D194D2F3B00A9AB63 /* AppDelegate.h */,
-				F53CCA7E194D2F3B00A9AB63 /* AppDelegate.m */,
 				F53CCA80194D2F3B00A9AB63 /* Main_iPhone.storyboard */,
 				F53CCA83194D2F3B00A9AB63 /* Main_iPad.storyboard */,
 				F5E8452E196A129D007738C6 /* HelpVideoVCViewController.h */,
 				F5E8452F196A129D007738C6 /* HelpVideoVCViewController.m */,
-				F53CCA86194D2F3B00A9AB63 /* ViewController.h */,
-				F53CCA87194D2F3B00A9AB63 /* ViewController.m */,
 				F5D56B0E194E89D30063D43A /* ScoresViewController.h */,
 				F5D56B0F194E89D30063D43A /* ScoresViewController.m */,
 				F53CCA89194D2F3B00A9AB63 /* MyScene.h */,
@@ -477,6 +467,7 @@
 				F57750CB195F2D72005205FF /* DateScore.m */,
 				F53CCA8E194D2F3B00A9AB63 /* Images.xcassets */,
 				F53CCA75194D2F3B00A9AB63 /* Supporting Files */,
+				F5C676C82F2FD90900E4AF7A /* HoverSharky-Bridging-Header.h */,
 			);
 			path = HoverBird;
 			sourceTree = "<group>";
@@ -526,7 +517,6 @@
 				F53CCAAC194D306D00A9AB63 /* Bird2.png */,
 				F53CCA76194D2F3B00A9AB63 /* HoverShark-Info.plist */,
 				F53CCA77194D2F3B00A9AB63 /* InfoPlist.strings */,
-				F53CCA7A194D2F3B00A9AB63 /* main.m */,
 				F53CCA7C194D2F3B00A9AB63 /* HoverShark-Prefix.pch */,
 			);
 			name = "Supporting Files";
@@ -764,11 +754,12 @@
 		F53CCA61194D2F3B00A9AB63 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0830;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2620;
 				ORGANIZATIONNAME = maadotaa.com;
 				TargetAttributes = {
 					F53CCA68194D2F3B00A9AB63 = {
-						DevelopmentTeam = 876U4BLX5B;
+						LastSwiftMigration = 2620;
 						SystemCapabilities = {
 							com.apple.GameCenter = {
 								enabled = 1;
@@ -944,10 +935,8 @@
 				F5D56B10194E89D30063D43A /* ScoresViewController.m in Sources */,
 				F57750CC195F2D72005205FF /* DateScore.m in Sources */,
 				F5354EA7194FE3510049F406 /* UIImage+ImageEffects.m in Sources */,
-				F53CCA88194D2F3B00A9AB63 /* ViewController.m in Sources */,
-				F53CCA7F194D2F3B00A9AB63 /* AppDelegate.m in Sources */,
 				F5E84530196A129D007738C6 /* HelpVideoVCViewController.m in Sources */,
-				F53CCA7B194D2F3B00A9AB63 /* main.m in Sources */,
+				F5C676C72F2FD90500E4AF7A /* HeadTrackingManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1009,18 +998,28 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -1028,6 +1027,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1043,9 +1043,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1054,18 +1055,28 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -1073,6 +1084,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1081,8 +1093,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1093,9 +1107,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = HoverSharky.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 7;
+				DEVELOPMENT_TEAM = 876U4BLX5B;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1105,12 +1122,15 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HoverBird/HoverShark-Prefix.pch";
 				INFOPLIST_FILE = "HoverBird/HoverShark-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.maadotaa.hoverSharky;
 				PRODUCT_NAME = HoverShark;
 				PROVISIONING_PROFILE = "";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "HoverBird/HoverSharky-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1120,9 +1140,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = HoverSharky.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 7;
+				DEVELOPMENT_TEAM = 876U4BLX5B;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1132,12 +1155,14 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HoverBird/HoverShark-Prefix.pch";
 				INFOPLIST_FILE = "HoverBird/HoverShark-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.maadotaa.hoverSharky;
 				PRODUCT_NAME = HoverShark;
 				PROVISIONING_PROFILE = "";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "HoverBird/HoverSharky-Bridging-Header.h";
+				SWIFT_VERSION = 6.0;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1158,6 +1183,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "HoverBirdTests/HoverSharkTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "RR.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = HoverSharkTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -1177,6 +1203,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HoverBird/HoverBird-Prefix.pch";
 				INFOPLIST_FILE = "HoverBirdTests/HoverSharkTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "RR.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = HoverSharkTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";

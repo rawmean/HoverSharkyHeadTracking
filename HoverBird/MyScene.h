@@ -8,15 +8,18 @@
 
 #import <SpriteKit/SpriteKit.h>
 
-@protocol GameSceneDelegate <NSObject>
+@class HeadTrackingManager;
+
+@protocol MySceneDelegate <NSObject>
 @required
 - (void) didFinishGameWithScore:(NSInteger)score;
 @end
 
 @interface MyScene : SKScene {
-    id <GameSceneDelegate> scoreDelegate;
+    id <MySceneDelegate> scoreDelegate;
 }
 
-@property  id scoreDelegate;
+@property (nonatomic, weak) id <MySceneDelegate> scoreDelegate;
+@property (nonatomic, strong) HeadTrackingManager *headTracker;
 
 @end

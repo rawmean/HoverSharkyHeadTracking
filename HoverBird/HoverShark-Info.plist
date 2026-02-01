@@ -25,15 +25,12 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Camera access is needed to detect hand motion which is used to control the shark</string>
+	<string>Camera access is needed to detect head motion which is used to control the shark</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Camera access is needed to detect hand motion which is used to control the shark</string>
 	<key>UILaunchStoryboardName</key>
 	<string>Main_iPhone</string>
-	<key>UIMainStoryboardFile</key>
-	<string>Main_iPhone</string>
-	<key>UIMainStoryboardFile~ipad</key>
-	<string>Main_iPad</string>
+
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

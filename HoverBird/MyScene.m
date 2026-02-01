@@ -6,24 +6,29 @@
 //  Copyright (c) 2014 maadotaa.com. All rights reserved.
 //
 
-
-#import <opencv2/videoio/cap_ios.h>
-#import "opencv2/imgcodecs/ios.h"
-
-//#import <opencv2/highgui/ios.h>
 #import "MyScene.h"
+#import <AVFoundation/AVFoundation.h>
+
+
+//#import <opencv2/videoio/cap_ios.h>
+//#import "opencv2/imgcodecs/ios.h"
+//
+//#import <opencv2/highgui/ios.h>
+#import <ARKit/ARKit.h>
+#import "MyScene.h"
+#import "HoverShark-Swift.h"
 #import "DateScore.h"
 #import <GameKit/GameKit.h>
 
 
-using namespace cv;
+
 
 #define HARD_LEVEL_SPEED_FACTOR 1.3
 #define AFTER_10_SPEED_FACTOR 1.3
 #define BARREL_SCORE  10
 #define TORPEDO_SCORE 15
 
-@interface MyScene ()<SKPhysicsContactDelegate, CvVideoCameraDelegate> {
+@interface MyScene ()<SKPhysicsContactDelegate> {
     SKSpriteNode* _shark;
     NSArray *sharkTexturesNormal;
     NSArray *fishTextures;
@@ -43,7 +48,7 @@ using namespace cv;
     BOOL _canRestart;
     SKLabelNode* _scoreLabelNode;
     NSInteger _score;
-    Mat grayImage, prevGrayImage;
+    // Mat grayImage, prevGrayImage; // Removed OpenCV vars
     NSMutableArray * scoreArray;
     NSMutableArray *lifeIconArray;
     NSInteger numLivesLeft;
@@ -74,10 +79,8 @@ using namespace cv;
     SKAction *splashSound, *torpedoSound, *popSound, *bubbleSound, *gulpSound;
     float sharkScale;
     SKAction* _moveBubbleAndRemove;
-    
+    SKLabelNode* _calibrationLabel;
 }
-@property (nonatomic, strong) CvVideoCamera* videoCamera;
-
 @end
 
 @implementation MyScene
@@ -151,6 +154,19 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
     [startNode setScale:.50];
 
     return startNode;
+}
+
+//Calibrate button (Text based)
+- (SKLabelNode *)calibrateButtonNode
+{
+    SKLabelNode *calButton = [SKLabelNode labelNodeWithFontNamed:@"MarkerFelt-Wide"];
+    calButton.text = @"Calibrate";
+    calButton.fontSize = 30;
+    calButton.fontColor = [SKColor whiteColor];
+    calButton.position = CGPointMake(self.frame.size.width*0.2, self.frame.size.height*0.78);
+    calButton.name = @"calibrateButtonNode";
+    calButton.zPosition = 1.0;
+    return calButton;
 }
 
 -(void) waitForRadomTime {
@@ -229,10 +245,14 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
 -(void)resetScene {
     
     [self addChild: [self startButtonNode]];
-    [self addChild: musicButton];
-    [self addChild: difficultyButton];
-    if (isCameraAvailable)
-        [self addChild: hoverButton];
+    
+    if (!musicButton.parent) [self addChild: musicButton];
+    if (!difficultyButton.parent) [self addChild: difficultyButton];
+
+    if (isCameraAvailable) {
+        if (!hoverButton.parent) [self addChild: hoverButton];
+        [self addChild: [self calibrateButtonNode]];
+    }
     
     self.physicsWorld.gravity = CGVectorMake( 0.0, 0.0 );
     [self removeActionForKey:@"mineSpawn"];
@@ -505,19 +525,11 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
         
         
         // init camera
-        isCameraAvailable = [UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceFront];
-//        isCameraAvailable = YES; // DEBUG
+        isCameraAvailable = [HeadTrackingManager isSupported];
         if (isCameraAvailable) {
             [self addChild: hoverButton];
-
-            self.videoCamera = [[CvVideoCamera alloc] init];
-            self.videoCamera.delegate = self;
-            self.videoCamera.defaultAVCaptureDevicePosition = AVCaptureDevicePositionFront;
-            self.videoCamera.defaultAVCaptureSessionPreset = AVCaptureSessionPreset352x288;
-            //                                AVCaptureSessionPreset640x480;
-            self.videoCamera.defaultAVCaptureVideoOrientation =
-            AVCaptureVideoOrientationPortrait;
-            self.videoCamera.defaultFPS = 15;
+            [self addChild: [self calibrateButtonNode]];
+            // Helper text or setup if needed
         }
         else
             isHoverEnabled = NO;
@@ -809,101 +821,7 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
 
 
 
-#pragma mark - Touch handling
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    
-    if (!isTouchEnabled) {
-        return;
-    }
-    
-    UITouch *touch = [touches anyObject];
-    CGPoint location = [touch locationInNode:self];
-    SKNode *node = [self nodeAtPoint:location];
-    
-    if ([node.name isEqualToString:@"musicButtonNode"]) {
-        isMusicEnabled = !isMusicEnabled;
-        if (isMusicEnabled) {
-            SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"music.png"]];
-            [musicButton runAction:changeImage];
-        }
-        else {
-            SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"no-music.png"]];
-            [musicButton runAction:changeImage];
-        }
-        return;
-    }
-
-    if ([node.name isEqualToString:@"DifficultyButtonNode"]) {
-        isGameEasy = !isGameEasy;
-        if (isGameEasy) {
-            _moving.speed = 1.0;
-            SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"Easy.png"]];
-            [difficultyButton runAction:changeImage];
-        }
-        else {
-            _moving.speed = HARD_LEVEL_SPEED_FACTOR;
-            SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"Hard.png"]];
-            [difficultyButton runAction:changeImage];
-        }
-        return;
-    }
-
-    
-    if ([node.name isEqualToString:@"hoverButtonNode"]) {
-        isHoverEnabled = !isHoverEnabled;
-        if (isHoverEnabled) {
-            SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"hover.png"]];
-            [hoverButton runAction:changeImage];
-        }
-        else {
-            SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"tap.png"]];
-            [hoverButton runAction:changeImage];
-        }
-        return;
-    }
-    
-    //if start button touched, bring the pipes and gravity
-    if ([node.name isEqualToString:@"startButtonNode"]) {
-        [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
-        [node removeFromParent];
-        [musicButton removeFromParent];
-        [hoverButton removeFromParent];
-        [difficultyButton removeFromParent];
-        
-        [self startSpawning];
-        
-        if (isHoverEnabled)
-            [self.videoCamera start];
-
-        isGameInProgress = YES;
-
-        _shark.physicsBody.velocity = CGVectorMake(0, 0);
-        [_shark.physicsBody applyImpulse:CGVectorMake(0, 12)];
-
-    } else if ([node.name isEqualToString:@"restartButtonNode"])
-    {
-        [node removeFromParent];
-        [self removeActionForKey:@"organPlaying"];
-        
-        [self resetScene];
-        [self createSharkRegular];
-    } else if (isGameInProgress)
-    {
-        _shark.physicsBody.velocity = CGVectorMake(0, 0);
-        [_shark.physicsBody applyImpulse:CGVectorMake(0, 15)];
-    }
-    
-    
-    
-    /* Called when a touch begins */
-//    if( _moving.speed > 0 ) {
-//        _shark.physicsBody.velocity = CGVectorMake(0, 0);
-//        [_shark.physicsBody applyImpulse:CGVectorMake(0, 6)];
-//    } else if( _canRestart ) {
-//        [self resetScene];
-//    }
-}
 
 CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
     if( value > max ) {
@@ -980,8 +898,9 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                     
                     // Shark has collided with world or a bullet
                     isTouchEnabled = NO;
-                    if (isHoverEnabled)
-                        [self.videoCamera stop];
+                    if (isHoverEnabled) {
+                        // Stop tracking if needed
+                    }
                     [self createCrashedShark];
                     if (isMusicEnabled) {
                         [gameSceneLoop stop];
@@ -1024,16 +943,16 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
 
 -(void) restartGame {
     [self.scoreDelegate didFinishGameWithScore:_score];
-//    [[self childNodeWithName:@"restartButtonNode"] removeFromParent];
+    [[self childNodeWithName:@"restartButtonNode"] removeFromParent];
     [self resetScene];
     [self createSharkRegular];
-
 }
 
 -(void)update:(CFTimeInterval)currentTime {
     /* Called before each frame is rendered */
     if( _moving.speed > 0 ) {
         _shark.zRotation = clamp( -1, 0.5, _shark.physicsBody.velocity.dy * ( _shark.physicsBody.velocity.dy < 0 ? 0.003 : 0.001 ) );
+        [self updateHeadTrackingControl];
     }
     
     //remove any nodes named "yourNode" that make it off screen
@@ -1044,44 +963,107 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
 //        }
 //    }];
     
-}
-
-#pragma mark - opencv callback
-
-- (void)processImage:(Mat&)image
-{
-    Mat filteredImage;
-    
-    cvtColor(image, grayImage, COLOR_BGR2GRAY);
-    
-    Mat cflow, flow;
-    pyrDown(grayImage, grayImage);
-    pyrDown(grayImage, grayImage);
-    
-    if (prevGrayImage.data)
-    {
-        calcOpticalFlowFarneback(prevGrayImage, grayImage, flow, 0.5, 3, 15, 3, 5, 1.2, 0);
-        Scalar meanFlow = mean(flow);
-//        NSLog(@"mean flowmeanFlow.val[1] = %f, %f", meanFlow.val[0], meanFlow.val[1]);
+    // Clamp shark position to screen bounds
+    if (_shark) {
+        CGPoint pos = _shark.position;
+        CGSize size = _shark.size;
+        CGFloat halfWidth = size.width / 2.0;
+        CGFloat halfHeight = size.height / 2.0;
         
-//        if( _moving.speed >0  ) {
-//            if (meanFlow.val[1] < -1.) {
-//                _shark.physicsBody.velocity = CGVectorMake(0, 0);
-//                [_shark.physicsBody applyImpulse:CGVectorMake(meanFlow.val[0]*0, 9)];
-//            }
-//        }
-
+        BOOL didClamp = NO;
+        if (pos.x < halfWidth) { pos.x = halfWidth; didClamp = YES; }
+        if (pos.x > self.size.width - halfWidth) { pos.x = self.size.width - halfWidth; didClamp = YES; }
+        if (pos.y < halfHeight) { pos.y = halfHeight; didClamp = YES; }
+        if (pos.y > self.size.height - halfHeight) { pos.y = self.size.height - halfHeight; didClamp = YES; }
         
-        if( _moving.speed > 0 ) {
-            _shark.physicsBody.velocity = CGVectorMake(0, 0);
-            if (isIPAD)
-                [_shark.physicsBody applyImpulse:CGVectorMake(meanFlow.val[1]*(-10), -meanFlow.val[0]*10)];
-            else
-                [_shark.physicsBody applyImpulse:CGVectorMake(meanFlow.val[1]*(-8), -meanFlow.val[0]*8)];
+        if (didClamp) {
+            _shark.position = pos;
+            // Zero out velocity if we hit a wall to prevent sticking/jittering
+            // _shark.physicsBody.velocity = CGVectorMake(0, 0); // Optional: might feel sticky
         }
     }
-    std::swap(prevGrayImage, grayImage);
+    
+    // Update Calibration UI if active
+    if (self.headTracker.headCalibrationStep != HeadCalibrationStepIdle) {
+        if (!_calibrationLabel) {
+            _calibrationLabel = [SKLabelNode labelNodeWithFontNamed:@"MarkerFelt-Wide"];
+            _calibrationLabel.fontSize = 40;
+            _calibrationLabel.fontColor = [SKColor yellowColor];
+            _calibrationLabel.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
+            _calibrationLabel.zPosition = 1000;
+            [self addChild:_calibrationLabel];
+            
+            // Hide menu UI
+            [[self childNodeWithName:@"startButtonNode"] setHidden:YES];
+            [[self childNodeWithName:@"restartButtonNode"] setHidden:YES];
+            [[self childNodeWithName:@"calibrateButtonNode"] setHidden:YES];
+            [musicButton setHidden:YES];
+            [difficultyButton setHidden:YES];
+            [hoverButton setHidden:YES];
+        }
+        _calibrationLabel.text = self.headTracker.calibrationStatusMessage;
+    } else {
+        if (_calibrationLabel) {
+            [_calibrationLabel removeFromParent];
+            _calibrationLabel = nil;
+            // Restore buttons if game not running
+            if (!isGameInProgress) {
+                [[self childNodeWithName:@"startButtonNode"] setHidden:NO];
+                [[self childNodeWithName:@"restartButtonNode"] setHidden:NO];
+                [[self childNodeWithName:@"calibrateButtonNode"] setHidden:NO];
+                [musicButton setHidden:NO];
+                [difficultyButton setHidden:NO];
+                [hoverButton setHidden:NO];
+            }
+        }
+    }
+}
 
+#pragma mark - Head Tracking Controls
+
+-(void)updateHeadTrackingControl {
+    if (_moving.speed > 0 && self.headTracker && self.headTracker.isTracking) {
+        float headX = self.headTracker.headPositionX;
+        float headY = self.headTracker.headPositionY;
+        
+        // Debug logging (throttled)
+        static int logCounter = 0;
+        if (logCounter++ % 60 == 0) {
+            NSLog(@"HeadTracking: X=%.4f, Y=%.4f", headX, headY);
+        }
+
+        // Map Head X/Y to Velocity
+        // Sensitivity factors - Increased significantly to respond to small head movements (in meters)
+        float sensitivityX = self.headTracker.headSensitivityX; // Use calibrated sensitivity
+        float sensitivityY = self.headTracker.headSensitivityY; // Use calibrated sensitivity
+        
+        // Invert X because moving head right (positive) should probably move shark right?
+        // Let's assume standard coordinate system: Right is +X.
+        // If shark is at left, we want to move it right.
+        
+        // Simply apply impulse or set velocity based on head offset from center (0,0)
+        // Or mapping head position directly to screen position (absolute positioning) might be better?
+        // The original code used optical flow (velocity). Let's try velocity based on head offset.
+        
+        float velX = headX * sensitivityX;
+        float velY = headY * sensitivityY;
+        
+        // Clamp velocity
+        // _shark.physicsBody.velocity = CGVectorMake(velX, velY); // Setting velocity directly gives absolute control feel
+        
+        // Or apply impulse
+        // Resetting velocity to 0 and applying impulse makes it behave like "velocity control"
+        // effectively canceling gravity each frame.
+         _shark.physicsBody.velocity = CGVectorMake(0, 0);
+         [_shark.physicsBody applyImpulse:CGVectorMake(velX, velY)];
+    } else {
+        // If tracking is lost or unsupported, maybe we should prevent it from falling?
+        // For now, let physics take over (gravity), but boundaries will catch it.
+        // Or we can set velocity to 0 to make it hover?
+        if (_shark && _moving.speed > 0) {
+             _shark.physicsBody.velocity = CGVectorMake(0, 0); // Hover if no tracking
+        }
+    }
 }
 
 
@@ -1110,5 +1092,94 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
 
 }
 
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    /* Called when a touch begins */
+    
+    UITouch *touch = [touches anyObject];
+    CGPoint location = [touch locationInNode:self];
+    SKNode *node = [self nodeAtPoint:location];
+
+    if ([node.name isEqualToString:@"startButtonNode"]) {
+        [self startSpawning];
+        [node removeFromParent];
+        [[self childNodeWithName:@"calibrateButtonNode"] removeFromParent]; // Hide calibrate
+        
+        [musicButton removeFromParent];
+        [difficultyButton removeFromParent];
+        [hoverButton removeFromParent];
+        [[self childNodeWithName:@"restartButtonNode"] removeFromParent];
+        
+        // Disable idle timer
+         [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+        return;
+    }
+    
+    if ([node.name isEqualToString:@"restartButtonNode"]) {
+        [self restartGame];
+        [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+        return;
+    }
+    
+    if ([node.name isEqualToString:@"musicButtonNode"]) {
+         // ... existing music toggle logic if any ...
+         // For now, simple toggle
+         isMusicEnabled = !isMusicEnabled;
+         if (isMusicEnabled) {
+              [node runAction:[SKAction setTexture:[SKTexture textureWithImageNamed:@"music.png"]]];
+              [gameSceneLoop play];
+         }
+         else {
+              [node runAction:[SKAction setTexture:[SKTexture textureWithImageNamed:@"no-music.png"]]];
+             [gameSceneLoop stop];
+             [gameSceneLoop2 stop];
+         }
+        // return; // Don't return, as touches often pass through
+    }
+    
+    if ([node.name isEqualToString:@"DifficultyButtonNode"]) {
+        isGameEasy = !isGameEasy;
+        if (isGameEasy) {
+            _moving.speed = 1.0;
+            SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"Easy.png"]];
+            [difficultyButton runAction:changeImage];
+        }
+        else {
+            _moving.speed = HARD_LEVEL_SPEED_FACTOR;
+            SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"Hard.png"]];
+            [difficultyButton runAction:changeImage];
+        }
+        return;
+    }
+
+    if ([node.name isEqualToString:@"hoverButtonNode"]) {
+        isHoverEnabled = !isHoverEnabled;
+        if (isHoverEnabled) {
+            SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"hover.png"]];
+            [hoverButton runAction:changeImage];
+        }
+        else {
+            SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"tap.png"]];
+            [hoverButton runAction:changeImage];
+        }
+        return;
+    }
+    
+    if ([node.name isEqualToString:@"calibrateButtonNode"]) {
+        [self.headTracker startHeadCalibration];
+        return;
+    }
+    
+    // Check if we are in calibration mode
+    if (self.headTracker.headCalibrationStep != HeadCalibrationStepIdle) {
+        [self.headTracker nextHeadCalibrationStep];
+        return;
+    }
+
+    if (isTouchEnabled) {
+         _shark.physicsBody.velocity = CGVectorMake(0, 0);
+         [_shark.physicsBody applyImpulse:CGVectorMake(0, 30)];
+        [self runAction:splashSound];
+    }
+}
 
 @end

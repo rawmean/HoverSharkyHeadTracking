@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>FFC6AA36-D9A1-4850-A507-45C4A3EFF2B3</string>
+	<key>IDESourceControlProjectName</key>
+	<string>HoverFlappy</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>1F87B7B4-EEE0-418B-BD9A-AD2F740B5E74</key>
+		<string>ssh://ns.home/home/ramin/git/HoverBird.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>HoverFlappy.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>1F87B7B4-EEE0-418B-BD9A-AD2F740B5E74</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://ns.home/home/ramin/git/HoverBird.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>1F87B7B4-EEE0-418B-BD9A-AD2F740B5E74</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>1F87B7B4-EEE0-418B-BD9A-AD2F740B5E74</string>
+			<key>IDESourceControlWCCName</key>
+			<string>HoverBird</string>
+		</dict>
+	</array>
+</dict>
+</plist>
