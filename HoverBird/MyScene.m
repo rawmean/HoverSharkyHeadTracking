@@ -552,8 +552,8 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
         self.physicsWorld.gravity = CGVectorMake( 0.0, -0.0 );
         self.physicsWorld.contactDelegate = self;
         
-//        _skyColor = [SKColor colorWithRed:113.0/255.0 green:197.0/255.0 blue:207.0/255.0 alpha:1.0];
-        _skyColor = [SKColor colorWithRed:120.0/255.0 green:127.0/255.0 blue:150/255.0 alpha:1.0];
+        _skyColor = [SKColor colorWithRed:113.0/255.0 green:197.0/255.0 blue:207.0/255.0 alpha:1.0];
+//        _skyColor = [SKColor colorWithRed:120.0/255.0 green:127.0/255.0 blue:150/255.0 alpha:1.0];
         [self setBackgroundColor:_skyColor];
         
         _moving = [SKNode node];
