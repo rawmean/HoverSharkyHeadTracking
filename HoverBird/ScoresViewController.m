@@ -7,6 +7,8 @@
 //
 
 #import "ScoresViewController.h"
+#import <ARKit/ARKit.h>
+#import "HoverShark-Swift.h"
 
 #define LEADERBOARD_ID @"HoverSharkyLeaderBoardID"
 
@@ -135,8 +137,9 @@
 
 
 - (IBAction)didTapLeaderboard:(id)sender {
-    [self presentLeaderboards];
-    
+    // Custom SwiftUI Leaderboard
+    UIViewController *leaderboardVC = [LeaderboardFactory createLeaderboardViewController];
+    [self presentViewController:leaderboardVC animated:YES completion:nil];
 }
 
 - (IBAction)didTapNewGame:(id)sender {
@@ -187,11 +190,14 @@
 
 
 - (void) presentLeaderboards {
-    GKGameCenterViewController* gameCenterController = [[GKGameCenterViewController alloc] init];
+   /* GKGameCenterViewController* gameCenterController = [[GKGameCenterViewController alloc] init];
     gameCenterController.viewState = GKGameCenterViewControllerStateLeaderboards;
 //    gameCenterController.viewState = GKGameCenterViewControllerStateAchievements;
     gameCenterController.gameCenterDelegate = self;
-    [self presentViewController:gameCenterController animated:YES completion: nil];
+    [self presentViewController:gameCenterController animated:YES completion: nil]; */
+    
+    UIViewController *leaderboardVC = [LeaderboardFactory createLeaderboardViewController];
+    [self presentViewController:leaderboardVC animated:YES completion:nil];
 
 }
 

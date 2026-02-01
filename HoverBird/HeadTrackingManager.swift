@@ -9,6 +9,7 @@ import ARKit
 import Observation
 import SwiftUI
 import SpriteKit
+import GameKit
 
 // MARK: - App Entry Point
 
@@ -168,14 +169,6 @@ struct GameView: UIViewRepresentable {
 
 // MARK: - HeadTrackingManager
 
-/// Calibration state for head tracking
-enum CalibrationState {
-    case notStarted
-    case lookingLeft
-    case lookingRight
-    case completed
-}
-
 /// Steps for Head Calibration
 @objc enum HeadCalibrationStep: Int {
     case idle
@@ -210,8 +203,11 @@ class HeadTrackingManager: NSObject {
     /// Whether the environment is too dark for tracking
     @objc dynamic var isEnvironmentTooDark: Bool = false
     
-    /// Current calibration state
-    var calibrationState: CalibrationState = .notStarted
+    /// Whether face is currently detected (false if camera may be covered)
+    @objc dynamic var isFaceDetected: Bool = true
+    
+    /// Warning message when face cannot be detected
+    @objc dynamic var faceDetectionWarning: String?
     
     /// Current head calibration step
     @objc dynamic var headCalibrationStep: HeadCalibrationStep = .idle
@@ -234,15 +230,11 @@ class HeadTrackingManager: NSObject {
     
     private var arSession: ARSession?
     
-    /// Raw eye position before filtering and calibration
-    private var rawEyeY: Float = 0.0
+    /// Last time face was detected (for timeout detection)
+    private var lastFaceDetectedTime: Date = Date()
     
-    /// Calibration values
-    private var leftCalibrationValue: Float = -0.15
-    private var rightCalibrationValue: Float = 0.15
-    
-    /// Low-pass filter state
-    private var filteredEyePosition: Float = 0.0
+    /// Timer to check for face detection timeout
+    private var faceDetectionTimer: Timer?
     
     /// Head position filter states
     private var filteredHeadX: Float = 0.0
@@ -256,14 +248,13 @@ class HeadTrackingManager: NSObject {
     private var hasSetNeutralPose: Bool = false
     
     /// Smoothing factor for low-pass filter (0.0 to 1.0, lower = smoother but more lag)
-    private let smoothingFactor: Float = 0.15
     private let headSmoothingFactor: Float = 0.90 // Increased from 0.1 for more responsiveness
     
     // MARK: - UserDefaults Keys
-    private let calibrationLeftKey = "headTracking.calibration.left"
-    private let calibrationRightKey = "headTracking.calibration.right"
-    private let calibrationCompletedKey = "headTracking.calibration.completed"
     private let onboardingCompletedKey = "headTracking.onboarding.completed"
+    private let headSensitivityXKey = "headTracking.headSensitivityX"
+    private let headSensitivityYKey = "headTracking.headSensitivityY"
+    private let headCalibrationCompletedKey = "headTracking.headCalibration.completed"
     
     /// Check if the device supports face tracking
     @objc static var isSupported: Bool {
@@ -273,7 +264,29 @@ class HeadTrackingManager: NSObject {
     override init() {
         super.init()
         loadOnboardingState()
-        loadCalibration()
+        loadHeadCalibration()
+        authenticateGameCenter()
+    }
+    
+    // MARK: - Game Center Authentication
+    
+    /// Authenticate with Game Center
+    private func authenticateGameCenter() {
+        let localPlayer = GKLocalPlayer.local
+        localPlayer.authenticateHandler = { viewController, error in
+            if let viewController = viewController {
+                // Present the authentication view controller if needed
+                // This is handled by the system when user needs to sign in
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                   let rootVC = windowScene.windows.first?.rootViewController {
+                    rootVC.present(viewController, animated: true)
+                }
+            } else if localPlayer.isAuthenticated {
+                print("Game Center: Authenticated as \(localPlayer.alias)")
+            } else if let error = error {
+                print("Game Center authentication error: \(error.localizedDescription)")
+            }
+        }
     }
     
     private func loadOnboardingState() {
@@ -301,15 +314,40 @@ class HeadTrackingManager: NSObject {
         arSession?.run(configuration, options: [.resetTracking, .removeExistingAnchors])
         isTracking = true
         errorMessage = nil
+        isFaceDetected = true
+        faceDetectionWarning = nil
+        lastFaceDetectedTime = Date()
+        startFaceDetectionTimer()
     }
     
-    /// Stop the AR face tracking session
+    /// Start a timer to check for face detection timeout
+    private func startFaceDetectionTimer() {
+        faceDetectionTimer?.invalidate()
+        faceDetectionTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
+            Task { @MainActor in
+                self?.checkFaceDetectionTimeout()
+            }
+        }
+    }
+    
+    /// Check if face detection has timed out
+    private func checkFaceDetectionTimeout() {
+        let timeout: TimeInterval = 2.0 // seconds
+        if Date().timeIntervalSince(lastFaceDetectedTime) > timeout {
+            isFaceDetected = false
+            faceDetectionWarning = "Face not detected. Please ensure camera is not covered."
+        }
+    }
+    
     func stopTracking() {
+        faceDetectionTimer?.invalidate()
+        faceDetectionTimer = nil
         arSession?.pause()
         arSession = nil
         isTracking = false
+        isFaceDetected = true
+        faceDetectionWarning = nil
         trackingPositionX = 0.0
-        filteredEyePosition = 0.0
         headPositionX = 0.0
         headPositionY = 0.0
         headPositionZ = 0.0
@@ -325,45 +363,6 @@ class HeadTrackingManager: NSObject {
     func resetTracking() {
         stopTracking()
         startTracking()
-    }
-    
-    // MARK: - Calibration
-    
-    /// Start the calibration process
-    func startCalibration() {
-        calibrationState = .lookingLeft
-        filteredEyePosition = 0.0
-    }
-    
-    /// Record the current eye position as the left calibration point
-    func recordLeftPosition() {
-        leftCalibrationValue = rawEyeY
-        calibrationState = .lookingRight
-    }
-    
-    /// Record the current eye position as the right calibration point
-    func recordRightPosition() {
-        rightCalibrationValue = rawEyeY
-        
-        // Ensure left and right are different enough
-        if abs(rightCalibrationValue - leftCalibrationValue) < 0.05 {
-            // Not enough difference, use defaults
-            print("Calibration points too close, using default values.")
-            leftCalibrationValue = -0.15
-            rightCalibrationValue = 0.15
-        }
-        
-        calibrationState = .completed
-        saveCalibration()
-    }
-    
-    /// Reset calibration to start over
-    func resetCalibration() {
-        calibrationState = .notStarted
-        leftCalibrationValue = -0.15
-        rightCalibrationValue = 0.15
-        filteredEyePosition = 0.0
-        clearCalibration()
     }
     
     // MARK: - Head Calibration
@@ -460,43 +459,36 @@ class HeadTrackingManager: NSObject {
             headSensitivityY = 2500.0
         }
         
-        print("Calibrated Sentivities: X=\(headSensitivityX), Y=\(headSensitivityY)")
+        print("Calibrated Sensitivities: X=\(headSensitivityX), Y=\(headSensitivityY)")
         
-        // Save these if we want persistence (omitted for now as per minimal change)
+        // Save head calibration
+        saveHeadCalibration()
     }
     
-    // MARK: - Calibration Persistence
+    // MARK: - Head Calibration Persistence
     
-    /// Save calibration values to UserDefaults
-    private func saveCalibration() {
-        UserDefaults.standard.set(leftCalibrationValue, forKey: calibrationLeftKey)
-        UserDefaults.standard.set(rightCalibrationValue, forKey: calibrationRightKey)
-        UserDefaults.standard.set(true, forKey: calibrationCompletedKey)
-        print("Calibration saved: left=\(leftCalibrationValue), right=\(rightCalibrationValue)")
+    /// Save head calibration sensitivities to UserDefaults
+    private func saveHeadCalibration() {
+        UserDefaults.standard.set(headSensitivityX, forKey: headSensitivityXKey)
+        UserDefaults.standard.set(headSensitivityY, forKey: headSensitivityYKey)
+        UserDefaults.standard.set(true, forKey: headCalibrationCompletedKey)
+        print("Head calibration saved: sensitivityX=\(headSensitivityX), sensitivityY=\(headSensitivityY)")
     }
     
-    /// Load calibration values from UserDefaults
-    private func loadCalibration() {
-        if UserDefaults.standard.bool(forKey: calibrationCompletedKey) {
-            leftCalibrationValue = UserDefaults.standard.float(forKey: calibrationLeftKey)
-            rightCalibrationValue = UserDefaults.standard.float(forKey: calibrationRightKey)
-            calibrationState = .completed
-            print("Calibration loaded: left=\(leftCalibrationValue), right=\(rightCalibrationValue)")
+    /// Load head calibration sensitivities from UserDefaults
+    private func loadHeadCalibration() {
+        if UserDefaults.standard.bool(forKey: headCalibrationCompletedKey) {
+            headSensitivityX = UserDefaults.standard.float(forKey: headSensitivityXKey)
+            headSensitivityY = UserDefaults.standard.float(forKey: headSensitivityYKey)
+            
+            // Ensure sensitivities are valid (not zero)
+            if headSensitivityX <= 0 { headSensitivityX = 2500.0 }
+            if headSensitivityY <= 0 { headSensitivityY = 2500.0 }
+            
+            print("Head calibration loaded: sensitivityX=\(headSensitivityX), sensitivityY=\(headSensitivityY)")
         } else {
-            // First time or no calibration: use sensible defaults and allow starting
-            leftCalibrationValue = -0.15
-            rightCalibrationValue = 0.15
-            calibrationState = .completed
-            print("No saved calibration found. Using defaults: left=-0.15, right=0.15")
+            print("No saved head calibration found. Using defaults.")
         }
-    }
-    
-    /// Clear saved calibration from UserDefaults
-    private func clearCalibration() {
-        UserDefaults.standard.removeObject(forKey: calibrationLeftKey)
-        UserDefaults.standard.removeObject(forKey: calibrationRightKey)
-        UserDefaults.standard.removeObject(forKey: calibrationCompletedKey)
-        print("Calibration cleared")
     }
 }
     
@@ -514,8 +506,16 @@ extension HeadTrackingManager: ARSessionDelegate {
         // Y = Yaw (Shaking No)
         // Z = Roll (Tilting head sideways)
         let rotation = faceAnchor.transform.eulerAngles
+        let isTrackingFace = faceAnchor.isTracked
 
         Task { @MainActor in
+            if isTrackingFace {
+                self.lastFaceDetectedTime = Date()
+                if !self.isFaceDetected {
+                    self.isFaceDetected = true
+                    self.faceDetectionWarning = nil
+                }
+            }
             self.processHeadPose(rotation: rotation)
         }
     }

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5EC0FC2CED81FAFCAEAA6FCB /* LeaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B8F71C26CADE25AEACB7F3 /* LeaderboardView.swift */; };
+		9799F62DE4D23A6A8F03BA34 /* LeaderboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C58AB041406B6A12D6D731 /* LeaderboardViewModel.swift */; };
 		F518E4241982014000C8A12D /* swallow_trimmed.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F518E4231982014000C8A12D /* swallow_trimmed.m4a */; };
 		F518E4261982270C00C8A12D /* Bubble.png in Resources */ = {isa = PBXBuildFile; fileRef = F518E4251982270C00C8A12D /* Bubble.png */; };
 		F518E42819822D9100C8A12D /* bubble.wav in Resources */ = {isa = PBXBuildFile; fileRef = F518E42719822D9100C8A12D /* bubble.wav */; };
@@ -166,6 +168,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		89B8F71C26CADE25AEACB7F3 /* LeaderboardView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LeaderboardView.swift; path = HoverBird/LeaderboardView.swift; sourceTree = SOURCE_ROOT; };
+		B5C58AB041406B6A12D6D731 /* LeaderboardViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LeaderboardViewModel.swift; path = HoverBird/LeaderboardViewModel.swift; sourceTree = SOURCE_ROOT; };
 		F518E4231982014000C8A12D /* swallow_trimmed.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = swallow_trimmed.m4a; sourceTree = "<group>"; };
 		F518E4251982270C00C8A12D /* Bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bubble.png; sourceTree = "<group>"; };
 		F518E42719822D9100C8A12D /* bubble.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bubble.wav; sourceTree = "<group>"; };
@@ -468,6 +472,8 @@
 				F53CCA8E194D2F3B00A9AB63 /* Images.xcassets */,
 				F53CCA75194D2F3B00A9AB63 /* Supporting Files */,
 				F5C676C82F2FD90900E4AF7A /* HoverSharky-Bridging-Header.h */,
+				89B8F71C26CADE25AEACB7F3 /* LeaderboardView.swift */,
+				B5C58AB041406B6A12D6D731 /* LeaderboardViewModel.swift */,
 			);
 			path = HoverBird;
 			sourceTree = "<group>";
@@ -937,6 +943,8 @@
 				F5354EA7194FE3510049F406 /* UIImage+ImageEffects.m in Sources */,
 				F5E84530196A129D007738C6 /* HelpVideoVCViewController.m in Sources */,
 				F5C676C72F2FD90500E4AF7A /* HeadTrackingManager.swift in Sources */,
+				5EC0FC2CED81FAFCAEAA6FCB /* LeaderboardView.swift in Sources */,
+				9799F62DE4D23A6A8F03BA34 /* LeaderboardViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

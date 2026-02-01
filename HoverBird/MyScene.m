@@ -80,6 +80,7 @@
     float sharkScale;
     SKAction* _moveBubbleAndRemove;
     SKLabelNode* _calibrationLabel;
+    SKLabelNode* _faceWarningLabel;
 }
 @end
 
@@ -956,7 +957,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
     SKLabelNode *gameOverLabel = [SKLabelNode labelNodeWithFontNamed:@"MarkerFelt-Wide"];
     gameOverLabel.text = @"GAME OVER";
     gameOverLabel.fontSize = 60;
-    gameOverLabel.fontColor = [SKColor redColor];
+    gameOverLabel.fontColor = [SKColor purpleColor];
     gameOverLabel.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
     gameOverLabel.zPosition = 100;
     gameOverLabel.name = @"GameOverLabel";
@@ -970,14 +971,12 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
 }
 
 -(void)showLeaderboard {
-    GKGameCenterViewController *gcViewController = [[GKGameCenterViewController alloc] init];
-    gcViewController.gameCenterDelegate = self;
-    gcViewController.viewState = GKGameCenterViewControllerStateLeaderboards;
-    gcViewController.leaderboardIdentifier = @"HoverSharkyLeaderBoardID"; // Ensure this matches constant in ScoresViewController if needed
+    // Use custom SwiftUI leaderboard
+    UIViewController *leaderboardVC = [LeaderboardFactory createLeaderboardViewController];
     
     // Get the root view controller to present
     UIViewController *rootVC = self.view.window.rootViewController;
-    [rootVC presentViewController:gcViewController animated:YES completion:nil];
+    [rootVC presentViewController:leaderboardVC animated:YES completion:nil];
 }
 
 - (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController {
@@ -1061,6 +1060,36 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                 [difficultyButton setHidden:NO];
                 [hoverButton setHidden:NO];
             }
+        }
+    }
+    
+    // Show face detection warning if face not detected during gameplay
+    if (isGameInProgress && self.headTracker && !self.headTracker.isFaceDetected) {
+        if (!_faceWarningLabel) {
+            _faceWarningLabel = [SKLabelNode labelNodeWithFontNamed:@"Helvetica-Bold"];
+            _faceWarningLabel.fontSize = 18;
+            _faceWarningLabel.fontColor = [SKColor whiteColor];
+            _faceWarningLabel.position = CGPointMake(CGRectGetMidX(self.frame), self.frame.size.height - 60);
+            _faceWarningLabel.zPosition = 1000;
+            _faceWarningLabel.numberOfLines = 2;
+            _faceWarningLabel.preferredMaxLayoutWidth = self.frame.size.width - 40;
+            
+            // Add background
+            SKShapeNode *background = [SKShapeNode shapeNodeWithRectOfSize:CGSizeMake(self.frame.size.width - 20, 50) cornerRadius:10];
+            background.fillColor = [[SKColor redColor] colorWithAlphaComponent:0.8];
+            background.strokeColor = [SKColor clearColor];
+            background.position = CGPointMake(0, 5);
+            background.zPosition = -1;
+            background.name = @"warningBackground";
+            [_faceWarningLabel addChild:background];
+            
+            [self addChild:_faceWarningLabel];
+        }
+        _faceWarningLabel.text = @"⚠️ Face not detected. Ensure camera is not covered.";
+        _faceWarningLabel.hidden = NO;
+    } else {
+        if (_faceWarningLabel) {
+            _faceWarningLabel.hidden = YES;
         }
     }
 }
