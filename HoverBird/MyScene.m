@@ -577,11 +577,13 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
 //        groundTexture.filteringMode = SKTextureFilteringNearest;
         float groundScale;
         if (isIPAD)
-            groundScale = 0.3*4;
+            groundScale = 0.3*4 * 1.25;
         else
-            groundScale = .15*4;
+            groundScale = .15*4 * 1.25; // Increase scale by 25% to extend height
         
-        groundHeight = groundTexture.size.height*groundScale;
+        // Logical height for game mechanics (keep roughly consistent with visual top relative to screen bottom, but adjusted for shift)
+        // We shift sprite down by ~30pts. Visual top is at (Height - 30).
+        groundHeight = groundTexture.size.height*groundScale - 30;
 
         SKAction* moveGroundSprite = [SKAction moveByX:-groundTexture.size.width*groundScale y:0 duration:speedScale*0.02 * groundTexture.size.width*groundScale];
         SKAction* resetGroundSprite = [SKAction moveByX:groundTexture.size.width*groundScale y:0 duration:0];
@@ -590,7 +592,8 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
         for( int i = 0; i < 2 + self.frame.size.width / ( groundTexture.size.width * groundScale ); ++i ) {
             SKSpriteNode* sprite = [SKSpriteNode spriteNodeWithTexture:groundTexture];
             [sprite setScale:groundScale];
-            sprite.position = CGPointMake(i * sprite.size.width, sprite.size.height / 2);
+            // Shift down by 30 points to cover the bottom safe area
+            sprite.position = CGPointMake(i * sprite.size.width, sprite.size.height / 2 - 30);
             [sprite runAction:moveGroundSpritesForever];
             [_moving addChild:sprite];
         }
@@ -632,6 +635,11 @@ static const uint32_t worldBoundaryUpCategory = 1 << 6;
             skylineScale = 1.5;
         else
             skylineScale = .63;
+        
+        // Ensure skyline covers the full screen height
+        if (skylineTexture.size.height * skylineScale < self.size.height) {
+            skylineScale = self.size.height / skylineTexture.size.height;
+        }
         
         SKAction* moveSkylineSprite = [SKAction moveByX:-skylineTexture.size.width*skylineScale y:0 duration:speedScale*0.1 * skylineTexture.size.width*skylineScale];
         SKAction* resetSkylineSprite = [SKAction moveByX:skylineTexture.size.width*skylineScale y:0 duration:0];
