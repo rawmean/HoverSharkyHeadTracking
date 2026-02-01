@@ -17,7 +17,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "964"
             endingLineNumber = "964"
-            landmarkName = "-update:"
+            landmarkName = "-showGameOver"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

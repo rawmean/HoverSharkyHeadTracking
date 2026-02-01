@@ -28,7 +28,7 @@
 #define BARREL_SCORE  10
 #define TORPEDO_SCORE 15
 
-@interface MyScene ()<SKPhysicsContactDelegate> {
+@interface MyScene ()<SKPhysicsContactDelegate, GKGameCenterControllerDelegate> {
     SKSpriteNode* _shark;
     NSArray *sharkTexturesNormal;
     NSArray *fishTextures;
@@ -934,8 +934,9 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                     if (numLivesLeft == 0) {
                         // Game over
                         [self updateAchievements];
-                        [self runAction:gameOverSound];
-                        [self performSelector:@selector(restartGame) withObject:nil afterDelay:2];
+                        [self showGameOver];
+                        //[self runAction:gameOverSound];
+                        //[self performSelector:@selector(restartGame) withObject:nil afterDelay:2];
                         isTouchEnabled = YES;
                     }
                     else {
@@ -949,7 +950,44 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
     }
 }
 
+#pragma mark - Game Over & Leaderboard
+
+-(void)showGameOver {
+    SKLabelNode *gameOverLabel = [SKLabelNode labelNodeWithFontNamed:@"MarkerFelt-Wide"];
+    gameOverLabel.text = @"GAME OVER";
+    gameOverLabel.fontSize = 60;
+    gameOverLabel.fontColor = [SKColor redColor];
+    gameOverLabel.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
+    gameOverLabel.zPosition = 100;
+    gameOverLabel.name = @"GameOverLabel";
+    [self addChild:gameOverLabel];
+    
+    [self runAction:[SKAction sequence:@[[SKAction scaleTo:1.2 duration:0.2], [SKAction scaleTo:1.0 duration:0.2]]]];
+    [self runAction:gameOverSound];
+    
+    // Show leaderboard after delay
+    [self performSelector:@selector(showLeaderboard) withObject:nil afterDelay:2.0];
+}
+
+-(void)showLeaderboard {
+    GKGameCenterViewController *gcViewController = [[GKGameCenterViewController alloc] init];
+    gcViewController.gameCenterDelegate = self;
+    gcViewController.viewState = GKGameCenterViewControllerStateLeaderboards;
+    gcViewController.leaderboardIdentifier = @"HoverSharkyLeaderBoardID"; // Ensure this matches constant in ScoresViewController if needed
+    
+    // Get the root view controller to present
+    UIViewController *rootVC = self.view.window.rootViewController;
+    [rootVC presentViewController:gcViewController animated:YES completion:nil];
+}
+
+- (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController {
+    [gameCenterViewController dismissViewControllerAnimated:YES completion:^{
+        [self restartGame];
+    }];
+}
+
 -(void) restartGame {
+    [[self childNodeWithName:@"GameOverLabel"] removeFromParent]; // Remove label if it exists
     [self.scoreDelegate didFinishGameWithScore:_score];
     [[self childNodeWithName:@"restartButtonNode"] removeFromParent];
     [self resetScene];
