@@ -14,6 +14,7 @@ struct SettingsView: View {
     @State private var showMailError = false
     @State private var showPaywall = false
     @State private var showHowToPlay = false
+    @State private var showLeaderboard = false
     @State private var storeManager = StoreManager.shared
     @State private var isMusicEnabled: Bool = GameSettingsManager.shared.isMusicEnabled
     @State private var isHandTappingEnabled: Bool = GameSettingsManager.shared.isHandTappingEnabled
@@ -71,6 +72,19 @@ struct SettingsView: View {
                         .tint(.cyan)
                         .onChange(of: isHandTappingEnabled) { _, newValue in
                             GameSettingsManager.shared.isHandTappingEnabled = newValue
+                        }
+                        
+                        Button(action: { showLeaderboard = true }) {
+                            HStack {
+                                Image(systemName: "trophy.fill")
+                                    .foregroundColor(.yellow)
+                                    .frame(width: 30)
+                                Text("Leaderboard")
+                                    .foregroundColor(.white)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.cyan.opacity(0.5))
+                            }
                         }
                     } header: {
                         Text("Game Settings")
@@ -174,6 +188,9 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showHowToPlay) {
             HowToPlayView()
+        }
+        .sheet(isPresented: $showLeaderboard) {
+            LeaderboardView()
         }
         .alert("Cannot Send Email", isPresented: $showMailError) {
             Button("OK", role: .cancel) { }

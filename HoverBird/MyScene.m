@@ -299,6 +299,12 @@ static const uint32_t submarineCategory = 1 << 7;
     // Read settings from GameSettingsManager
     isMusicEnabled = [[GameSettingsManager shared] isMusicEnabled];
     isHoverEnabled = [[GameSettingsManager shared] isHeadTrackingEnabled];
+    
+    // Stop music if disabled
+    if (!isMusicEnabled) {
+        [gameSceneLoop stop];
+        [gameSceneLoop2 stop];
+    }
 
     if (isCameraAvailable) {
         [self addChild: [self calibrateButtonNode]];
@@ -988,7 +994,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                 
                 if ( (contact.bodyA.categoryBitMask & fishCategory ) == fishCategory) {
                     [contact.bodyA.node removeFromParent];
-                    NSLog(@"Fish type: %@", contact.bodyA.node.name);
+//                    NSLog(@"Fish type: %@", contact.bodyA.node.name);
                     if ([contact.bodyA.node.name hasPrefix:@"medium"])
                         [self runAction:bigGulpSound];
                     else
@@ -996,7 +1002,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                 }
                 if ( (contact.bodyB.categoryBitMask & fishCategory ) == fishCategory) {
                     [contact.bodyB.node removeFromParent];
-                    NSLog(@"Fish type: %@", contact.bodyB.node.name);
+//                    NSLog(@"Fish type: %@", contact.bodyB.node.name);
                     if ([contact.bodyB.node.name hasPrefix:@"medium"])
                         [self runAction:bigGulpSound];
                     else
@@ -1080,6 +1086,12 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
     // Increment round count for paywall tracking
     [[GameRoundTracker shared] incrementRoundCount];
     
+    // Update local high score
+    [[GameSettingsManager shared] updateHighScoreIfNeeded:_score];
+    
+    // Submit score to Game Center
+    [self submitScoreToGameCenter:_score];
+    
     SKLabelNode *gameOverLabel = [SKLabelNode labelNodeWithFontNamed:@"MarkerFelt-Wide"];
     gameOverLabel.text = @"GAME OVER";
     gameOverLabel.fontSize = 60;
@@ -1097,6 +1109,26 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
     
     [self runAction:[SKAction sequence:@[[SKAction scaleTo:1.2 duration:0.2], [SKAction scaleTo:1.0 duration:0.2]]]];
     [self runAction:gameOverSound];
+}
+
+// Submit score to Game Center
+-(void)submitScoreToGameCenter:(NSInteger)score {
+    if (![GKLocalPlayer localPlayer].isAuthenticated) {
+        NSLog(@"Game Center: Not authenticated, cannot submit score");
+        return;
+    }
+    
+    GKScore *scoreReporter = [[GKScore alloc] initWithLeaderboardIdentifier:@"HoverSharkyLeaderBoardID"];
+    scoreReporter.value = score;
+    scoreReporter.context = 0;
+    
+    [GKScore reportScores:@[scoreReporter] withCompletionHandler:^(NSError *error) {
+        if (error != nil) {
+            NSLog(@"Game Center: Error submitting score: %@", error.localizedDescription);
+        } else {
+            NSLog(@"Game Center: Successfully submitted score %ld", (long)score);
+        }
+    }];
 }
 
 -(void)showLeaderboard {
@@ -1226,11 +1258,11 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
         float headX = self.headTracker.headPositionX;
         float headY = self.headTracker.headPositionY;
         
-        // Debug logging (throttled)
-        static int logCounter = 0;
-        if (logCounter++ % 60 == 0) {
-            NSLog(@"HeadTracking: X=%.4f, Y=%.4f", headX, headY);
-        }
+//        // Debug logging (throttled)
+//        static int logCounter = 0;
+//        if (logCounter++ % 60 == 0) {
+//            NSLog(@"HeadTracking: X=%.4f, Y=%.4f", headX, headY);
+//        }
 
         // Map Head X/Y to Velocity
         // Sensitivity factors - Increased significantly to respond to small head movements (in meters)

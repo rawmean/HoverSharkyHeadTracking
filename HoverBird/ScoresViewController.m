@@ -73,12 +73,9 @@
     
     self.backgroundImage.image = _bgImage;
     
-//    NSInteger highestScore = [[NSUserDefaults standardUserDefaults] integerForKey:@"highestScore"];
-//    highestScore = MAX(highestScore, self.score);
-//
-//    [[NSUserDefaults standardUserDefaults] setInteger:highestScore forKey:@"highestScore"];
-//    [[NSUserDefaults standardUserDefaults]  synchronize];
-//    maxScore = highestScore;
+    // Update local high score
+    [[GameSettingsManager shared] updateHighScoreIfNeeded:self.score];
+    
     [self reportScore:self.score forLeaderboardID:LEADERBOARD_ID];
 
     [self updateHighestScore];
@@ -158,12 +155,15 @@
 {
     GKScore *scoreReporter = [[GKScore alloc] initWithLeaderboardIdentifier: identifier];
     scoreReporter.value = score;
-//    scoreReporter.value = 22; // TODO: remove this
     scoreReporter.context = 0;
     
     NSArray *scores = @[scoreReporter];
-    [GKScore  reportScores:scores withCompletionHandler:^(NSError *error) {
-//        [self presentLeaderboards];
+    [GKScore reportScores:scores withCompletionHandler:^(NSError *error) {
+        if (error != nil) {
+            NSLog(@"Error reporting score to Game Center: %@", error.localizedDescription);
+        } else {
+            NSLog(@"Successfully submitted score %lld to Game Center", score);
+        }
     }];
 }
 

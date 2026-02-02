@@ -79,14 +79,12 @@ struct LeaderboardView: View {
                 } else {
                     ScrollView {
                         VStack(spacing: 16) {
-                            // Your Stats Section
-                            if let localPlayer = viewModel.localPlayerEntry {
-                                YourStatsCard(
-                                    rank: localPlayer.rank,
-                                    highestScore: localPlayer.score,
-                                    currentScore: currentScore
-                                )
-                            }
+                            // Your Stats Section - show even if no leaderboard entry yet
+                            YourStatsCard(
+                                rank: viewModel.localPlayerEntry?.rank ?? 0,
+                                bestScore: viewModel.bestScore,
+                                currentScore: currentScore
+                            )
                             
                             // Leaderboard List
                             LazyVStack(spacing: 12) {
@@ -96,19 +94,6 @@ struct LeaderboardView: View {
                             }
                         }
                         .padding()
-                    }
-                }
-                
-                // Local Player Status (Fixed at bottom) - only show if not anonymous
-                if let localPlayer = viewModel.localPlayerEntry,
-                   localPlayer.displayName != "Anonymous" {
-                    VStack(spacing: 0) {
-                        Divider()
-                            .background(Color.white.opacity(0.3))
-                        LeaderboardRow(entry: localPlayer, isLocalPlayer: true)
-                            .padding()
-                            .background(Color.black)
-                            .background(Color.white.opacity(0.1))
                     }
                 }
             }
@@ -124,8 +109,13 @@ struct LeaderboardView: View {
 
 struct YourStatsCard: View {
     let rank: Int
-    let highestScore: Int
+    let bestScore: Int
     let currentScore: Int
+    
+    // Display rank, or "—" if not ranked yet
+    private var rankDisplay: String {
+        rank > 0 ? "#\(rank)" : "—"
+    }
     
     var body: some View {
         VStack(spacing: 16) {
@@ -134,8 +124,8 @@ struct YourStatsCard: View {
                 .foregroundColor(.white)
             
             HStack(spacing: 24) {
-                StatItem(title: "Rank", value: "#\(rank)", color: rankColor(rank))
-                StatItem(title: "Best", value: "\(highestScore)", color: .yellow)
+                StatItem(title: "Rank", value: rankDisplay, color: rankColor(rank))
+                StatItem(title: "Best", value: "\(bestScore)", color: .yellow)
                 StatItem(title: "Current", value: "\(currentScore)", color: .cyan)
             }
         }
@@ -189,6 +179,11 @@ struct LeaderboardRow: View {
     let entry: LeaderboardViewModel.LeaderboardEntry
     var isLocalPlayer: Bool = false
     
+    // Determine if this row should be highlighted as local player
+    private var shouldHighlight: Bool {
+        isLocalPlayer || entry.isLocalPlayer
+    }
+    
     var body: some View {
         HStack(spacing: 16) {
             // Rank
@@ -232,11 +227,11 @@ struct LeaderboardRow: View {
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(isLocalPlayer ? Color.blue.opacity(0.3) : Color.white.opacity(0.08))
+                .fill(shouldHighlight ? Color.blue.opacity(0.3) : Color.white.opacity(0.08))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(isLocalPlayer ? Color.blue.opacity(0.5) : Color.clear, lineWidth: 1)
+                .stroke(shouldHighlight ? Color.blue.opacity(0.5) : Color.clear, lineWidth: 1)
         )
     }
     

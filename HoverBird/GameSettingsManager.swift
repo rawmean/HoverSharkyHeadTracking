@@ -43,4 +43,23 @@ import Foundation
     @objc var isHeadTrackingEnabled: Bool {
         return !isHandTappingEnabled
     }
+    
+    // MARK: - High Score Tracking
+    
+    private let localHighScoreKey = "localHighScore"
+    
+    /// The local high score - persisted independently of Game Center
+    @objc var localHighScore: Int {
+        get { UserDefaults.standard.integer(forKey: localHighScoreKey) }
+        set { UserDefaults.standard.set(newValue, forKey: localHighScoreKey) }
+    }
+    
+    /// Updates the local high score if the new score is higher. Returns true if updated.
+    @objc func updateHighScoreIfNeeded(_ score: Int) -> Bool {
+        if score > localHighScore {
+            localHighScore = score
+            return true
+        }
+        return false
+    }
 }

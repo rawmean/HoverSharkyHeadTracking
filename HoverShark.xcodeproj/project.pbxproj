@@ -183,7 +183,6 @@
 /* Begin PBXFileReference section */
 		0E17D68DB723BD32FF189E59 /* YellowSubmarine.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = YellowSubmarine.png; sourceTree = "<group>"; };
 		14E897A6621CCA0D22BC8F44 /* PaywallPresenter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PaywallPresenter.swift; sourceTree = "<group>"; };
-		DD1C2B3A4D5E6F7890AABBCC /* GameSettingsManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GameSettingsManager.swift; sourceTree = "<group>"; };
 		26300C5583FD03CBC75FB4D0 /* RedSubmarine.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = RedSubmarine.png; sourceTree = "<group>"; };
 		3ED314D6F0501D199D038A15 /* StylishPaywallView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StylishPaywallView.swift; sourceTree = "<group>"; };
 		439EA23133288262B2383CCF /* KeychainHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
@@ -192,6 +191,7 @@
 		89B8F71C26CADE25AEACB7F3 /* LeaderboardView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LeaderboardView.swift; path = HoverBird/LeaderboardView.swift; sourceTree = SOURCE_ROOT; };
 		AD7EF513254130EAD60F2690 /* GameRoundTracker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GameRoundTracker.swift; sourceTree = "<group>"; };
 		B5C58AB041406B6A12D6D731 /* LeaderboardViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LeaderboardViewModel.swift; path = HoverBird/LeaderboardViewModel.swift; sourceTree = SOURCE_ROOT; };
+		DD1C2B3A4D5E6F7890AABBCC /* GameSettingsManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GameSettingsManager.swift; sourceTree = "<group>"; };
 		E2FCFC062149761301FDE43D /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		F518E4231982014000C8A12D /* swallow_trimmed.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = swallow_trimmed.m4a; sourceTree = "<group>"; };
 		F518E4251982270C00C8A12D /* Bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bubble.png; sourceTree = "<group>"; };
@@ -1182,6 +1182,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HoverBird/HoverShark-Prefix.pch";
 				INFOPLIST_FILE = "HoverBird/HoverShark-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Shark;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.maadotaa.hoverSharky;
@@ -1215,6 +1217,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HoverBird/HoverShark-Prefix.pch";
 				INFOPLIST_FILE = "HoverBird/HoverShark-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Shark;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.maadotaa.hoverSharky;
