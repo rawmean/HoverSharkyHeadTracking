@@ -7,10 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03495355DE1E41F829EE6B75 /* PaywallPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E897A6621CCA0D22BC8F44 /* PaywallPresenter.swift */; };
+		1A2B3C4D5E6F7890AABBCCDD /* GameSettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1C2B3A4D5E6F7890AABBCC /* GameSettingsManager.swift */; };
+		259E94F5E8664FD69C42650F /* RedSubmarine.png in Resources */ = {isa = PBXBuildFile; fileRef = 26300C5583FD03CBC75FB4D0 /* RedSubmarine.png */; };
+		31A2AC061D06BC734B7DB657 /* SettingsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E822CAC14893407004B8EF /* SettingsPresenter.swift */; };
+		43CA1F023416327719AB2797 /* YellowSubmarine.png in Resources */ = {isa = PBXBuildFile; fileRef = 0E17D68DB723BD32FF189E59 /* YellowSubmarine.png */; };
+		4908E88B1FF70FD9ED6A0855 /* GameRoundTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD7EF513254130EAD60F2690 /* GameRoundTracker.swift */; };
 		5EC0FC2CED81FAFCAEAA6FCB /* LeaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B8F71C26CADE25AEACB7F3 /* LeaderboardView.swift */; };
-		7CEBDBF1FE4A4D1A250093AF /* YellowSubmarine.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFB3BF5E202E7CE950B494E /* YellowSubmarine.png */; };
+		64E4EB0B1C164912EDFF3E4A /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439EA23133288262B2383CCF /* KeychainHelper.swift */; };
+		6A037E3144D62CE4F1D4CBA2 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB66B614A42DED8E29EFE17 /* StoreManager.swift */; };
+		7BAE6F0B72F426A278B4C519 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FCFC062149761301FDE43D /* SettingsView.swift */; };
+		8385C159B7C0F53D2BC6EE21 /* StylishPaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED314D6F0501D199D038A15 /* StylishPaywallView.swift */; };
 		9799F62DE4D23A6A8F03BA34 /* LeaderboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C58AB041406B6A12D6D731 /* LeaderboardViewModel.swift */; };
-		B80E442CBBC45311C8CBF961 /* RedSubmarine.png in Resources */ = {isa = PBXBuildFile; fileRef = 6698E52751CBF249F70F7A09 /* RedSubmarine.png */; };
 		F518E4241982014000C8A12D /* swallow_trimmed.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F518E4231982014000C8A12D /* swallow_trimmed.m4a */; };
 		F518E4261982270C00C8A12D /* Bubble.png in Resources */ = {isa = PBXBuildFile; fileRef = F518E4251982270C00C8A12D /* Bubble.png */; };
 		F518E42819822D9100C8A12D /* bubble.wav in Resources */ = {isa = PBXBuildFile; fileRef = F518E42719822D9100C8A12D /* bubble.wav */; };
@@ -145,6 +153,7 @@
 		F5C676C72F2FD90500E4AF7A /* HeadTrackingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C676C62F2FD90500E4AF7A /* HeadTrackingManager.swift */; };
 		F5C676CB2F300EF100E4AF7A /* shark2.icon in Resources */ = {isa = PBXBuildFile; fileRef = F5C676CA2F300EF100E4AF7A /* shark2.icon */; };
 		F5C676CD2F300F3200E4AF7A /* shark.icon in Resources */ = {isa = PBXBuildFile; fileRef = F5C676CC2F300F3200E4AF7A /* shark.icon */; };
+		F5C677002F311EBB00E4AF7A /* sharkyStore.storekit in Resources */ = {isa = PBXBuildFile; fileRef = F5C676FF2F311EBB00E4AF7A /* sharkyStore.storekit */; };
 		F5D56B10194E89D30063D43A /* ScoresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D56B0F194E89D30063D43A /* ScoresViewController.m */; };
 		F5D56B18194EBBEB0063D43A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D56B17194EBBEB0063D43A /* iAd.framework */; };
 		F5E844FA19687EE7007738C6 /* Easy.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E844F819687EE7007738C6 /* Easy.png */; };
@@ -172,10 +181,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		6698E52751CBF249F70F7A09 /* RedSubmarine.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = RedSubmarine.png; sourceTree = "<group>"; };
+		0E17D68DB723BD32FF189E59 /* YellowSubmarine.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = YellowSubmarine.png; sourceTree = "<group>"; };
+		14E897A6621CCA0D22BC8F44 /* PaywallPresenter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PaywallPresenter.swift; sourceTree = "<group>"; };
+		DD1C2B3A4D5E6F7890AABBCC /* GameSettingsManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GameSettingsManager.swift; sourceTree = "<group>"; };
+		26300C5583FD03CBC75FB4D0 /* RedSubmarine.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = RedSubmarine.png; sourceTree = "<group>"; };
+		3ED314D6F0501D199D038A15 /* StylishPaywallView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StylishPaywallView.swift; sourceTree = "<group>"; };
+		439EA23133288262B2383CCF /* KeychainHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
+		6FB66B614A42DED8E29EFE17 /* StoreManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
+		88E822CAC14893407004B8EF /* SettingsPresenter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SettingsPresenter.swift; sourceTree = "<group>"; };
 		89B8F71C26CADE25AEACB7F3 /* LeaderboardView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LeaderboardView.swift; path = HoverBird/LeaderboardView.swift; sourceTree = SOURCE_ROOT; };
+		AD7EF513254130EAD60F2690 /* GameRoundTracker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GameRoundTracker.swift; sourceTree = "<group>"; };
 		B5C58AB041406B6A12D6D731 /* LeaderboardViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LeaderboardViewModel.swift; path = HoverBird/LeaderboardViewModel.swift; sourceTree = SOURCE_ROOT; };
-		BAFB3BF5E202E7CE950B494E /* YellowSubmarine.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = YellowSubmarine.png; sourceTree = "<group>"; };
+		E2FCFC062149761301FDE43D /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		F518E4231982014000C8A12D /* swallow_trimmed.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = swallow_trimmed.m4a; sourceTree = "<group>"; };
 		F518E4251982270C00C8A12D /* Bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bubble.png; sourceTree = "<group>"; };
 		F518E42719822D9100C8A12D /* bubble.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bubble.wav; sourceTree = "<group>"; };
@@ -318,6 +335,7 @@
 		F5C676C92F2FDACF00E4AF7A /* HoverSharky.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HoverSharky.entitlements; sourceTree = "<group>"; };
 		F5C676CA2F300EF100E4AF7A /* shark2.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = shark2.icon; sourceTree = "<group>"; };
 		F5C676CC2F300F3200E4AF7A /* shark.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = shark.icon; sourceTree = "<group>"; };
+		F5C676FF2F311EBB00E4AF7A /* sharkyStore.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = sharkyStore.storekit; sourceTree = "<group>"; };
 		F5D56B0E194E89D30063D43A /* ScoresViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoresViewController.h; sourceTree = "<group>"; };
 		F5D56B0F194E89D30063D43A /* ScoresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoresViewController.m; sourceTree = "<group>"; };
 		F5D56B17194EBBEB0063D43A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
@@ -465,6 +483,7 @@
 			isa = PBXGroup;
 			children = (
 				F5C676C62F2FD90500E4AF7A /* HeadTrackingManager.swift */,
+				F5C676FF2F311EBB00E4AF7A /* sharkyStore.storekit */,
 				F5354EA8194FE3580049F406 /* BlurEffects */,
 				F53CCA80194D2F3B00A9AB63 /* Main_iPhone.storyboard */,
 				F53CCA83194D2F3B00A9AB63 /* Main_iPad.storyboard */,
@@ -484,8 +503,16 @@
 				B5C58AB041406B6A12D6D731 /* LeaderboardViewModel.swift */,
 				F5C676CA2F300EF100E4AF7A /* shark2.icon */,
 				F5C676CC2F300F3200E4AF7A /* shark.icon */,
-				BAFB3BF5E202E7CE950B494E /* YellowSubmarine.png */,
-				6698E52751CBF249F70F7A09 /* RedSubmarine.png */,
+				439EA23133288262B2383CCF /* KeychainHelper.swift */,
+				6FB66B614A42DED8E29EFE17 /* StoreManager.swift */,
+				AD7EF513254130EAD60F2690 /* GameRoundTracker.swift */,
+				3ED314D6F0501D199D038A15 /* StylishPaywallView.swift */,
+				14E897A6621CCA0D22BC8F44 /* PaywallPresenter.swift */,
+				E2FCFC062149761301FDE43D /* SettingsView.swift */,
+				88E822CAC14893407004B8EF /* SettingsPresenter.swift */,
+				DD1C2B3A4D5E6F7890AABBCC /* GameSettingsManager.swift */,
+				0E17D68DB723BD32FF189E59 /* YellowSubmarine.png */,
+				26300C5583FD03CBC75FB4D0 /* RedSubmarine.png */,
 			);
 			path = HoverBird;
 			sourceTree = "<group>";
@@ -880,6 +907,7 @@
 				F538678E19840C760039404F /* exp1-01.png in Resources */,
 				F5F81C611981E62C00072D50 /* Barrel1.png in Resources */,
 				F555DDE81960FCD100E0841A /* a1.png in Resources */,
+				F5C677002F311EBB00E4AF7A /* sharkyStore.storekit in Resources */,
 				F555DDEE1960FCD100E0841A /* a7.png in Resources */,
 				F574E6E3197CF819004644D6 /* goldMine.png in Resources */,
 				F589236D197C420C0064C68B /* column_3a.png in Resources */,
@@ -933,8 +961,8 @@
 				F589236F197C420C0064C68B /* column2a.png in Resources */,
 				F555DE1A196134DE00E0841A /* s3.png in Resources */,
 				F5892375197C857E0064C68B /* bricks_gray_down.png in Resources */,
-				7CEBDBF1FE4A4D1A250093AF /* YellowSubmarine.png in Resources */,
-				B80E442CBBC45311C8CBF961 /* RedSubmarine.png in Resources */,
+				43CA1F023416327719AB2797 /* YellowSubmarine.png in Resources */,
+				259E94F5E8664FD69C42650F /* RedSubmarine.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -961,6 +989,14 @@
 				F5C676C72F2FD90500E4AF7A /* HeadTrackingManager.swift in Sources */,
 				5EC0FC2CED81FAFCAEAA6FCB /* LeaderboardView.swift in Sources */,
 				9799F62DE4D23A6A8F03BA34 /* LeaderboardViewModel.swift in Sources */,
+				64E4EB0B1C164912EDFF3E4A /* KeychainHelper.swift in Sources */,
+				6A037E3144D62CE4F1D4CBA2 /* StoreManager.swift in Sources */,
+				4908E88B1FF70FD9ED6A0855 /* GameRoundTracker.swift in Sources */,
+				8385C159B7C0F53D2BC6EE21 /* StylishPaywallView.swift in Sources */,
+				03495355DE1E41F829EE6B75 /* PaywallPresenter.swift in Sources */,
+				7BAE6F0B72F426A278B4C519 /* SettingsView.swift in Sources */,
+				31A2AC061D06BC734B7DB657 /* SettingsPresenter.swift in Sources */,
+				1A2B3C4D5E6F7890AABBCCDD /* GameSettingsManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

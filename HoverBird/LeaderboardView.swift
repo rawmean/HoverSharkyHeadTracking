@@ -4,6 +4,7 @@ import GameKit
 struct LeaderboardView: View {
     @StateObject private var viewModel = LeaderboardViewModel()
     @Environment(\.dismiss) var dismiss
+    var currentScore: Int = 0
     
     var body: some View {
         ZStack {
@@ -77,9 +78,21 @@ struct LeaderboardView: View {
                     Spacer()
                 } else {
                     ScrollView {
-                        LazyVStack(spacing: 12) {
-                            ForEach(viewModel.players) { entry in
-                                LeaderboardRow(entry: entry)
+                        VStack(spacing: 16) {
+                            // Your Stats Section
+                            if let localPlayer = viewModel.localPlayerEntry {
+                                YourStatsCard(
+                                    rank: localPlayer.rank,
+                                    highestScore: localPlayer.score,
+                                    currentScore: currentScore
+                                )
+                            }
+                            
+                            // Leaderboard List
+                            LazyVStack(spacing: 12) {
+                                ForEach(viewModel.players) { entry in
+                                    LeaderboardRow(entry: entry)
+                                }
                             }
                         }
                         .padding()
@@ -101,8 +114,74 @@ struct LeaderboardView: View {
             }
         }
         .onAppear {
+            viewModel.currentScore = currentScore
             viewModel.loadScores()
         }
+    }
+}
+
+// MARK: - Your Stats Card
+
+struct YourStatsCard: View {
+    let rank: Int
+    let highestScore: Int
+    let currentScore: Int
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("Your Stats")
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundColor(.white)
+            
+            HStack(spacing: 24) {
+                StatItem(title: "Rank", value: "#\(rank)", color: rankColor(rank))
+                StatItem(title: "Best", value: "\(highestScore)", color: .yellow)
+                StatItem(title: "Current", value: "\(currentScore)", color: .cyan)
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(
+                    LinearGradient(
+                        colors: [Color.purple.opacity(0.4), Color.blue.opacity(0.3)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color.white.opacity(0.2), lineWidth: 1)
+        )
+    }
+    
+    private func rankColor(_ rank: Int) -> Color {
+        switch rank {
+        case 1: return .yellow
+        case 2: return .gray
+        case 3: return .orange
+        default: return .white
+        }
+    }
+}
+
+struct StatItem: View {
+    let title: String
+    let value: String
+    let color: Color
+    
+    var body: some View {
+        VStack(spacing: 4) {
+            Text(title)
+                .font(.system(size: 12, weight: .medium))
+                .foregroundColor(.white.opacity(0.7))
+            Text(value)
+                .font(.system(size: 24, weight: .bold, design: .rounded))
+                .foregroundColor(color)
+        }
+        .frame(minWidth: 70)
     }
 }
 
@@ -179,10 +258,15 @@ struct LeaderboardView_Previews: PreviewProvider {
 
 @objc class LeaderboardFactory: NSObject {
     @objc static func createLeaderboardViewController() -> UIViewController {
-        let view = LeaderboardView()
+        return createLeaderboardViewController(currentScore: 0)
+    }
+    
+    @objc static func createLeaderboardViewController(currentScore: Int) -> UIViewController {
+        let view = LeaderboardView(currentScore: currentScore)
         let controller = UIHostingController(rootView: view)
-        controller.modalPresentationStyle = .overFullScreen // or .fullScreen based on preference
-        controller.view.backgroundColor = .clear // Important for glassmorphism
+        controller.modalPresentationStyle = .overFullScreen
+        controller.view.backgroundColor = .clear
         return controller
     }
 }
+

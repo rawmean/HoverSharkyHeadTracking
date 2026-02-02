@@ -8,6 +8,7 @@ class LeaderboardViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var localPlayerEntry: LeaderboardEntry?
+    @Published var currentScore: Int = 0
     
     struct LeaderboardEntry: Identifiable, Sendable {
         let id = UUID()

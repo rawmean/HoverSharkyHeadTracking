@@ -200,6 +200,19 @@ static const uint32_t submarineCategory = 1 << 7;
     return calButton;
 }
 
+//Settings button (gear icon text based)
+- (SKLabelNode *)settingsButtonNode
+{
+    SKLabelNode *settingsButton = [SKLabelNode labelNodeWithFontNamed:@"MarkerFelt-Wide"];
+    settingsButton.text = @"Settings";
+    settingsButton.fontSize = 30;
+    settingsButton.fontColor = [SKColor whiteColor];
+    settingsButton.position = CGPointMake(self.frame.size.width*0.8, self.frame.size.height*0.78);
+    settingsButton.name = @"settingsButtonNode";
+    settingsButton.zPosition = 1.0;
+    return settingsButton;
+}
+
 -(void) waitForRadomTime {
     NSInteger delay =  3.0/_moving.speed;
     [self runAction:[SKAction waitForDuration:delay]];
@@ -280,11 +293,14 @@ static const uint32_t submarineCategory = 1 << 7;
     
     [self addChild: [self startButtonNode]];
     
-    if (!musicButton.parent) [self addChild: musicButton];
-    if (!difficultyButton.parent) [self addChild: difficultyButton];
+    // Add settings button
+    [self addChild: [self settingsButtonNode]];
+
+    // Read settings from GameSettingsManager
+    isMusicEnabled = [[GameSettingsManager shared] isMusicEnabled];
+    isHoverEnabled = [[GameSettingsManager shared] isHeadTrackingEnabled];
 
     if (isCameraAvailable) {
-        if (!hoverButton.parent) [self addChild: hoverButton];
         [self addChild: [self calibrateButtonNode]];
     }
     
@@ -576,16 +592,11 @@ static const uint32_t submarineCategory = 1 << 7;
 -(id)initWithSize:(CGSize)size {
     if (self = [super initWithSize:size]) {
         
-        musicButton = [self MusicButtonNode];
-        difficultyButton = [self DifficultyButtonNode];
-        hoverButton = [self hoverButtonNode];
-        [self addChild: musicButton];
-        [self addChild: difficultyButton];
+        // Read settings from GameSettingsManager
+        isMusicEnabled = [[GameSettingsManager shared] isMusicEnabled];
+        isHoverEnabled = [[GameSettingsManager shared] isHeadTrackingEnabled];
         
-
         isTouchEnabled = YES;
-        isMusicEnabled = YES;
-        isHoverEnabled = YES;
         isGameEasy = YES;
         speedScale = 1.0;
         
@@ -628,12 +639,14 @@ static const uint32_t submarineCategory = 1 << 7;
         // init camera
         isCameraAvailable = [HeadTrackingManager isSupported];
         if (isCameraAvailable) {
-            [self addChild: hoverButton];
             [self addChild: [self calibrateButtonNode]];
             // Helper text or setup if needed
         }
         else
             isHoverEnabled = NO;
+        
+        // Add settings button
+        [self addChild: [self settingsButtonNode]];
         
         totalNumLives = 3;
         numLivesLeft = totalNumLives;
@@ -1064,6 +1077,9 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
 #pragma mark - Game Over & Leaderboard
 
 -(void)showGameOver {
+    // Increment round count for paywall tracking
+    [[GameRoundTracker shared] incrementRoundCount];
+    
     SKLabelNode *gameOverLabel = [SKLabelNode labelNodeWithFontNamed:@"MarkerFelt-Wide"];
     gameOverLabel.text = @"GAME OVER";
     gameOverLabel.fontSize = 60;
@@ -1084,8 +1100,8 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
 }
 
 -(void)showLeaderboard {
-    // Use custom SwiftUI leaderboard
-    UIViewController *leaderboardVC = [LeaderboardFactory createLeaderboardViewController];
+    // Use custom SwiftUI leaderboard with current score
+    UIViewController *leaderboardVC = [LeaderboardFactory createLeaderboardViewControllerWithCurrentScore:_score];
     
     // Get the root view controller to present
     UIViewController *rootVC = self.view.window.rootViewController;
@@ -1157,9 +1173,6 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
             [[self childNodeWithName:@"startButtonNode"] setHidden:YES];
             [[self childNodeWithName:@"restartButtonNode"] setHidden:YES];
             [[self childNodeWithName:@"calibrateButtonNode"] setHidden:YES];
-            [musicButton setHidden:YES];
-            [difficultyButton setHidden:YES];
-            [hoverButton setHidden:YES];
         }
         _calibrationLabel.text = self.headTracker.calibrationStatusMessage;
     } else {
@@ -1171,9 +1184,6 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                 [[self childNodeWithName:@"startButtonNode"] setHidden:NO];
                 [[self childNodeWithName:@"restartButtonNode"] setHidden:NO];
                 [[self childNodeWithName:@"calibrateButtonNode"] setHidden:NO];
-                [musicButton setHidden:NO];
-                [difficultyButton setHidden:NO];
-                [hoverButton setHidden:NO];
             }
         }
     }
@@ -1290,13 +1300,21 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
     SKNode *node = [self nodeAtPoint:location];
 
     if ([node.name isEqualToString:@"startButtonNode"]) {
+        // Check if user can play or needs to see paywall
+        if ([[GameRoundTracker shared] shouldShowPaywall]) {
+            // Show paywall
+            [PaywallPresenter showPaywallFromView:self.view];
+            return;
+        }
+        
+        // Read latest settings before starting game
+        isMusicEnabled = [[GameSettingsManager shared] isMusicEnabled];
+        isHoverEnabled = [[GameSettingsManager shared] isHeadTrackingEnabled];
+        
         [self startSpawning];
         [node removeFromParent];
         [[self childNodeWithName:@"calibrateButtonNode"] removeFromParent]; // Hide calibrate
-        
-        [musicButton removeFromParent];
-        [difficultyButton removeFromParent];
-        [hoverButton removeFromParent];
+        [[self childNodeWithName:@"settingsButtonNode"] removeFromParent]; // Hide settings
         [[self childNodeWithName:@"restartButtonNode"] removeFromParent];
         
         // Disable idle timer
@@ -1311,6 +1329,13 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
     }
     
     if ([node.name isEqualToString:@"playAgainButtonNode"]) {
+        // Check if user can play or needs to see paywall
+        if ([[GameRoundTracker shared] shouldShowPaywall]) {
+            // Show paywall
+            [PaywallPresenter showPaywallFromView:self.view];
+            return;
+        }
+        
         [self restartGame];
         [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
         return;
@@ -1320,53 +1345,15 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
         [self showLeaderboard];
         return;
     }
-    
-    if ([node.name isEqualToString:@"musicButtonNode"]) {
-         // ... existing music toggle logic if any ...
-         // For now, simple toggle
-         isMusicEnabled = !isMusicEnabled;
-         if (isMusicEnabled) {
-              [node runAction:[SKAction setTexture:[SKTexture textureWithImageNamed:@"music.png"]]];
-              [gameSceneLoop play];
-         }
-         else {
-              [node runAction:[SKAction setTexture:[SKTexture textureWithImageNamed:@"no-music.png"]]];
-             [gameSceneLoop stop];
-             [gameSceneLoop2 stop];
-         }
-        // return; // Don't return, as touches often pass through
-    }
-    
-    if ([node.name isEqualToString:@"DifficultyButtonNode"]) {
-        isGameEasy = !isGameEasy;
-        if (isGameEasy) {
-            _moving.speed = 1.0;
-            SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"Easy.png"]];
-            [difficultyButton runAction:changeImage];
-        }
-        else {
-            _moving.speed = HARD_LEVEL_SPEED_FACTOR;
-            SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"Hard.png"]];
-            [difficultyButton runAction:changeImage];
-        }
-        return;
-    }
 
-    if ([node.name isEqualToString:@"hoverButtonNode"]) {
-        isHoverEnabled = !isHoverEnabled;
-        if (isHoverEnabled) {
-            SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"hover.png"]];
-            [hoverButton runAction:changeImage];
-        }
-        else {
-            SKAction *changeImage = [SKAction setTexture:[SKTexture textureWithImageNamed:@"tap.png"]];
-            [hoverButton runAction:changeImage];
-        }
-        return;
-    }
     
     if ([node.name isEqualToString:@"calibrateButtonNode"]) {
         [self.headTracker startHeadCalibration];
+        return;
+    }
+    
+    if ([node.name isEqualToString:@"settingsButtonNode"]) {
+        [SettingsPresenter showSettingsFromView:self.view];
         return;
     }
     
