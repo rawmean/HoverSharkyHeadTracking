@@ -557,6 +557,8 @@ extension HeadTrackingManager: ARSessionDelegate {
 
 extension HeadTrackingManager {
     /// Apply calibration and low-pass filter to raw head pose (rotation)
+    /// Uses an adaptive neutral reference that slowly drifts toward current pose,
+    /// making control independent of absolute head position relative to camera.
     /// - Parameter rotation: Euler angles (x: Pitch, y: Yaw, z: Roll)
     private func processHeadPose(rotation: SIMD3<Float>) {
         
@@ -573,17 +575,22 @@ extension HeadTrackingManager {
             filteredHeadZ = rotation.z
         }
         
-        // Apply smoothing to head rotation
+        // Apply smoothing to head rotation (fast response)
         filteredHeadX = filteredHeadX + headSmoothingFactor * (rotation.y - filteredHeadX)
         filteredHeadY = filteredHeadY + headSmoothingFactor * (rotation.x - filteredHeadY)
         filteredHeadZ = filteredHeadZ + headSmoothingFactor * (rotation.z - filteredHeadZ)
         
-        // Apply offset relative to neutral pose
-        // X: Yaw (Left/Right)
-        // Y: Pitch (Up/Down) - Note: ARKit Pitch might be inverted relative to screen Y.
-        // Usually looking UP is positive Pitch in some systems, or negative?
-        // We will rely on Calibration to determine Min/Max and direction.
+        // Adaptive neutral reference: slowly drift neutral toward current filtered pose
+        // This makes the control relative to recent head position, not absolute camera position
+        // Lower values = slower adaptation = more "absolute" feel
+        // Higher values = faster adaptation = more "relative to body" feel
+        let neutralAdaptRate: Float = 0.01  // Slow drift toward current pose
+        neutralHeadX = neutralHeadX + neutralAdaptRate * (filteredHeadX - neutralHeadX)
+        neutralHeadY = neutralHeadY + neutralAdaptRate * (filteredHeadY - neutralHeadY)
         
+        // Apply offset relative to adaptive neutral pose
+        // X: Yaw (Left/Right)
+        // Y: Pitch (Up/Down)
         headPositionX = filteredHeadX - neutralHeadX
         // Invert Y axis for natural look-up -> go-up feel
         headPositionY = -(filteredHeadY - neutralHeadY)
