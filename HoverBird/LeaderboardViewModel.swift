@@ -68,49 +68,97 @@ class LeaderboardViewModel: ObservableObject {
                 let localPlayerID = localPlayer.gamePlayerID
                 var localPlayerInList = false
                 
+                // First pass: collect all entries and calculate local player's best score
+                var localPlayerBestScore = 0
+                var localPlayerGameCenterRank = 0
+                
                 for entry in entries {
                     let isLocal = entry.player.gamePlayerID == localPlayerID
                     if isLocal {
                         localPlayerInList = true
+                        localPlayerBestScore = max(entry.score, self.localHighScore, self.currentScore)
+                        localPlayerGameCenterRank = entry.rank
+                    }
+                }
+                
+                // If local player not in entries but has a localEntry, get their best score from there
+                if !localPlayerInList, let local = localEntry {
+                    localPlayerBestScore = max(local.score, self.localHighScore, self.currentScore)
+                    localPlayerGameCenterRank = local.rank
+                }
+                
+                // Calculate where the local player's best score would rank
+                // Count how many entries have a score >= local player's best score
+                var calculatedRank = 1
+                for entry in entries {
+                    if entry.player.gamePlayerID != localPlayerID && entry.score >= localPlayerBestScore {
+                        calculatedRank += 1
+                    }
+                }
+                
+                // Second pass: build the player list
+                for entry in entries {
+                    let isLocal = entry.player.gamePlayerID == localPlayerID
+                    
+                    // For local player, use best score, actual alias, and calculated rank
+                    let displayScore: Int
+                    let displayName: String
+                    let displayRank: Int
+                    if isLocal {
+                        displayScore = localPlayerBestScore
+                        displayName = localPlayer.alias
+                        displayRank = calculatedRank
+                    } else {
+                        displayScore = entry.score
+                        displayName = entry.player.alias
+                        displayRank = entry.rank
                     }
                     
                     let newEntry = LeaderboardEntry(
-                        rank: entry.rank,
-                        score: entry.score,
-                        playerAlias: entry.player.alias,
+                        rank: displayRank,
+                        score: displayScore,
+                        playerAlias: displayName,
                         playerID: entry.player.gamePlayerID,
                         image: nil,
                         isLocalPlayer: isLocal
                     )
                     loadedPlayers.append(newEntry)
+                    
+                    // If this is the local player, also set the localPlayerEntry
+                    if isLocal {
+                        self.localPlayerEntry = newEntry
+                    }
                 }
                 
                 // If local player has an entry but isn't in the top entries, add them at correct position
                 if let local = localEntry {
-                    self.localPlayerEntry = LeaderboardEntry(
-                        rank: local.rank,
-                        score: local.score,
-                        playerAlias: local.player.alias,
-                        playerID: local.player.gamePlayerID,
-                        image: nil,
-                        isLocalPlayer: true
-                    )
+                    // Only set localPlayerEntry if not already set from the entries loop
+                    if self.localPlayerEntry == nil {
+                        self.localPlayerEntry = LeaderboardEntry(
+                            rank: calculatedRank,
+                            score: localPlayerBestScore,
+                            playerAlias: localPlayer.alias,
+                            playerID: local.player.gamePlayerID,
+                            image: nil,
+                            isLocalPlayer: true
+                        )
+                    }
                     
                     // Insert local player into list if not already there
                     if !localPlayerInList {
                         let localLeaderboardEntry = LeaderboardEntry(
-                            rank: local.rank,
-                            score: local.score,
-                            playerAlias: local.player.alias,
+                            rank: calculatedRank,
+                            score: localPlayerBestScore,
+                            playerAlias: localPlayer.alias,
                             playerID: local.player.gamePlayerID,
                             image: nil,
                             isLocalPlayer: true
                         )
                         
-                        // Find the correct position based on rank
+                        // Find the correct position based on score (descending order)
                         var insertIndex = loadedPlayers.count
                         for (index, player) in loadedPlayers.enumerated() {
-                            if local.rank < player.rank {
+                            if localPlayerBestScore > player.score {
                                 insertIndex = index
                                 break
                             }
@@ -118,6 +166,9 @@ class LeaderboardViewModel: ObservableObject {
                         loadedPlayers.insert(localLeaderboardEntry, at: insertIndex)
                     }
                 }
+                
+                // Sort by score descending to ensure correct order
+                loadedPlayers.sort { $0.score > $1.score }
                 
                 self.players = loadedPlayers
                 self.isLoading = false
@@ -137,15 +188,19 @@ class LeaderboardViewModel: ObservableObject {
     }
     
     private func loadImages(entries: [GKLeaderboard.Entry], localEntry: GKLeaderboard.Entry?) async {
-        // Load images for entries in the list
-        for (index, entry) in entries.enumerated() {
+        // Load images for entries in the list - match by playerID since list is sorted
+        for entry in entries {
             do {
                 let image = try await entry.player.loadPhoto(for: .normal)
-                if index < self.players.count {
+                let playerID = entry.player.gamePlayerID
+                
+                // Find this player in our sorted list and update their image
+                if let index = self.players.firstIndex(where: { $0.playerID == playerID }) {
                     self.players[index].image = image
                 }
                 
-                if self.localPlayerEntry?.playerID == entry.player.gamePlayerID {
+                // Also update localPlayerEntry if this is the local player
+                if self.localPlayerEntry?.playerID == playerID {
                     self.localPlayerEntry?.image = image
                 }
             } catch {
@@ -153,23 +208,22 @@ class LeaderboardViewModel: ObservableObject {
             }
         }
         
-        // Load local player's image if they're not in the top entries
-        if let local = localEntry {
-            let localPlayerID = local.player.gamePlayerID
-            let isInList = entries.contains { $0.player.gamePlayerID == localPlayerID }
-            
-            if !isInList {
-                do {
-                    let image = try await local.player.loadPhoto(for: .normal)
-                    self.localPlayerEntry?.image = image
-                    
-                    // Update in players list too
-                    if let index = self.players.firstIndex(where: { $0.playerID == localPlayerID }) {
-                        self.players[index].image = image
-                    }
-                } catch {
-                    // Photo loading failed
+        // Load local player's image directly from GKLocalPlayer
+        let localPlayer = GKLocalPlayer.local
+        if localPlayer.isAuthenticated {
+            do {
+                let image = try await localPlayer.loadPhoto(for: .normal)
+                
+                // Update localPlayerEntry
+                self.localPlayerEntry?.image = image
+                
+                // Find local player in list by isLocalPlayer flag (more reliable than playerID)
+                if let index = self.players.firstIndex(where: { $0.isLocalPlayer }) {
+                    self.players[index].image = image
                 }
+            } catch {
+                // Photo loading failed - try printing error for debugging
+                print("Failed to load local player photo: \(error)")
             }
         }
     }
