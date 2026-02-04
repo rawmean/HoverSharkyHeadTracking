@@ -187,7 +187,8 @@ struct SettingsView: View {
             StylishPaywallView()
         }
         .sheet(isPresented: $showHowToPlay) {
-            HowToPlayView()
+            OnboardingView()
+                .environment(HeadTrackingManager.shared)
         }
         .sheet(isPresented: $showLeaderboard) {
             LeaderboardView()

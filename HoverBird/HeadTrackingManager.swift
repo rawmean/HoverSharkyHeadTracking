@@ -35,7 +35,10 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            if isGameActive {
+            // Show onboarding on first launch
+            if !headTrackingManager.onboardingCompleted {
+                OnboardingView()
+            } else if isGameActive {
                 GameView(isGameActive: $isGameActive)
                     .ignoresSafeArea()
                     .transition(.opacity)
@@ -43,34 +46,36 @@ struct ContentView: View {
                 MainMenu(isGameActive: $isGameActive)
             }
             
-            // Debug/Status Overlay
-            if headTrackingManager.isTracking {
-                VStack {
-                    HStack {
-                        Circle()
-                            .fill(Color.green)
-                            .frame(width: 10, height: 10)
-                        Text("Head Tracking Active")
-                            .font(.caption)
-                            .foregroundColor(.white)
+            // Debug/Status Overlay (only show when not in onboarding)
+            if headTrackingManager.onboardingCompleted {
+                if headTrackingManager.isTracking {
+                    VStack {
+                        HStack {
+                            Circle()
+                                .fill(Color.green)
+                                .frame(width: 10, height: 10)
+                            Text("Head Tracking Active")
+                                .font(.caption)
+                                .foregroundColor(.white)
+                            Spacer()
+                        }
+                        .padding()
                         Spacer()
                     }
-                    .padding()
-                    Spacer()
-                }
-            } else if let error = headTrackingManager.errorMessage {
-                 VStack {
-                    HStack {
-                        Circle()
-                            .fill(Color.red)
-                            .frame(width: 10, height: 10)
-                        Text(error)
-                            .font(.caption)
-                            .foregroundColor(.red)
+                } else if let error = headTrackingManager.errorMessage {
+                     VStack {
+                        HStack {
+                            Circle()
+                                .fill(Color.red)
+                                .frame(width: 10, height: 10)
+                            Text(error)
+                                .font(.caption)
+                                .foregroundColor(.red)
+                            Spacer()
+                        }
+                        .padding()
                         Spacer()
                     }
-                    .padding()
-                    Spacer()
                 }
             }
         }
@@ -88,10 +93,13 @@ struct MainMenu: View {
             Color.blue.edgesIgnoringSafeArea(.all) // Placeholder background
             
             VStack(spacing: 30) {
-                Text("Hover Sharky")
+                Text("Shark Attack: User Your Head")
                     .font(.system(size: 60, weight: .heavy, design: .rounded))
                     .foregroundColor(.white)
                     .shadow(radius: 10)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2, reservesSpace: false)
+                    .frame(width: 500)
                 
                 Button(action: {
                     withAnimation {
@@ -185,6 +193,9 @@ struct GameView: UIViewRepresentable {
 @MainActor
 @Observable
 class HeadTrackingManager: NSObject {
+    
+    /// Shared singleton instance for app-wide access
+    static let shared = HeadTrackingManager()
     
     /// Normalized horizontal tracking position from -1.0 (left) to 1.0 (right)
     @objc dynamic var trackingPositionX: Float = 0.0
