@@ -73,8 +73,8 @@
     
     self.backgroundImage.image = _bgImage;
     
-    // Update local high score
-    [[GameSettingsManager shared] updateHighScoreIfNeeded:self.score];
+    // Update local high score - REMOVED per user request
+    // [[GameSettingsManager shared] updateHighScoreIfNeeded:self.score];
     
     [self reportScore:self.score forLeaderboardID:LEADERBOARD_ID];
 
@@ -153,12 +153,7 @@
 
 - (void) reportScore: (int64_t) score forLeaderboardID: (NSString*) identifier
 {
-    GKScore *scoreReporter = [[GKScore alloc] initWithLeaderboardIdentifier: identifier];
-    scoreReporter.value = score;
-    scoreReporter.context = 0;
-    
-    NSArray *scores = @[scoreReporter];
-    [GKScore reportScores:scores withCompletionHandler:^(NSError *error) {
+    [GKLeaderboard submitScore:score context:0 player:[GKLocalPlayer localPlayer] leaderboardIDs:@[identifier] completionHandler:^(NSError * _Nullable error) {
         if (error != nil) {
             NSLog(@"Error reporting score to Game Center: %@", error.localizedDescription);
         } else {

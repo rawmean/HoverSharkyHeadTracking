@@ -77,24 +77,31 @@ struct LeaderboardView: View {
                     }
                     Spacer()
                 } else {
-                    ScrollView {
-                        VStack(spacing: 16) {
-                            // Your Stats Section - show even if no leaderboard entry yet
+                    HStack(spacing: 20) {
+                        // Left Panel: Your Stats (Fixed)
+                        VStack {
                             YourStatsCard(
                                 rank: viewModel.localPlayerEntry?.rank ?? 0,
                                 bestScore: viewModel.bestScore,
                                 currentScore: currentScore
                             )
-                            
-                            // Leaderboard List
+                            Spacer()
+                        }
+                        .frame(maxWidth: 300)
+                        .padding(.vertical)
+                        
+                        // Right Panel: Leaderboard List (Scrollable)
+                        ScrollView {
                             LazyVStack(spacing: 12) {
                                 ForEach(viewModel.players) { entry in
                                     LeaderboardRow(entry: entry)
                                 }
                             }
+                            .padding(.vertical)
+                            .padding(.trailing) // Extra padding for scroll bar space
                         }
-                        .padding()
                     }
+                    .padding(.horizontal)
                 }
             }
         }

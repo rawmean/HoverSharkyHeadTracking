@@ -10,14 +10,9 @@ class LeaderboardViewModel: ObservableObject {
     @Published var localPlayerEntry: LeaderboardEntry?
     @Published var currentScore: Int = 0
     
-    /// Local high score from device (independent of Game Center)
-    var localHighScore: Int {
-        GameSettingsManager.shared.localHighScore
-    }
-    
-    /// Best score = max of Game Center score, local high score, and current score
+    /// Best score = max of Game Center score and current score
     var bestScore: Int {
-        max(localPlayerEntry?.score ?? 0, localHighScore, currentScore)
+        max(localPlayerEntry?.score ?? 0, currentScore)
     }
     
     struct LeaderboardEntry: Identifiable, Sendable {
@@ -76,14 +71,14 @@ class LeaderboardViewModel: ObservableObject {
                     let isLocal = entry.player.gamePlayerID == localPlayerID
                     if isLocal {
                         localPlayerInList = true
-                        localPlayerBestScore = max(entry.score, self.localHighScore, self.currentScore)
+                        localPlayerBestScore = max(entry.score, self.currentScore)
                         localPlayerGameCenterRank = entry.rank
                     }
                 }
                 
                 // If local player not in entries but has a localEntry, get their best score from there
                 if !localPlayerInList, let local = localEntry {
-                    localPlayerBestScore = max(local.score, self.localHighScore, self.currentScore)
+                    localPlayerBestScore = max(local.score, self.currentScore)
                     localPlayerGameCenterRank = local.rank
                 }
                 

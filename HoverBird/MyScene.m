@@ -84,6 +84,7 @@
     SKAction* _moveBubbleAndRemove;
     SKLabelNode* _calibrationLabel;
     SKLabelNode* _faceWarningLabel;
+    BOOL _hasCheckedInitialCalibration;
 }
 @end
 
@@ -137,28 +138,97 @@ static const uint32_t submarineCategory = 1 << 7;
     return musicNode;
 }
 
-//TapToStart button
-- (SKSpriteNode *)startButtonNode
+//TapToStart button - programmatic implementation
+- (SKNode *)startButtonNode
 {
-    SKSpriteNode *startNode = [SKSpriteNode spriteNodeWithImageNamed:@"startButton.png"];
-    startNode.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame)*1.);
-    startNode.name = @"startButtonNode";//how the node is identified later
-    startNode.zPosition = 1.0;
-    [startNode setScale:.50];
-
-    return startNode;
+    // Create container node
+    SKNode *buttonNode = [SKNode node];
+    buttonNode.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame) * 1.0);
+    buttonNode.name = @"startButtonNode";
+    buttonNode.zPosition = 1.0;
+    
+    // Create rounded rectangle background
+    CGSize buttonSize = CGSizeMake(280, 60);
+    CGFloat cornerRadius = 12.0;
+    SKShapeNode *background = [SKShapeNode shapeNodeWithRectOfSize:buttonSize cornerRadius:cornerRadius];
+    background.fillColor = [SKColor colorWithRed:1.0 green:0.6 blue:0.2 alpha:1.0]; // Orange
+    background.strokeColor = [SKColor colorWithRed:0.9 green:0.5 blue:0.1 alpha:1.0]; // Darker orange border
+    background.lineWidth = 3.0;
+    [buttonNode addChild:background];
+    
+    // Create text label
+    SKLabelNode *label = [SKLabelNode labelNodeWithFontNamed:@"AvenirNext-Bold"];
+    label.text = @"Tap Here When Ready";
+    label.fontSize = 24;
+    label.fontColor = [SKColor whiteColor];
+    label.verticalAlignmentMode = SKLabelVerticalAlignmentModeCenter;
+    label.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
+    label.position = CGPointMake(0, 0);
+    [buttonNode addChild:label];
+    
+    return buttonNode;
 }
 
-//TapToReset button
-- (SKSpriteNode *)restartButtonNode
+//TapToRestart button - programmatic implementation
+- (SKNode *)restartButtonNode
 {
-    SKSpriteNode *startNode = [SKSpriteNode spriteNodeWithImageNamed:@"restartButton.png"];
-    startNode.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame)*0.7);
-    startNode.name = @"restartButtonNode";//how the node is identified later
-    startNode.zPosition = 1.0;
-    [startNode setScale:.50];
+    // Create container node
+    SKNode *buttonNode = [SKNode node];
+    buttonNode.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame) * 0.7);
+    buttonNode.name = @"restartButtonNode";
+    buttonNode.zPosition = 1.0;
+    
+    // Create rounded rectangle background
+    CGSize buttonSize = CGSizeMake(220, 55);
+    CGFloat cornerRadius = 12.0;
+    SKShapeNode *background = [SKShapeNode shapeNodeWithRectOfSize:buttonSize cornerRadius:cornerRadius];
+    background.fillColor = [SKColor colorWithRed:0.2 green:0.7 blue:0.3 alpha:1.0]; // Green
+    background.strokeColor = [SKColor colorWithRed:0.1 green:0.6 blue:0.2 alpha:1.0]; // Darker green border
+    background.lineWidth = 3.0;
+    [buttonNode addChild:background];
+    
+    // Create text label
+    SKLabelNode *label = [SKLabelNode labelNodeWithFontNamed:@"AvenirNext-Bold"];
+    label.text = @"Play Again";
+    label.fontSize = 24;
+    label.fontColor = [SKColor whiteColor];
+    label.verticalAlignmentMode = SKLabelVerticalAlignmentModeCenter;
+    label.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
+    label.position = CGPointMake(0, 0);
+    [buttonNode addChild:label];
+    
+    return buttonNode;
+}
 
-    return startNode;
+//Head pose status label - shown while waiting for head tracking
+- (SKNode *)headPoseStatusNode
+{
+    // Create container node
+    SKNode *statusNode = [SKNode node];
+    statusNode.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame) * 1.0);
+    statusNode.name = @"headPoseStatusNode";
+    statusNode.zPosition = 1.0;
+    
+    // Create rounded rectangle background
+    CGSize boxSize = CGSizeMake(320, 60);
+    CGFloat cornerRadius = 12.0;
+    SKShapeNode *background = [SKShapeNode shapeNodeWithRectOfSize:boxSize cornerRadius:cornerRadius];
+    background.fillColor = [SKColor colorWithRed:0.2 green:0.4 blue:0.6 alpha:0.9]; // Blue-gray
+    background.strokeColor = [SKColor colorWithRed:0.3 green:0.5 blue:0.7 alpha:1.0]; // Lighter blue border
+    background.lineWidth = 2.0;
+    [statusNode addChild:background];
+    
+    // Create text label
+    SKLabelNode *label = [SKLabelNode labelNodeWithFontNamed:@"AvenirNext-Medium"];
+    label.text = @"Detecting head pose...";
+    label.fontSize = 22;
+    label.fontColor = [SKColor whiteColor];
+    label.verticalAlignmentMode = SKLabelVerticalAlignmentModeCenter;
+    label.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
+    label.position = CGPointMake(0, 0);
+    [statusNode addChild:label];
+    
+    return statusNode;
 }
 
 //Play Again button (shown after game over)
@@ -299,6 +369,20 @@ static const uint32_t submarineCategory = 1 << 7;
     // Read settings from GameSettingsManager
     isMusicEnabled = [[GameSettingsManager shared] isMusicEnabled];
     isHoverEnabled = [[GameSettingsManager shared] isHeadTrackingEnabled];
+    
+    // If head tracking is enabled and camera available, show status until tracking is ready
+    if (isHoverEnabled && isCameraAvailable) {
+        // Check calibration first
+        if (self.headTracker && !self.headTracker.isCalibrationCompleted) {
+            [self.headTracker startHeadCalibration];
+            [[self childNodeWithName:@"startButtonNode"] setHidden:YES];
+        } else {
+            // Hide start button initially
+            [[self childNodeWithName:@"startButtonNode"] setHidden:YES];
+            // Show status label
+            [self addChild: [self headPoseStatusNode]];
+        }
+    }
     
     // Stop music if disabled
     if (!isMusicEnabled) {
@@ -689,6 +773,14 @@ static const uint32_t submarineCategory = 1 << 7;
             sharkScale = 0.55;
         [self createSharkRegular];
         [self addChild:[self startButtonNode]];
+        
+        // If head tracking is enabled and camera available, show status until tracking is ready
+        if (isHoverEnabled && isCameraAvailable) {
+            // Hide start button initially
+            [[self childNodeWithName:@"startButtonNode"] setHidden:YES];
+            // Show status label
+            [self addChild: [self headPoseStatusNode]];
+        }
         
         // Create ground
         //////////////////
@@ -1086,9 +1178,6 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
     // Increment round count for paywall tracking
     [[GameRoundTracker shared] incrementRoundCount];
     
-    // Update local high score
-    [[GameSettingsManager shared] updateHighScoreIfNeeded:_score];
-    
     // Submit score to Game Center
     [self submitScoreToGameCenter:_score];
     
@@ -1118,11 +1207,7 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
         return;
     }
     
-    GKScore *scoreReporter = [[GKScore alloc] initWithLeaderboardIdentifier:@"HoverSharkyLeaderBoardID"];
-    scoreReporter.value = score;
-    scoreReporter.context = 0;
-    
-    [GKScore reportScores:@[scoreReporter] withCompletionHandler:^(NSError *error) {
+    [GKLeaderboard submitScore:score context:0 player:[GKLocalPlayer localPlayer] leaderboardIDs:@[@"HoverSharkyLeaderBoardID"] completionHandler:^(NSError * _Nullable error) {
         if (error != nil) {
             NSLog(@"Game Center: Error submitting score: %@", error.localizedDescription);
         } else {
@@ -1217,6 +1302,26 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
                 [[self childNodeWithName:@"restartButtonNode"] setHidden:NO];
                 [[self childNodeWithName:@"calibrateButtonNode"] setHidden:NO];
             }
+        }
+    }
+    
+    // Handle head pose status -> start button transition when tracking becomes ready
+    SKNode *statusNode = [self childNodeWithName:@"headPoseStatusNode"];
+    if (statusNode && !isGameInProgress) {
+        if (self.headTracker && self.headTracker.isTracking) {
+            // Head tracking is now active, switch to start button
+            [statusNode removeFromParent];
+            [[self childNodeWithName:@"startButtonNode"] setHidden:NO];
+        }
+    }
+    
+    // Check for initial calibration requirement once head tracker is ready
+    if (!_hasCheckedInitialCalibration && self.headTracker) {
+        _hasCheckedInitialCalibration = YES;
+        if (isHoverEnabled && isCameraAvailable && !self.headTracker.isCalibrationCompleted) {
+             [self.headTracker startHeadCalibration];
+             [[self childNodeWithName:@"startButtonNode"] setHidden:YES];
+             [statusNode removeFromParent]; // Remove detecting message if present
         }
     }
     
@@ -1330,8 +1435,12 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
     UITouch *touch = [touches anyObject];
     CGPoint location = [touch locationInNode:self];
     SKNode *node = [self nodeAtPoint:location];
+    
+    // Traverse up the node hierarchy to find a named button
+    SKNode *buttonNode = [self findButtonAncestor:node];
+    NSString *nodeName = buttonNode ? buttonNode.name : node.name;
 
-    if ([node.name isEqualToString:@"startButtonNode"]) {
+    if ([nodeName isEqualToString:@"startButtonNode"]) {
         // Check if user can play or needs to see paywall
         if ([[GameRoundTracker shared] shouldShowPaywall]) {
             // Show paywall
@@ -1344,7 +1453,9 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
         isHoverEnabled = [[GameSettingsManager shared] isHeadTrackingEnabled];
         
         [self startSpawning];
-        [node removeFromParent];
+        // Remove the button node (using ancestor if tap was on child)
+        SKNode *nodeToRemove = buttonNode ? buttonNode : node;
+        [nodeToRemove removeFromParent];
         [[self childNodeWithName:@"calibrateButtonNode"] removeFromParent]; // Hide calibrate
         [[self childNodeWithName:@"settingsButtonNode"] removeFromParent]; // Hide settings
         [[self childNodeWithName:@"restartButtonNode"] removeFromParent];
@@ -1354,13 +1465,14 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
         return;
     }
     
-    if ([node.name isEqualToString:@"restartButtonNode"]) {
+    if ([nodeName isEqualToString:@"restartButtonNode"]) {
+        SKNode *buttonToRemove = buttonNode ? buttonNode : node;
         [self restartGame];
         [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
         return;
     }
     
-    if ([node.name isEqualToString:@"playAgainButtonNode"]) {
+    if ([nodeName isEqualToString:@"playAgainButtonNode"]) {
         // Check if user can play or needs to see paywall
         if ([[GameRoundTracker shared] shouldShowPaywall]) {
             // Show paywall
@@ -1373,18 +1485,18 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
         return;
     }
     
-    if ([node.name isEqualToString:@"leaderboardButtonNode"]) {
+    if ([nodeName isEqualToString:@"leaderboardButtonNode"]) {
         [self showLeaderboard];
         return;
     }
 
     
-    if ([node.name isEqualToString:@"calibrateButtonNode"]) {
+    if ([nodeName isEqualToString:@"calibrateButtonNode"]) {
         [self.headTracker startHeadCalibration];
         return;
     }
     
-    if ([node.name isEqualToString:@"settingsButtonNode"]) {
+    if ([nodeName isEqualToString:@"settingsButtonNode"]) {
         [SettingsPresenter showSettingsFromView:self.view];
         return;
     }
@@ -1400,6 +1512,18 @@ CGFloat clamp(CGFloat min, CGFloat max, CGFloat value) {
          [_shark.physicsBody applyImpulse:CGVectorMake(0, 30)];
         [self runAction:splashSound];
     }
+}
+
+// Helper method to find a button ancestor in the node hierarchy
+- (SKNode *)findButtonAncestor:(SKNode *)node {
+    SKNode *current = node;
+    while (current != nil && current != self) {
+        if (current.name != nil && [current.name hasSuffix:@"ButtonNode"]) {
+            return current;
+        }
+        current = current.parent;
+    }
+    return nil;
 }
 
 @end

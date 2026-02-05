@@ -230,6 +230,9 @@ class HeadTrackingManager: NSObject {
     @objc dynamic var headSensitivityX: Float = 2500.0
     @objc dynamic var headSensitivityY: Float = 2500.0
     
+    /// Whether head calibration has been completed
+    @objc dynamic var isCalibrationCompleted: Bool = false
+    
     // Calibration storage
     private var calibMinX: Float = 0
     private var calibMaxX: Float = 0
@@ -398,7 +401,7 @@ class HeadTrackingManager: NSObject {
             hasSetNeutralPose = true
             
             headCalibrationStep = .up
-            calibrationStatusMessage = "Look UP & Tap"
+            calibrationStatusMessage = "Move your head UP slightly & Tap"
             
         case .up:
             // Record Max Y (Up is usually positive Y in 3D or screen? Need to check coordinate system)
@@ -408,20 +411,20 @@ class HeadTrackingManager: NSObject {
             calibMaxY = headPositionY // This is current offset from neutral
             
             headCalibrationStep = .down
-            calibrationStatusMessage = "Look DOWN & Tap"
+            calibrationStatusMessage = "Move your head DOWN slightly & Tap"
             
         case .down:
             calibMinY = headPositionY
             
             headCalibrationStep = .left
-            calibrationStatusMessage = "Look LEFT & Tap"
+            calibrationStatusMessage = "Move your head LEFT slightly & Tap"
             
         case .left:
             // ARKit: Right might be +X?
             calibMinX = headPositionX
             
             headCalibrationStep = .right
-            calibrationStatusMessage = "Look RIGHT & Tap"
+            calibrationStatusMessage = "Move your head RIGHT slightly & Tap"
             
         case .right:
             calibMaxX = headPositionX
@@ -483,6 +486,7 @@ class HeadTrackingManager: NSObject {
         UserDefaults.standard.set(headSensitivityX, forKey: headSensitivityXKey)
         UserDefaults.standard.set(headSensitivityY, forKey: headSensitivityYKey)
         UserDefaults.standard.set(true, forKey: headCalibrationCompletedKey)
+        isCalibrationCompleted = true
         print("Head calibration saved: sensitivityX=\(headSensitivityX), sensitivityY=\(headSensitivityY)")
     }
     
@@ -496,8 +500,10 @@ class HeadTrackingManager: NSObject {
             if headSensitivityX <= 0 { headSensitivityX = 2500.0 }
             if headSensitivityY <= 0 { headSensitivityY = 2500.0 }
             
+            isCalibrationCompleted = true
             print("Head calibration loaded: sensitivityX=\(headSensitivityX), sensitivityY=\(headSensitivityY)")
         } else {
+            isCalibrationCompleted = false
             print("No saved head calibration found. Using defaults.")
         }
     }
